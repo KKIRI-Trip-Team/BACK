@@ -3,26 +3,26 @@
 
 - **🛠️ Build Tool** : Gradle  
 - **🌱 Spring Boot** : 3.4.4  
-- **☕ Java** : 17  
+- **☕ Java** : 17
 
-## 패키지 구조 설계 - 도메인형 패키지 구조
+ 
+## 🗂️ 패키지 구조 설계 - 도메인형 패키지 구조
 ```
-com
-└── app
-    ├── api
-    │   └── apis...
-    ├── domain
-    │   ├── common
-    │   └── domains...
-    ├── global
-    │   ├── config
-    │   ├── error
-    │   ├── jwt
-    │   ├── interceptor
-    │   ├── resolver
-    │   └── util
-    ├── infra
-    └── web
+com  
+└── app  
+    ├── api                # 🌐 외부에 제공할 API 구현  
+    ├── domain             # 📦 핵심 비즈니스 로직 관련 클래스  
+    │   ├── common  
+    │   └── domains...  
+    ├── global             # 🌍 애플리케이션 전반에 사용되는 클래스  
+    │   ├── config         # ⚙️ 각종 설정 클래스  
+    │   ├── error          # ❗ 예외 처리 및 관련 클래스  
+    │   ├── jwt            # 🔒 JWT 기반 인증 처리 클래스  
+    │   ├── interceptor    # 🛑 인증 및 인가 인터셉터 클래스  
+    │   ├── resolver       # 🔄 Resolver 클래스  
+    │   └── util           # 🛠️ 유틸리티 클래스  
+    ├── infra              # ☁️ 외부 서비스 관련 클래스 (파일 업로드, 이메일 전송 등)  
+    └── web                # 🌐 Kakao 토큰 발급 및 CORS 설정 테스트  
 ```
 - api 패키지 : 외부에 제공할 api 구현
 - domain 패키지 : 애플리케이션 핵심 비즈니스 로직와 관련된 클래스

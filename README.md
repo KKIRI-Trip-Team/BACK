@@ -37,3 +37,7 @@ com
     - util 패키지 : util 클래스
 - infra : 아마존 파일 업로드, 이메일 전송, SMS 전송과 같은 외부 서비스에 대한 클래스
 - web : kakao 토큰 발급 및 cors 설정 테스트 진행.
+
+
+# 커밋 컨벤션
+![image](https://github.com/user-attachments/assets/b187c5a7-e618-41b5-bb02-94b63beed5ac)

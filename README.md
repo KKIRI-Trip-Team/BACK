@@ -1,4 +1,4 @@
-# BACK
+# KKIRI-TRIP(끼리트립)
 사이드프로젝트 백입니다!<br>
 build tool : Gradle<br>
 SpringBoot : 3.4.4<br>

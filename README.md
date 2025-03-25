@@ -1,8 +1,9 @@
 # KKIRI-TRIP(끼리트립)
-사이드프로젝트 백입니다!<br>
-build tool : Gradle<br>
-SpringBoot : 3.4.4<br>
-JAVA 17<br>
+## 🚀 기술 스택
+
+- **🛠️ Build Tool** : Gradle  
+- **🌱 Spring Boot** : 3.4.4  
+- **☕ Java** : 17  
 
 
 

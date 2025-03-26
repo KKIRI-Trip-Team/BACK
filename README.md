@@ -24,17 +24,29 @@ com
     ├── infra              # ☁️ 외부 서비스 관련 클래스 (파일 업로드, 이메일 전송 등)  
     └── web                # 🌐 Kakao 토큰 발급 및 CORS 설정 테스트  
 ```
-- api 패키지 : 외부에 제공할 api 구현
-- domain 패키지 : 애플리케이션 핵심 비즈니스 로직와 관련된 클래스
-- global : 애플리케이션 전반에 사용되는 클래스
-    - config 패키지 : 각종 설정 클래스
-    - error 패키지 : 예외 처리 및 예외 관련 클래스
-    - jwt 패키지 : JWT 기반의 인증 처리 관련 클래스
-    - interceptor 패키지 : interceptor 클래스. 인증과 인가를 위한 인터셉터 구현
-    - resolver 패키지 : resolver 클래스
-    - util 패키지 : util 클래스
-- infra : 아마존 파일 업로드, 이메일 전송, SMS 전송과 같은 외부 서비스에 대한 클래스
-- web : kakao 토큰 발급 및 cors 설정 테스트 진행.
+
+### 📜 상세 설명
+
+#### `api` (🌐 외부에 제공할 API 구현)
+- 외부 클라이언트가 호출하는 엔드포인트를 정의하는 컨트롤러 클래스들
+
+#### `domain` (📦 핵심 비즈니스 로직 관련 클래스)
+- **`common`**: 공통 엔티티, DTO, 상수, Enum 등  
+- **`domains...`**: 각 도메인 별 핵심 비즈니스 로직 (예: `User`, `Order`, `Product` 등)  
+
+#### `global` (🌍 애플리케이션 전반에 사용되는 클래스)
+- **`config`** (⚙️ 설정 클래스): Spring Security, WebSocket, Kafka, Database 설정 등  
+- **`error`** (❗ 예외 처리 관련): `CustomException`, `@ControllerAdvice` 전역 예외 처리  
+- **`jwt`** (🔒 JWT 인증 관련): JWT 생성, 검증, 파싱 처리  
+- **`interceptor`** (🛑 인증 및 인가 관련): 인증 및 로깅 처리를 위한 인터셉터  
+- **`resolver`** (🔄 리졸버 관련): 커스텀 애노테이션 기반의 파라미터 바인딩  
+- **`util`** (🛠️ 유틸리티 클래스): 문자열 처리, 날짜 변환 등 공통 로직  
+
+#### `infra` (☁️ 외부 서비스 관련 클래스)
+- 파일 업로드, 이메일 전송, 외부 API 연동 등 외부 인프라 서비스 처리  
+
+#### `web` (🌐 Kakao 토큰 발급 및 CORS 설정 테스트)
+- Kakao 소셜 로그인, CORS 설정 등 테스트 및 API 통신 관련 클래스  
 
 
 ## 커밋 컨벤션

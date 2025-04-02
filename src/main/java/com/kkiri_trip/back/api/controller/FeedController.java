@@ -19,13 +19,15 @@ public class FeedController {
     private final FeedService feedService;
 
     @GetMapping()
-    public ResponseEntity<ApiResponseDto<List<FeedDto>>> getfeeds()
+    public ResponseEntity<ApiResponseDto<List<FeedDto>>> getFeeds()
     {
         return ApiResponseDto.from(HttpStatus.OK, "피드 리스트 조회", feedService.getAllFeeds());
     }
 
+
+
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<FeedDto>> getfeedById(@PathVariable Long id)
+    public ResponseEntity<ApiResponseDto<FeedDto>> getFeedById(@PathVariable Long id)
     {
         return ApiResponseDto.from(HttpStatus.OK, "피드 조회", feedService.getFeedById(id));
     }
@@ -48,4 +50,20 @@ public class FeedController {
         return ApiResponseDto.from(HttpStatus.OK, "피드 삭제", null);
     }
 
+    @GetMapping("/dummy")
+    public ResponseEntity<ApiResponseDto<FeedDto>> getDummyFeedById()
+    {
+        FeedDto feedDto = new FeedDto(1L,"제목1","내용1");
+        return ApiResponseDto.from(HttpStatus.OK, "피드 리스트 조회", feedDto);
+    }
+
+    @GetMapping("/dummylist")
+    public ResponseEntity<ApiResponseDto<List<FeedDto>>> getDummyFeeds()
+    {
+        FeedDto feedDto1 = new FeedDto(1L,"제목1","내용1");
+        FeedDto feedDto2 = new FeedDto(2L,"제목2","내용2");
+        FeedDto feedDto3 = new FeedDto(3L,"제목3","내용3");
+        FeedDto feedDto4 = new FeedDto(4L,"제목4","내용4");
+        return ApiResponseDto.from(HttpStatus.OK, "피드 리스트 조회", List.of(feedDto1,feedDto2,feedDto3,feedDto4));
+    }
 }

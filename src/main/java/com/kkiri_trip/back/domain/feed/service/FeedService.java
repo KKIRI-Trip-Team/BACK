@@ -7,6 +7,7 @@ import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +41,21 @@ public class FeedService {
         return savedFeed.toDto();
     }
 
+
+    @Transactional
+    public FeedDto updateFeed(Long id, FeedDto feedDto) {
+        Feed feed = feedRepository.findById(id)
+                .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+
+        validateFeedDto(feedDto);
+
+        // Dirty Checking
+        feed.setTitle(feedDto.getTitle());
+        feed.setContent(feedDto.getContent());
+
+        return new FeedDto(feed.getId(), feed.getTitle(), feed.getContent());
+    }
+
     private void validateFeedDto(FeedDto feedDto) {
         if (feedDto.getTitle() == null || feedDto.getTitle().trim().isEmpty()) {
             throw new FeedException(FeedErrorCode.EMPTY_TITLE);
@@ -49,4 +65,11 @@ public class FeedService {
         }
     }
 
+    @Transactional
+    public void deleteFeed(Long id) {
+        feedRepository.findById(id)
+                .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+
+        feedRepository.deleteById(id);
+    }
 }

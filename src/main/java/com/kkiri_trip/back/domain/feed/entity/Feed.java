@@ -7,6 +7,7 @@ import com.kkiri_trip.back.global.error.exception.FeedException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Feed extends BaseEntity {
 
     @Column(nullable = false)
@@ -26,8 +28,8 @@ public class Feed extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column
-    private Long userId;
+//    @Column
+//    private Long userId;
 
     public void setTitle(String title) {
         if (title == null || title.trim().isEmpty()) {

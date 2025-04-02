@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.kkiri_trip.back.Feed.FeedControllerTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2025-04-02T09:03:03.879Z" hostname="gangdaehuiui-noteubug.local" time="0.134">
+<testsuite name="com.kkiri_trip.back.Feed.FeedControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-04-02T14:17:54.515Z" hostname="gangdaehuiui-noteubug.local" time="0.084">
   <properties/>
-  <testcase name="빈 내용으로 피드를 생성하면 예외가 발생해야 한다." classname="com.kkiri_trip.back.Feed.FeedControllerTest" time="0.1"/>
-  <testcase name="피드 id로 피드를 조회할 때, 존재하지 않으면 예외 처리한다." classname="com.kkiri_trip.back.Feed.FeedControllerTest" time="0.006"/>
-  <testcase name="피드를 생성한다." classname="com.kkiri_trip.back.Feed.FeedControllerTest" time="0.008"/>
-  <testcase name="피드 id로 피드를 조회한다." classname="com.kkiri_trip.back.Feed.FeedControllerTest" time="0.006"/>
-  <testcase name="피드 목록을 조회한다." classname="com.kkiri_trip.back.Feed.FeedControllerTest" time="0.006"/>
-  <testcase name="빈 제목으로 피드를 생성하면 예외가 발생해야 한다." classname="com.kkiri_trip.back.Feed.FeedControllerTest" time="0.005"/>
-  <system-out><![CDATA[18:03:02.739 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.kkiri_trip.back.Feed.FeedControllerTest]: FeedControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-18:03:02.799 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.kkiri_trip.back.BackApplication for test class com.kkiri_trip.back.Feed.FeedControllerTest
+  <testcase name="존재하지 않는 피드를 삭제하면 예외가 발생한다." classname="com.kkiri_trip.back.Feed.FeedControllerTest" time="0.084"/>
+  <system-out><![CDATA[23:17:53.361 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.kkiri_trip.back.Feed.FeedControllerTest]: FeedControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:17:53.418 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.kkiri_trip.back.BackApplication for test class com.kkiri_trip.back.Feed.FeedControllerTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -19,12 +14,12 @@
 
  :: Spring Boot ::                (v3.4.4)
 
-2025-04-02T18:03:02.966+09:00  INFO 49019 --- [    Test worker] c.k.back.Feed.FeedControllerTest         : Starting FeedControllerTest using Java 17.0.10 with PID 49019 (started by kangdaehee in /Users/kangdaehee/Documents/BACK)
-2025-04-02T18:03:02.967+09:00  INFO 49019 --- [    Test worker] c.k.back.Feed.FeedControllerTest         : No active profile set, falling back to 1 default profile: "default"
-2025-04-02T18:03:03.858+09:00  INFO 49019 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2025-04-02T18:03:03.858+09:00  INFO 49019 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2025-04-02T18:03:03.859+09:00  INFO 49019 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
-2025-04-02T18:03:03.875+09:00  INFO 49019 --- [    Test worker] c.k.back.Feed.FeedControllerTest         : Started FeedControllerTest in 1.042 seconds (process running for 1.475)
+2025-04-02T23:17:53.588+09:00  INFO 93538 --- [    Test worker] c.k.back.Feed.FeedControllerTest         : Starting FeedControllerTest using Java 17.0.10 with PID 93538 (started by kangdaehee in /Users/kangdaehee/Documents/BACK)
+2025-04-02T23:17:53.588+09:00  INFO 93538 --- [    Test worker] c.k.back.Feed.FeedControllerTest         : No active profile set, falling back to 1 default profile: "default"
+2025-04-02T23:17:54.490+09:00  INFO 93538 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-04-02T23:17:54.491+09:00  INFO 93538 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-04-02T23:17:54.492+09:00  INFO 93538 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-04-02T23:17:54.508+09:00  INFO 93538 --- [    Test worker] c.k.back.Feed.FeedControllerTest         : Started FeedControllerTest in 1.058 seconds (process running for 1.487)
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

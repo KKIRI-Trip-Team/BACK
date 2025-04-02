@@ -1,5 +1,6 @@
 package com.kkiri_trip.back.Feed;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkiri_trip.back.api.controller.FeedController;
 import com.kkiri_trip.back.api.dto.Feed.FeedDto;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
@@ -15,13 +16,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -129,4 +131,72 @@ class FeedControllerTest {
                 .andExpect(status().isBadRequest()) // 400 상태 코드로 수정
                 .andExpect(jsonPath("$.message", is("내용은 비어 있을 수 없습니다.")));
     }
+
+    @Test
+    @DisplayName("피드 수정을 성공한다.")
+    void updateFeedSuccess() throws Exception {
+        // given
+        Long feedId = 1L;
+        FeedDto updateDto = new FeedDto(feedId, "수정된 제목", "수정된 내용");
+        String jsonContent = new ObjectMapper().writeValueAsString(updateDto);
+
+        given(feedService.updateFeed(eq(feedId), any(FeedDto.class)))
+                .willReturn(updateDto);
+
+        // when & then
+        mockMvc.perform(patch("/api/feeds/{id}", feedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(feedId))
+                .andExpect(jsonPath("$.data.title").value("수정된 제목"))
+                .andExpect(jsonPath("$.data.content").value("수정된 내용"));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 피드 업데이트 시 예외가 발생한다.")
+    void updateFeedNotFound() throws Exception {
+        // given
+        FeedDto updateDto = new FeedDto(1L, "새 제목", "새 내용");
+        String jsonContent = new ObjectMapper().writeValueAsString(updateDto);
+
+        doThrow(new FeedException(FeedErrorCode.FEED_NOT_FOUND))
+                .when(feedService).updateFeed(eq(1L), any(FeedDto.class));
+
+        // when & then
+        mockMvc.perform(patch("/api/feeds/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonContent))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("해당 피드를 찾을 수 없습니다.")));
+    }
+
+    @Test
+    @DisplayName("피드를 정상적으로 삭제한다.")
+    void deleteFeedSuccess() throws Exception {
+        // given
+        Long feedId = 1L;
+        doNothing().when(feedService).deleteFeed(feedId);
+
+        // when & then
+        mockMvc.perform(delete("/api/feeds/{id}", feedId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()); // HTTP 204 응답
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 피드를 삭제하면 예외가 발생한다.")
+    void deleteFeedNotFound() throws Exception {
+        // given
+        Long feedId = 999L; // 없는 ID
+        doThrow(new FeedException(FeedErrorCode.FEED_NOT_FOUND))
+                .when(feedService).deleteFeed(feedId);
+
+        // when & then
+        mockMvc.perform(delete("/api/feeds/{id}", feedId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("해당 피드를 찾을 수 없습니다.")));
+    }
+
 }

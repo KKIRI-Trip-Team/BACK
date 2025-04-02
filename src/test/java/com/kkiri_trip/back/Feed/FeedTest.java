@@ -19,7 +19,6 @@ public class FeedTest {
         feed = Feed.builder()
                 .title("피드제목")
                 .content("피드내용")
-                .userId(1L)
                 .build();
     }
 

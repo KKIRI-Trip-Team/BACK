@@ -27,6 +27,7 @@ public class FeedTest {
     void getTitle() {
         assertThat(feed.getTitle()).isEqualTo("피드제목");
     }
+
     @Test
     @DisplayName("피드의 내용을 가져온다")
     void getContent() {

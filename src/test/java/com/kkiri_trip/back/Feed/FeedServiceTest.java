@@ -2,6 +2,8 @@ package com.kkiri_trip.back.Feed;
 
 import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
+import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
+import com.kkiri_trip.back.global.error.exception.FeedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +40,7 @@ public class FeedServiceTest {
 
         // when
         Feed foundFeed = feedRepository.findById(feed.getId())
-                .orElseThrow(() -> new RuntimeException("피드를 찾을 수 없습니다."));
+                .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND));
 
         // then
         assertThat(foundFeed)
@@ -50,11 +52,10 @@ public class FeedServiceTest {
     @Test
     void findFeedByIdNotFound() {
         // when & then
-
         assertThatThrownBy(() -> feedRepository.findById(999L)
-                .orElseThrow(() -> new RuntimeException("피드를 찾을 수 없습니다.")))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("피드를 찾을 수 없습니다.");
+                .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND)))
+                .isInstanceOf(FeedException.class)
+                .hasMessage("해당 피드를 찾을 수 없습니다.");
     }
 
 
@@ -88,7 +89,7 @@ public class FeedServiceTest {
     }
 
     @DisplayName("피드의 제목을 업데이트한다.")
-    @Transactional // ✅ 트랜잭션이 유지되므로 Dirty Checking이 적용됨
+    @Transactional
     @Test
     void updateFeedTitle() {
         // given
@@ -98,7 +99,7 @@ public class FeedServiceTest {
                 .build());
 
         // when
-        feed.setTitle("수정된 제목"); // ✅ Dirty Checking이 동작하여 자동으로 UPDATE 실행됨
+        feed.setTitle("수정된 제목");
 
         // then
         Feed updatedFeed = feedRepository.findById(feed.getId()).orElseThrow();

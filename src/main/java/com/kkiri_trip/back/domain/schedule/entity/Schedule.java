@@ -1,5 +1,7 @@
 package com.kkiri_trip.back.domain.schedule.entity;
 
+import com.kkiri_trip.back.api.dto.Feed.FeedDto;
+import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
 import com.kkiri_trip.back.domain.common.entity.BaseEntity;
 import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
@@ -11,6 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -38,5 +43,17 @@ public class Schedule extends BaseEntity {
             throw new ScheduleException(ScheduleErrorCode.INVALID_FEED);
         }
         this.feed = feed;
+    }
+
+    // Feed 엔티티를 FeedDto로 변환하는 메서드
+    public ScheduleDto toDto() {
+        return new ScheduleDto(this.getId(), this.dayNumber, this.feed.getId());
+    }
+
+    // Feed 리스트를 FeedDto 리스트로 변환하는 Stream 기반 메서드
+    public static List<ScheduleDto> toDtoList(List<Schedule> schedules) {
+        return schedules.stream()
+                .map(Schedule::toDto)
+                .collect(Collectors.toList());
     }
 }

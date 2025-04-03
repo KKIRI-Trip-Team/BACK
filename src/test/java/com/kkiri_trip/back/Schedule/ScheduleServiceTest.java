@@ -136,5 +136,26 @@ public class ScheduleServiceTest {
         assertThat(updatedSchedule.getDayNumber()).isEqualTo(2);
     }
 
+    @DisplayName("스케줄을 삭제한다.")
+    @Test
+    void deleteFeed() {
+        // given
+        Feed feed = feedRepository.save(Feed.builder()
+                .title("피드제목1")
+                .content("피드내용1")
+                .build());
+
+        Schedule schedule = scheduleRepository.save(Schedule.builder()
+                .dayNumber(1)
+                .feed(feed)
+                .build());
+
+        // when
+        scheduleRepository.delete(schedule);
+
+        // then
+        boolean exists = scheduleRepository.existsById(schedule.getId());
+        assertThat(exists).isFalse();
+    }
 
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.kkiri_trip.back.Schedule.ScheduleControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-04-03T07:23:35.979Z" hostname="gangdaehuiui-noteubug.local" time="0.104">
+  <properties/>
+  <testcase name="유효하지 않은 dayNumber로 인해 생성 실패" classname="com.kkiri_trip.back.Schedule.ScheduleControllerTest" time="0.104"/>
+  <system-out><![CDATA[16:23:34.802 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.kkiri_trip.back.Schedule.ScheduleControllerTest]: ScheduleControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:23:34.864 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.kkiri_trip.back.BackApplication for test class com.kkiri_trip.back.Schedule.ScheduleControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.4)
+
+2025-04-03T16:23:35.043+09:00  INFO 28945 --- [    Test worker] c.k.b.Schedule.ScheduleControllerTest    : Starting ScheduleControllerTest using Java 17.0.10 with PID 28945 (started by kangdaehee in /Users/kangdaehee/Documents/BACK)
+2025-04-03T16:23:35.043+09:00  INFO 28945 --- [    Test worker] c.k.b.Schedule.ScheduleControllerTest    : No active profile set, falling back to 1 default profile: "default"
+2025-04-03T16:23:35.956+09:00  INFO 28945 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-04-03T16:23:35.957+09:00  INFO 28945 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-04-03T16:23:35.958+09:00  INFO 28945 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-04-03T16:23:35.975+09:00  INFO 28945 --- [    Test worker] c.k.b.Schedule.ScheduleControllerTest    : Started ScheduleControllerTest in 1.071 seconds (process running for 1.515)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

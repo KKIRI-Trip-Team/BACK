@@ -1,4 +1,4 @@
-package com.kkiri_trip.back.domain.common.entity;
+package com.kkiri_trip.back.global.common.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

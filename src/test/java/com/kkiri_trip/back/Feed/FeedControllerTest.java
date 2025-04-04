@@ -144,7 +144,7 @@ class FeedControllerTest {
                 .willReturn(updateDto);
 
         // when & then
-        mockMvc.perform(put("/api/feeds/{id}", feedId)
+        mockMvc.perform(patch("/api/feeds/{id}", feedId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andExpect(status().isOk())
@@ -164,7 +164,7 @@ class FeedControllerTest {
                 .when(feedService).updateFeed(eq(1L), any(FeedDto.class));
 
         // when & then
-        mockMvc.perform(put("/api/feeds/1")
+        mockMvc.perform(patch("/api/feeds/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andExpect(status().isNotFound())

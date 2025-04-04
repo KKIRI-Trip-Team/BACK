@@ -34,7 +34,7 @@ public class ScheduleController {
         return ApiResponseDto.from(HttpStatus.OK, "스케줄 생성", scheduleService.createSchedule(feedId,scheduleDto));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<ApiResponseDto<ScheduleDto>> updateScheduleById(@PathVariable("feedId") Long feedId, @PathVariable("id") Long id, @Valid @RequestBody ScheduleDto scheduleDto) {
         return ApiResponseDto.from(HttpStatus.OK, "스케줄 수정", scheduleService.updateSchedule(feedId,id,scheduleDto));
     }

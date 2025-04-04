@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.domain.user.entity;
 
-import com.kkiri_trip.back.global.common.entity.BaseEntity;
+import com.kkiri_trip.back.domain.common.entity.BaseEntity;
 import com.kkiri_trip.back.global.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @Builder
 @NoArgsConstructor

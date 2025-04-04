@@ -1,7 +1,7 @@
 package com.kkiri_trip.back.domain.feed.entity;
 
 import com.kkiri_trip.back.api.dto.Feed.FeedDto;
-import com.kkiri_trip.back.global.common.entity.BaseEntity;
+import com.kkiri_trip.back.domain.common.entity.BaseEntity;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import jakarta.persistence.Column;

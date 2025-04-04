@@ -3,6 +3,7 @@ package com.kkiri_trip.back.api.controller;
 import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
 import com.kkiri_trip.back.domain.schedule.service.ScheduleService;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,20 @@ public class ScheduleController {
         return ApiResponseDto.from(HttpStatus.OK, "스케줄 조회", scheduleService.getScheduleById(feedId,id));
     }
 
-    @PostMapping("/{id}")
+    @PostMapping
     public ResponseEntity<ApiResponseDto<ScheduleDto>> createSchedule(@PathVariable("feedId") Long feedId, @RequestBody ScheduleDto scheduleDto) {
         return ApiResponseDto.from(HttpStatus.OK, "스케줄 생성", scheduleService.createSchedule(feedId,scheduleDto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<ScheduleDto>> updateScheduleById(@PathVariable("feedId") Long feedId, @PathVariable("id") Long id, @Valid @RequestBody ScheduleDto scheduleDto) {
+        return ApiResponseDto.from(HttpStatus.OK, "스케줄 수정", scheduleService.updateSchedule(feedId,id,scheduleDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<Void>> deleteScheculdeById(@PathVariable Long id) {
+        scheduleService.deleteSchedule(id);
+        return ApiResponseDto.from(HttpStatus.OK, "스케줄 삭제", null);
     }
 
 }

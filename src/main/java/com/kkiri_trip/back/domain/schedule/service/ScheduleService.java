@@ -1,5 +1,6 @@
 package com.kkiri_trip.back.domain.schedule.service;
 
+import com.kkiri_trip.back.api.dto.Feed.FeedDto;
 import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
 import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
@@ -12,6 +13,7 @@ import com.kkiri_trip.back.global.error.exception.FeedException;
 import com.kkiri_trip.back.global.error.exception.ScheduleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -59,5 +61,27 @@ public class ScheduleService {
         if (scheduleDto.getFeedId() == null || scheduleDto.getFeedId() <= 0) {
             throw new ScheduleException(ScheduleErrorCode.INVALID_FEED);
         }
+    }
+
+    public ScheduleDto updateSchedule(Long feedId, Long scheduleId, ScheduleDto scheduleDto) {
+
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() ->
+                new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() ->
+                new ScheduleException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+        validateFeedDto(scheduleDto);
+
+        schedule.setDayNumber(scheduleDto.getDayNumber());
+        schedule.setFeed(feed);
+
+        return scheduleRepository.save(schedule).toDto();
+    }
+
+    @Transactional
+    public void deleteSchedule(Long id) {
+        scheduleRepository.findById(id)
+                .orElseThrow(() -> new ScheduleException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+
+        scheduleRepository.deleteById(id);
     }
 }

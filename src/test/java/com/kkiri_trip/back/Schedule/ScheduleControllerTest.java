@@ -31,9 +31,9 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -157,11 +157,102 @@ public class ScheduleControllerTest {
                 .thenThrow(new FeedException(FeedErrorCode.FEED_NOT_FOUND));
 
         // when & then
-        mockMvc.perform(post("/api/feeds/{feedId}/schedules/1", feedId)
+        mockMvc.perform(post("/api/feeds/{feedId}/schedules", feedId) // ✅ URL 수정
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(requestDto)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("해당 피드를 찾을 수 없습니다."))); // ✅ 메시지 통일 추천
+    }
+
+
+    @Test
+    @DisplayName("정상적으로 스케줄을 수정한다.")
+    void updateSchedule_Success() throws Exception {
+        // given
+        Long feedId = 1L;
+        Long scheduleId = 1L;
+        ScheduleDto requestDto = new ScheduleDto(scheduleId, 2, feedId);
+        ScheduleDto responseDto = new ScheduleDto(scheduleId, 2, feedId);
+
+        when(scheduleService.updateSchedule(eq(feedId), eq(scheduleId), any(ScheduleDto.class)))
+                .thenReturn(responseDto);
+
+        // when & then
+        mockMvc.perform(put("/api/feeds/{feedId}/schedules/{scheduleId}", feedId, scheduleId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(requestDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(scheduleId))
+                .andExpect(jsonPath("$.data.dayNumber").value(2))
+                .andExpect(jsonPath("$.data.feedId").value(feedId));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 피드 ID로 인해 수정 실패")
+    void updateScheduleFail_InvalidFeed() throws Exception {
+        // given
+        Long feedId = 999L;
+        Long scheduleId = 1L;
+        ScheduleDto requestDto = new ScheduleDto(scheduleId, 2, feedId);
+
+        when(scheduleService.updateSchedule(eq(feedId), eq(scheduleId), any(ScheduleDto.class)))
+                .thenThrow(new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+
+        // when & then
+        mockMvc.perform(put("/api/feeds/{feedId}/schedules/{scheduleId}", feedId, scheduleId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(requestDto)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("해당 피드를 찾을 수 없습니다.")));
+    }
+
+    @Test
+    @DisplayName("유효하지 않은 dayNumber로 인해 수정 실패")
+    void updateScheduleFail_InvalidDayNumber() throws Exception {
+        // given
+        Long feedId = 1L;
+        Long scheduleId = 1L;
+        ScheduleDto requestDto = new ScheduleDto(scheduleId, 0, feedId); // dayNumber가 0 (유효하지 않음)
+
+        when(scheduleService.updateSchedule(eq(feedId), eq(scheduleId), any(ScheduleDto.class)))
+                .thenThrow(new ScheduleException(ScheduleErrorCode.INVALID_DAYNUMBER));
+
+        // when & then
+        mockMvc.perform(put("/api/feeds/{feedId}/schedules/{scheduleId}", feedId, scheduleId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message",is("유효하지 않는 피드입니다.")));
-
+                .andExpect(jsonPath("$.message", is("일차는 0이하일 수 없습니다.")));
     }
+
+    @Test
+    @DisplayName("피드를 정상적으로 삭제한다.")
+    void deleteFeedSuccess() throws Exception {
+        // given
+        Long feedId = 1L;
+        Long scheduleId = 1L;
+        doNothing().when(scheduleService).deleteSchedule(scheduleId);
+
+        // when & then
+        mockMvc.perform(delete("/api/feeds/{feedId}/schedules/{scheduleId}",feedId, scheduleId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 피드를 삭제하면 예외가 발생한다.")
+    void deleteFeedNotFound() throws Exception {
+        // given
+        Long feedId = 1L;
+        Long scheduleId = 999L; // 없는 ID
+        doThrow(new FeedException(FeedErrorCode.FEED_NOT_FOUND))
+                .when(scheduleService).deleteSchedule(scheduleId);
+
+        // when & then
+        mockMvc.perform(delete("/api/feeds/{feedId}/schedules/{scheduleId}",feedId, scheduleId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("해당 피드를 찾을 수 없습니다.")));
+    }
+
 }

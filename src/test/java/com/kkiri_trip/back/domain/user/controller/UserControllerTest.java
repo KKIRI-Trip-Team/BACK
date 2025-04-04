@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 @AutoConfigureMockMvc(addFilters = false)
 class UserControllerTest {
     @Autowired private MockMvc mockMvc;
+    @MockitoBean private UserService userService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

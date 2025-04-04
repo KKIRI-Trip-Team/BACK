@@ -1,6 +1,8 @@
 package com.kkiri_trip.back.api.controller;
 
+import com.kkiri_trip.back.api.dto.Feed.FeedDto;
 import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
+import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.schedule.service.ScheduleService;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
 import jakarta.validation.Valid;
@@ -41,6 +43,23 @@ public class ScheduleController {
     public ResponseEntity<ApiResponseDto<Void>> deleteScheculdeById(@PathVariable Long id) {
         scheduleService.deleteSchedule(id);
         return ApiResponseDto.from(HttpStatus.OK, "스케줄 삭제", null);
+    }
+
+    @GetMapping("/dummy")
+    public ResponseEntity<ApiResponseDto<ScheduleDto>> getDummyScheduleById()
+    {
+        ScheduleDto scheduleDto = new ScheduleDto(1L,1,1L);
+
+        return ApiResponseDto.from(HttpStatus.OK, "스케줄 조회", scheduleDto);
+    }
+
+    @GetMapping("/dummylist")
+    public ResponseEntity<ApiResponseDto<List<ScheduleDto>>> getDummyScheduleList()
+    {
+        ScheduleDto scheduleDto1 = new ScheduleDto(1L,1,1L);
+        ScheduleDto scheduleDto2 = new ScheduleDto(2L,2,1L);
+        ScheduleDto scheduleDto3 = new ScheduleDto(3L,3,1L);
+        return ApiResponseDto.from(HttpStatus.OK, "스케줄 리스트 조회", List.of(scheduleDto1,scheduleDto2,scheduleDto3));
     }
 
 }

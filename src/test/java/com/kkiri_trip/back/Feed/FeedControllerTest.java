@@ -11,8 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -33,10 +33,10 @@ class FeedControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private FeedService feedService;
 
-    @MockBean
+    @MockitoBean
     private FeedRepository feedRepository;
 
     @Test
@@ -63,8 +63,8 @@ class FeedControllerTest {
     @DisplayName("피드 id로 피드를 조회한다.")
     void getFeedById() throws Exception {
         // given
-        FeedDto feeds = new FeedDto(1L, "제목1", "내용1");
-        given(feedService.getFeedById(1L)).willReturn(feeds);
+        FeedDto feed = new FeedDto(1L, "제목1", "내용1");
+        given(feedService.getFeedById(1L)).willReturn(feed);
 
         // when & then
         mockMvc.perform(get("/api/feeds/1"))
@@ -198,5 +198,4 @@ class FeedControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is("해당 피드를 찾을 수 없습니다.")));
     }
-
 }

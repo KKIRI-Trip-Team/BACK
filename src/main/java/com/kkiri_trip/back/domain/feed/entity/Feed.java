@@ -6,7 +6,6 @@ import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

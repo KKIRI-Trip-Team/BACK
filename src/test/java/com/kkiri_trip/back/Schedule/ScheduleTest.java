@@ -6,10 +6,12 @@ import com.kkiri_trip.back.global.error.exception.ScheduleException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@AutoConfigureMockMvc(addFilters = false)
 public class ScheduleTest {
 
     private Feed feed;

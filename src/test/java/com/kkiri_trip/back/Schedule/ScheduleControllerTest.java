@@ -1,13 +1,9 @@
 package com.kkiri_trip.back.Schedule;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kkiri_trip.back.api.controller.FeedController;
 import com.kkiri_trip.back.api.controller.ScheduleController;
-import com.kkiri_trip.back.api.dto.Feed.FeedDto;
 import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
-import com.kkiri_trip.back.domain.feed.service.FeedService;
-import com.kkiri_trip.back.domain.schedule.entity.Schedule;
 import com.kkiri_trip.back.domain.schedule.repository.ScheduleRepository;
 import com.kkiri_trip.back.domain.schedule.service.ScheduleService;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
@@ -19,11 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -140,7 +134,7 @@ public class ScheduleControllerTest {
                 .thenThrow(new ScheduleException(ScheduleErrorCode.INVALID_DAYNUMBER));
 
         // when & then
-        mockMvc.perform(post("/api/feeds/{feedId}/schedules/1", feedId)
+        mockMvc.perform(post("/api/feeds/{feedId}/schedules", feedId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest())

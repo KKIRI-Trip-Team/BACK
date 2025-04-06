@@ -5,10 +5,12 @@ import com.kkiri_trip.back.global.error.exception.FeedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@AutoConfigureMockMvc(addFilters = false)
 public class FeedTest {
 
 
@@ -27,6 +29,7 @@ public class FeedTest {
     void getTitle() {
         assertThat(feed.getTitle()).isEqualTo("피드제목");
     }
+
     @Test
     @DisplayName("피드의 내용을 가져온다")
     void getContent() {

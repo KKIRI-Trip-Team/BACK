@@ -58,7 +58,6 @@ public class ScheduleControllerTest {
                 new ScheduleDto(3L, 3, feedId)
         );
 
-        // scheduleService.getAllSchedules(feedId) 호출 시, schedules 리스트 반환
         given(scheduleService.getAllSchedules(eq(feedId))).willReturn(schedules);
 
         // when & then

@@ -3,6 +3,7 @@ package com.kkiri_trip.back.global.error;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import com.kkiri_trip.back.global.error.exception.ScheduleException;
+import com.kkiri_trip.back.global.error.exception.ScheduleItemException;
 import com.kkiri_trip.back.global.error.exception.UserException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +19,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ScheduleException.class)
     public ResponseEntity<ApiResponseDto<Void>> handleScheduleException(ScheduleException ex) {
+        return ApiResponseDto.from(ex.getErrorCode().getHttpStatus(), ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(ScheduleItemException.class)
+    public ResponseEntity<ApiResponseDto<Void>> handleScheduleItemException(ScheduleItemException ex) {
         return ApiResponseDto.from(ex.getErrorCode().getHttpStatus(), ex.getMessage(), null);
     }
 

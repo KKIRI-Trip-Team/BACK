@@ -25,6 +25,13 @@ spring:
       max-file-size: 10MB
       max-request-size: 100MB
 
+  jwt:
+    secret: JYGu7LnAjPxE1Hw9404R+guJVN91HYj3DxHT927j3EHmbAnTqi1AIGDSbyZMNudGN2+Ux8ZriRtN+D2V90jsHA==
+    access-expiration: 3600000
+    refresh-expiration: 1209600000
+
+
 logging:
   level:
     org.hibernate.type: trace
+

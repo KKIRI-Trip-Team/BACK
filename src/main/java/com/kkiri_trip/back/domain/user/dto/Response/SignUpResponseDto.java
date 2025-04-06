@@ -1,4 +1,4 @@
-package com.kkiri_trip.back.domain.user.dto;
+package com.kkiri_trip.back.domain.user.dto.Response;
 
 import lombok.*;
 

@@ -1,9 +1,12 @@
 package com.kkiri_trip.back.domain.user.controller;
 
-import com.kkiri_trip.back.domain.user.dto.SignUpRequestDto;
-import com.kkiri_trip.back.domain.user.dto.SignUpResponseDto;
+import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
+import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
+import com.kkiri_trip.back.domain.user.dto.Response.LoginResponseDto;
+import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
 import com.kkiri_trip.back.domain.user.service.UserService;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,5 +27,11 @@ public class UserController {
     public ResponseEntity<ApiResponseDto<SignUpResponseDto>> register(@RequestBody @Valid SignUpRequestDto signUpRequestDto){
         SignUpResponseDto signUpResponseDto = userService.register(signUpRequestDto);
         return ApiResponseDto.from(HttpStatus.CREATED, "회원가입이 성공적으로 등록되었습니다.", signUpResponseDto);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponseDto<LoginResponseDto>> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
+        LoginResponseDto loginResponseDto = userService.login(loginRequestDto, response);
+        return ApiResponseDto.from(HttpStatus.OK, "로그인이 성공적으로 완료되었습니다.", loginResponseDto);
     }
 }

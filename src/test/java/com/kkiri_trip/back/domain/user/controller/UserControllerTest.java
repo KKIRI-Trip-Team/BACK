@@ -1,8 +1,8 @@
 package com.kkiri_trip.back.domain.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kkiri_trip.back.domain.user.dto.SignUpRequestDto;
-import com.kkiri_trip.back.domain.user.dto.SignUpResponseDto;
+import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
+import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
 import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.domain.user.service.UserService;
 import com.kkiri_trip.back.global.enums.Gender;
@@ -14,22 +14,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class UserControllerTest {
     @Autowired private MockMvc mockMvc;
+
     @MockitoBean private UserService userService;
 
+    @MockitoBean private UserRepository userRepository;
+
+    @MockitoBean
+    private PasswordEncoder passwordEncoder;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+
 
     @Test
     @DisplayName("회원가입 요청 성공")
@@ -105,5 +113,4 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest());
     }
-
 }

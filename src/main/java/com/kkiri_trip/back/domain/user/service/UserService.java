@@ -12,9 +12,12 @@ import com.kkiri_trip.back.global.error.exception.UserException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final StringRedisTemplate stringRedisTemplate;
 
     @Transactional
     public SignUpResponseDto register(SignUpRequestDto signupRequestDto){
@@ -59,6 +63,13 @@ public class UserService {
         String accessToken = jwtUtil.generateAccessToken(user.getId());
         String refreshToken = jwtUtil.generateRefreshToken(user.getId());
 
+        // RefreshToken Redis 저장 (Key: refresh:{userId})
+        stringRedisTemplate.opsForValue().set(
+                "refresh:" + user.getId(),
+                refreshToken,
+                14, TimeUnit.DAYS // 만료시간 설정
+        );
+
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
@@ -66,6 +77,20 @@ public class UserService {
         response.addCookie(cookie);
 
         return new LoginResponseDto(accessToken, user.getNickname());
+    }
+
+    public void logout(String accessToken){
+        // 남은 유효시간 계산
+        long remainingTime = jwtUtil.getRemainingTime(accessToken);
+
+        // 블랙리스트 등록
+        stringRedisTemplate.opsForValue().set(
+                "blacklist:" + accessToken,
+                "logout",
+                remainingTime,
+                TimeUnit.MILLISECONDS
+        );
+
     }
 
     // TODO : 프로필 업로드 논의

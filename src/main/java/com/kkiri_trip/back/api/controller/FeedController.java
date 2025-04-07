@@ -39,13 +39,13 @@ public class FeedController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<FeedDto>> createFeed(@PathVariable Long id, @Valid @RequestBody FeedDto feedDto) {
+    public ResponseEntity<ApiResponseDto<FeedDto>> updateFeedById(@PathVariable Long id, @Valid @RequestBody FeedDto feedDto) {
         FeedDto updatedFeed = feedService.updateFeed(id, feedDto);
         return ApiResponseDto.from(HttpStatus.OK, "피드 수정", updatedFeed);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> createFeed(@PathVariable Long id) {
+    public ResponseEntity<ApiResponseDto<Void>> deleteFeedById(@PathVariable Long id) {
         feedService.deleteFeed(id);
         return ApiResponseDto.from(HttpStatus.OK, "피드 삭제", null);
     }

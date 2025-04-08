@@ -67,8 +67,8 @@ public class ScheduleItemController {
 
     @DeleteMapping("/feeds/{feedId}/schedules/{scheduleId}/scheduleItems/{id}")
     ResponseEntity<ApiResponseDto<Void>> deleteScheduleItem(@PathVariable("feedId") Long feedId,
-                                                                       @PathVariable("scheduleId") Long scheduleId,
-                                                                       @PathVariable("id") Long id)
+                                                            @PathVariable("scheduleId") Long scheduleId,
+                                                            @PathVariable("id") Long id)
     {
         scheduleItemService.deleteScheduleItem(feedId,scheduleId,id);
         return ApiResponseDto.from(HttpStatus.OK,

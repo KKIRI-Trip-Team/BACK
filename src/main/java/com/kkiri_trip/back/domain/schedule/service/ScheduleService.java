@@ -78,7 +78,10 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void deleteSchedule(Long id) {
+    public void deleteSchedule(Long feedId, Long id) {
+
+        feedRepository.findById(feedId).orElseThrow(()->
+                new FeedException(FeedErrorCode.FEED_NOT_FOUND));
         scheduleRepository.findById(id)
                 .orElseThrow(() -> new ScheduleException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
 

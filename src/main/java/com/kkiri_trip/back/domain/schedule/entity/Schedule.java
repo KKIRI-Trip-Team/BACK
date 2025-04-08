@@ -45,12 +45,10 @@ public class Schedule extends BaseEntity {
         this.feed = feed;
     }
 
-    // Feed 엔티티를 FeedDto로 변환하는 메서드
     public ScheduleDto toDto() {
         return new ScheduleDto(this.getId(), this.dayNumber, this.feed.getId());
     }
 
-    // Feed 리스트를 FeedDto 리스트로 변환하는 Stream 기반 메서드
     public static List<ScheduleDto> toDtoList(List<Schedule> schedules) {
         return schedules.stream()
                 .map(Schedule::toDto)

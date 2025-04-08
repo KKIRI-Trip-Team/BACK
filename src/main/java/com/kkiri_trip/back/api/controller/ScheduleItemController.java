@@ -76,5 +76,21 @@ public class ScheduleItemController {
                 null);
     }
 
+    @GetMapping("/scheduleItems/dummy")
+    ResponseEntity<ApiResponseDto<ScheduleItemDto>> getDummyScheduleItems(@PathVariable("feedId") Long feedId)
+    {
+        ScheduleItemDto scheduleItemDto = new ScheduleItemDto(1L,1,1L);
+        return ApiResponseDto.from(HttpStatus.OK, "피드의 스케줄 아이템 조회", scheduleItemDto);
+    }
+
+    @GetMapping("/scheduleItems/dummylist")
+    ResponseEntity<ApiResponseDto<List<ScheduleItemDto>>> getAllDummyScheduleItems(@PathVariable("feedId") Long feedId)
+    {
+        ScheduleItemDto scheduleItemDto1 = new ScheduleItemDto(1L,1,1L);
+        ScheduleItemDto scheduleItemDto2 = new ScheduleItemDto(2L,2,1L);
+        ScheduleItemDto scheduleItemDto3 = new ScheduleItemDto(3L,3,1L);
+        return ApiResponseDto.from(HttpStatus.OK, "피드의 스케줄 아이템 리스트 조회", List.of(scheduleItemDto1,scheduleItemDto2,scheduleItemDto3));
+    }
+
 
 }

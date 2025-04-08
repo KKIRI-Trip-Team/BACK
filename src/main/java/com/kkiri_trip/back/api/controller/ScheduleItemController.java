@@ -77,14 +77,14 @@ public class ScheduleItemController {
     }
 
     @GetMapping("/scheduleItems/dummy")
-    ResponseEntity<ApiResponseDto<ScheduleItemDto>> getDummyScheduleItems(@PathVariable("feedId") Long feedId)
+    ResponseEntity<ApiResponseDto<ScheduleItemDto>> getDummyScheduleItems()
     {
         ScheduleItemDto scheduleItemDto = new ScheduleItemDto(1L,1,1L);
         return ApiResponseDto.from(HttpStatus.OK, "피드의 스케줄 아이템 조회", scheduleItemDto);
     }
 
     @GetMapping("/scheduleItems/dummylist")
-    ResponseEntity<ApiResponseDto<List<ScheduleItemDto>>> getAllDummyScheduleItems(@PathVariable("feedId") Long feedId)
+    ResponseEntity<ApiResponseDto<List<ScheduleItemDto>>> getAllDummyScheduleItems()
     {
         ScheduleItemDto scheduleItemDto1 = new ScheduleItemDto(1L,1,1L);
         ScheduleItemDto scheduleItemDto2 = new ScheduleItemDto(2L,2,1L);

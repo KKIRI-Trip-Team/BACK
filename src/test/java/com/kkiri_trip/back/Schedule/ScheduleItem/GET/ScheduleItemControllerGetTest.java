@@ -110,7 +110,7 @@ public class ScheduleItemControllerGetTest {
                 .willReturn(scheduleItemDto);
 
         // when & then
-        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/items/{id}",feedId, scheduleId,scheduleItemId)
+        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems/{id}",feedId, scheduleId,scheduleItemId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.itemOrder").value(1));
@@ -134,7 +134,7 @@ public class ScheduleItemControllerGetTest {
                 .willThrow(new FeedException(FeedErrorCode.FEED_NOT_FOUND));
 
         // when & then
-        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/items/{id}",feedId, scheduleId,scheduleItemId)
+        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems/{id}",feedId, scheduleId,scheduleItemId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message",is("해당 피드를 찾을 수 없습니다.")));
@@ -158,7 +158,7 @@ public class ScheduleItemControllerGetTest {
                 .willThrow(new ScheduleException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
 
         // when & then
-        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/items/{id}",feedId, scheduleId,scheduleItemId)
+        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems/{id}",feedId, scheduleId,scheduleItemId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message",is("해당 스케줄을 찾을 수 없습니다.")));
@@ -182,7 +182,7 @@ public class ScheduleItemControllerGetTest {
                 .willThrow(new ScheduleItemException(ScheduleItemErrorCode.SCHEDULEITEM_NOT_FOUND));
 
         // when & then
-        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/items/{id}",feedId, scheduleId,scheduleItemId)
+        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems/{id}",feedId, scheduleId,scheduleItemId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message",is("해당 스케줄 아이템을 찾을 수 없습니다.")));
@@ -206,7 +206,7 @@ public class ScheduleItemControllerGetTest {
                 .willThrow(new ScheduleItemException(ScheduleItemErrorCode.INVALID_ITEMORDER));
 
         // when & then
-        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/items/{id}",feedId, scheduleId,scheduleItemId)
+        mockMvc.perform(get("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems/{id}",feedId, scheduleId,scheduleItemId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message",is("아이템 순서는 0이하일 수 없습니다.")));

@@ -29,7 +29,7 @@ public class ScheduleItemController {
         return ApiResponseDto.from(HttpStatus.OK, "스케줄의 스케줄 아이템 리스트 조회", scheduleItemService.getAllScheduleItemsInSchedule(scheduleId));
     }
 
-    @GetMapping("/feeds/{feedId}/schedules/{scheduleId}/items/{id}")
+    @GetMapping("/feeds/{feedId}/schedules/{scheduleId}/scheduleItems/{id}")
     ResponseEntity<ApiResponseDto<ScheduleItemDto>> getScheduleItem(@PathVariable("feedId") Long feedId,
                                                                           @PathVariable("scheduleId") Long scheduleId,
                                                                           @PathVariable("id") Long id) {
@@ -44,7 +44,7 @@ public class ScheduleItemController {
     }
 
 
-    @PostMapping("/feeds/{feedId}/schedules/{scheduleId}/items")
+    @PostMapping("/feeds/{feedId}/schedules/{scheduleId}/scheduleItems")
     ResponseEntity<ApiResponseDto<ScheduleItemDto>> createScheduleItem(@PathVariable("feedId") Long feedId,
                                                                     @PathVariable("scheduleId") Long scheduleId,
                                                                     @RequestBody ScheduleItemDto scheduleItemDto) {
@@ -52,6 +52,28 @@ public class ScheduleItemController {
                 "스케줄 아이템 조회",
             scheduleItemService.createScheduleItem(feedId,scheduleId,scheduleItemDto)
         );
+    }
+
+    @PutMapping("/feeds/{feedId}/schedules/{scheduleId}/scheduleItems/{id}")
+    ResponseEntity<ApiResponseDto<ScheduleItemDto>> updateScheduleItem(@PathVariable("feedId") Long feedId,
+                                                                       @PathVariable("scheduleId") Long scheduleId,
+                                                                       @PathVariable("id") Long id,
+                                                                       @RequestBody ScheduleItemDto scheduleItemDto)
+    {
+        return ApiResponseDto.from(HttpStatus.OK,
+                "스케줄 아이템 수정",
+                scheduleItemService.updateScheduleItem(feedId,scheduleId,id,scheduleItemDto));
+    }
+
+    @DeleteMapping("/feeds/{feedId}/schedules/{scheduleId}/scheduleItems/{id}")
+    ResponseEntity<ApiResponseDto<Void>> deleteScheduleItem(@PathVariable("feedId") Long feedId,
+                                                                       @PathVariable("scheduleId") Long scheduleId,
+                                                                       @PathVariable("id") Long id)
+    {
+        scheduleItemService.deleteScheduleItem(feedId,scheduleId,id);
+        return ApiResponseDto.from(HttpStatus.OK,
+                "스케줄 아이템 수정",
+                null);
     }
 
 

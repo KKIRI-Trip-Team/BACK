@@ -1,10 +1,7 @@
 package com.kkiri_trip.back.Schedule.DELETE;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkiri_trip.back.api.controller.ScheduleController;
-import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
-import com.kkiri_trip.back.domain.schedule.repository.ScheduleRepository;
 import com.kkiri_trip.back.domain.schedule.service.ScheduleService;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.errorcode.ScheduleErrorCode;
@@ -38,12 +35,12 @@ public class ScheduleControllerTest {
     private FeedRepository feedRepository;
 
     @Test
-    @DisplayName("피드를 정상적으로 삭제한다.")
-    void deleteFeedSuccess() throws Exception {
+    @DisplayName("스케줄을 정상적으로 삭제한다.")
+    void deleteSchedule() throws Exception {
         // given
         Long feedId = 1L;
         Long scheduleId = 1L;
-        doNothing().when(scheduleService).deleteSchedule(scheduleId);
+        doNothing().when(scheduleService).deleteSchedule(feedId,scheduleId);
 
         // when & then
         mockMvc.perform(delete("/api/feeds/{feedId}/schedules/{scheduleId}",feedId, scheduleId)
@@ -52,19 +49,35 @@ public class ScheduleControllerTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 피드를 삭제하면 예외가 발생한다.")
+    @DisplayName("스케줄 안에 존재하지 않는 피드를 삭제하면 예외가 발생한다.")
     void deleteFeedNotFound() throws Exception {
         // given
-        Long feedId = 1L;
-        Long scheduleId = 999L; // 없는 ID
+        Long feedId = 999L;
+        Long scheduleId = 1L;
         doThrow(new FeedException(FeedErrorCode.FEED_NOT_FOUND))
-                .when(scheduleService).deleteSchedule(scheduleId);
+                .when(scheduleService).deleteSchedule(feedId,scheduleId);
 
         // when & then
         mockMvc.perform(delete("/api/feeds/{feedId}/schedules/{scheduleId}",feedId, scheduleId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message", is("해당 피드를 찾을 수 없습니다.")));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 스케줄을 삭제하면 예외가 발생한다.")
+    void deleteScheduleNotFound() throws Exception {
+        // given
+        Long feedId = 1L;
+        Long scheduleId = 999L;
+        doThrow(new ScheduleException(ScheduleErrorCode.SCHEDULE_NOT_FOUND))
+                .when(scheduleService).deleteSchedule(feedId,scheduleId);
+
+        // when & then
+        mockMvc.perform(delete("/api/feeds/{feedId}/schedules/{scheduleId}",feedId, scheduleId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message", is("해당 스케줄을 찾을 수 없습니다.")));
     }
 
 }

@@ -38,8 +38,8 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDto<Void>> deleteScheculdeById(@PathVariable Long id) {
-        scheduleService.deleteSchedule(id);
+    public ResponseEntity<ApiResponseDto<Void>> deleteScheculdeById(@PathVariable ("feedId") Long feedId, @PathVariable Long id) {
+        scheduleService.deleteSchedule(feedId, id);
         return ApiResponseDto.from(HttpStatus.OK, "스케줄 삭제", null);
     }
 

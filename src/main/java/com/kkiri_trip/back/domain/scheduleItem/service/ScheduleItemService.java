@@ -1,5 +1,6 @@
 package com.kkiri_trip.back.domain.scheduleItem.service;
 
+import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
 import com.kkiri_trip.back.api.dto.Schedule.ScheduleItem.ScheduleItemDto;
 import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
@@ -85,5 +86,42 @@ public class ScheduleItemService {
     {
         if (itemOrder <= 0 )
             throw new ScheduleItemException(ScheduleItemErrorCode.INVALID_ITEMORDER);
+    }
+
+    public ScheduleItemDto updateScheduleItem(Long feedId,
+                                          Long scheduleId,
+                                          Long scheduleItemId,
+                                          ScheduleItemDto scheduleItemDto) {
+        feedRepository.findById(feedId).orElseThrow(()->
+                new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(()->
+                new ScheduleException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+
+        validateScheduleDto(scheduleItemDto.getItemOrder());
+
+        ScheduleItem scheduleItem = scheduleItemRepository.findById(scheduleItemId).orElseThrow(()->
+                new ScheduleItemException(ScheduleItemErrorCode.SCHEDULEITEM_NOT_FOUND));
+
+        scheduleItem.setItemOrder(scheduleItemDto.getItemOrder());
+        scheduleItem.setSchedule(schedule);
+
+        return scheduleItem.toDto();
+    }
+
+    public void deleteScheduleItem(Long feedId,
+                               Long scheduleId,
+                               Long scheduleItemId) {
+
+        feedRepository.findById(feedId).orElseThrow(()->
+                new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+
+         scheduleRepository.findById(scheduleId).orElseThrow(()->
+                new ScheduleException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
+
+        ScheduleItem scheduleItem = scheduleItemRepository.findById(scheduleItemId).orElseThrow(()->
+                new ScheduleItemException(ScheduleItemErrorCode.SCHEDULEITEM_NOT_FOUND));
+
+        scheduleItemRepository.delete(scheduleItem);
     }
 }

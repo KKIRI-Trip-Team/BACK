@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,7 +60,7 @@ public class ScheduleItemControllerPostTest {
                 .willReturn(scheduleItemDto);
 
         // when & then
-        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/items",feedId, scheduleId)
+        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems",feedId, scheduleId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(scheduleItemDto)))
                 .andExpect(status().isCreated())
@@ -85,7 +84,7 @@ public class ScheduleItemControllerPostTest {
                 .willThrow(new FeedException(FeedErrorCode.FEED_NOT_FOUND));
 
         // when & then
-        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/items",feedId, scheduleId)
+        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems",feedId, scheduleId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(scheduleItemDto)))
                 .andExpect(status().isNotFound())
@@ -110,7 +109,7 @@ public class ScheduleItemControllerPostTest {
                 .willThrow(new ScheduleException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
 
         // when & then
-        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/items",feedId, scheduleId)
+        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems",feedId, scheduleId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(scheduleItemDto)))
                 .andExpect(status().isNotFound())
@@ -135,7 +134,7 @@ public class ScheduleItemControllerPostTest {
                 .willThrow(new ScheduleItemException(ScheduleItemErrorCode.SCHEDULEITEM_NOT_FOUND));
 
         // when & then
-        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/items",feedId, scheduleId)
+        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems",feedId, scheduleId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(scheduleItemDto)))
                 .andExpect(status().isNotFound())
@@ -160,7 +159,7 @@ public class ScheduleItemControllerPostTest {
                 .willThrow(new ScheduleItemException(ScheduleItemErrorCode.INVALID_ITEMORDER));
 
         // when & then
-        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/items",feedId, scheduleId)
+        mockMvc.perform(post("/api/feeds/{feedId}/schedules/{scheduleId}/scheduleItems",feedId, scheduleId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(scheduleItemDto)))
                 .andExpect(status().isBadRequest())

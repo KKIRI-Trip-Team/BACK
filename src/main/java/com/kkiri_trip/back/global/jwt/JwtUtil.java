@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -62,4 +63,22 @@ public class JwtUtil {
                 .getBody(); // 토큰의 body 추출
         return claims.getSubject();  // subject는 사용자 이메일
     }
+
+    public long getRemainingTime(String token){
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey.getBytes()) // 비밀키 설정
+                .build()
+                .parseClaimsJws(token) // 토큰 파싱 및 검증
+                .getBody(); // 토큰의 body 추출
+        return claims.getExpiration().getTime() - System.currentTimeMillis();
+    }
+
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7); // "Bearer " 이후 부분만 반환
+        }
+        return null;
+    }
+
 }

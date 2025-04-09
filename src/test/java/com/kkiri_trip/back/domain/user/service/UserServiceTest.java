@@ -123,7 +123,7 @@ class UserServiceTest {
 
         // then
         assertThat(result.getAccessToken()).isNotNull();
-        assertThat(result.getNickName()).isEqualTo("김스트");
+        assertThat(result.getNickname()).isEqualTo("김스트");
     }
 
     @Test

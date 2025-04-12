@@ -9,6 +9,9 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
 public class AWSConfig {
+
+    public final static long IMAGE_MAXIMUM_LENGTH = 10485760L; // 10MB
+
     @Value("${spring.cloud.aws.credentials.access-key}")
     private String accessKey;
 

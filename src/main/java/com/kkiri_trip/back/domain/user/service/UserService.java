@@ -2,8 +2,11 @@ package com.kkiri_trip.back.domain.user.service;
 
 import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
+import com.kkiri_trip.back.domain.user.dto.Request.UserUpdateRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Response.LoginResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
+import com.kkiri_trip.back.domain.user.dto.Response.UserResponseDto;
+import com.kkiri_trip.back.domain.user.dto.Response.UserUpdateResponseDto;
 import com.kkiri_trip.back.domain.user.entity.User;
 import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.global.jwt.JwtUtil;
@@ -17,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -93,8 +97,25 @@ public class UserService {
 
     }
 
-    // TODO : 프로필 업로드 논의
-    // TODO : 닉네임 중복 검사 논의
-    // TODO : 이메일 검증 추가 논의
+    public List<UserResponseDto> getAllUsers(){
+        return userRepository.findAll()
+                .stream()
+                .map(UserResponseDto::from)
+                .toList();
+    }
 
+    // TODO : 논의 후 정보 수정 추가 예쩡
+    @Transactional
+    public UserUpdateResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto, User loginUser){
+        User user = userRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        if(!user.getId().equals(loginUser.getId())){
+            throw new UserException(UserErrorCode.UNAUTHORIZED_UPDATE);
+        }
+
+        user.setNickname(userUpdateRequestDto.getNickname());
+
+        return new UserUpdateResponseDto(user.getId(), user.getNickname());
+    }
 }

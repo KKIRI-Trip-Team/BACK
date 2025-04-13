@@ -30,7 +30,6 @@ public class UserController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponseDto<SignUpResponseDto>> register(@RequestBody @Valid SignUpRequestDto signUpRequestDto){

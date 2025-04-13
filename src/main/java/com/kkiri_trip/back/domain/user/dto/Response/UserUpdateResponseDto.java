@@ -9,5 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class UserUpdateResponseDto {
     private Long Id;
+    private String email;
     private String nickname;
+    private String profileUrl;
 }

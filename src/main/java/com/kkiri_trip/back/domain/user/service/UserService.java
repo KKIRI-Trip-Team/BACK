@@ -34,10 +34,17 @@ public class UserService {
 
     @Transactional
     public SignUpResponseDto register(SignUpRequestDto signupRequestDto){
+        // 이메일 중복 검사
         if(userRepository.existsByEmail(signupRequestDto.getEmail())){
             throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
         }
 
+        // 닉네임 중복 검사
+        if (userRepository.existsByNickname(signupRequestDto.getNickname())){
+            throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
+        }
+
+        // 비밀번호와 확인 비밀번호 일치 검사
         if(!signupRequestDto.getPassword().equals(signupRequestDto.getConfirmPassword())){
             throw new UserException(UserErrorCode.PASSWORD_MISMATCH);
         }
@@ -48,6 +55,7 @@ public class UserService {
                 .name(signupRequestDto.getName())
                 .nickname(signupRequestDto.getNickname())
                 .mobile_number(signupRequestDto.getMobile_number())
+                .profileUrl(signupRequestDto.getProfileUrl())
                 .gender(signupRequestDto.getGender())
                 .build();
 
@@ -104,7 +112,6 @@ public class UserService {
                 .toList();
     }
 
-    // TODO : 논의 후 정보 수정 추가 예쩡
     @Transactional
     public UserUpdateResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto, User loginUser){
         User user = userRepository.findById(loginUser.getId())
@@ -114,8 +121,20 @@ public class UserService {
             throw new UserException(UserErrorCode.UNAUTHORIZED_UPDATE);
         }
 
-        user.setNickname(userUpdateRequestDto.getNickname());
+        if(userRepository.existsByEmail(userUpdateRequestDto.getEmail())
+                && !user.getEmail().equals(userUpdateRequestDto.getEmail())){
+            throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
+        }
 
-        return new UserUpdateResponseDto(user.getId(), user.getNickname());
+        if(userRepository.existsByNickname(userUpdateRequestDto.getNickname())
+                && !user.getNickname().equals(userUpdateRequestDto.getNickname())){
+            throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
+        }
+
+        user.setEmail(userUpdateRequestDto.getEmail());
+        user.setNickname(userUpdateRequestDto.getNickname());
+        user.setProfileUrl(userUpdateRequestDto.getProfileUrl());
+
+        return new UserUpdateResponseDto(user.getId(),user.getEmail(), user.getNickname(), user.getProfileUrl());
     }
 }

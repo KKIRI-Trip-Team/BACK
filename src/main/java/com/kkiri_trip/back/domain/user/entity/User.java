@@ -27,6 +27,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String mobile_number;
 
+    private String profileUrl;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 

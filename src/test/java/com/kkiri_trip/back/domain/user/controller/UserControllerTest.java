@@ -8,6 +8,7 @@ import com.kkiri_trip.back.domain.user.service.UserService;
 import com.kkiri_trip.back.global.enums.Gender;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
 import com.kkiri_trip.back.global.error.exception.UserException;
+import com.kkiri_trip.back.global.jwt.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ class UserControllerTest {
     @MockitoBean
     private PasswordEncoder passwordEncoder;
 
+    @MockitoBean
+    private JwtUtil jwtUtil;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
@@ -43,7 +47,7 @@ class UserControllerTest {
     @DisplayName("회원가입 요청 성공")
     void register_success() throws Exception{
         SignUpRequestDto dto = new SignUpRequestDto(
-                "test@example.com", "12345", "12345", "김테스트", "김스트", "01012345678", Gender.M
+                "test@example.com", "12345", "12345",  "김테스트", "김스트", "01012345678", null, Gender.M
         );
 
         SignUpResponseDto responseDto = new SignUpResponseDto(1L, "김스트");
@@ -62,7 +66,7 @@ class UserControllerTest {
     @DisplayName("중복 이메일 회원가입 실패")
     void register_duplicate_email() throws Exception{
         SignUpRequestDto dto =  new SignUpRequestDto(
-                "test@example.com", "12345", "12345", "박테스트", "박스트", "01011112222", Gender.F
+                "test@example.com", "12345", "12345", "박테스트", "박스트", "01011112222", null, Gender.F
         );
 
         given(userService.register(any(SignUpRequestDto.class)))
@@ -79,7 +83,7 @@ class UserControllerTest {
     @DisplayName("이메일 누락 시 400 BadRequest")
     void register_missing_email() throws Exception{
         SignUpRequestDto dto =  new SignUpRequestDto(
-                "", "12345", "12345", "박테스트", "박스트", "01011112222", Gender.F
+                "", "12345", "12345", "박테스트", "박스트", "01011112222", null, Gender.F
         );
 
         mockMvc.perform(post("/api/user/register")
@@ -92,7 +96,7 @@ class UserControllerTest {
     @DisplayName("비밀번호 누락 시 400 BadRequest")
     void register_missing_password() throws Exception{
         SignUpRequestDto dto =  new SignUpRequestDto(
-                "test@example.com", "", "", "박테스트", "박스트", "01011112222", Gender.F
+                "test@example.com", "", "", "박테스트", "박스트", "01011112222", null, Gender.F
         );
 
         mockMvc.perform(post("/api/user/register")
@@ -105,7 +109,7 @@ class UserControllerTest {
     @DisplayName("이메일 형식이 올바르지 않으면 400 BadRequest")
     void invalid_email_format() throws Exception{
         SignUpRequestDto dto =  new SignUpRequestDto(
-                "not-email", "12345", "12345", "박테스트", "박스트", "01011112222", Gender.F
+                "not-email", "12345", "12345", "박테스트", "박스트", "01011112222", null, Gender.F
         );
 
         mockMvc.perform(post("/api/user/register")

@@ -3,8 +3,13 @@ package com.kkiri_trip.back.Feed;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkiri_trip.back.api.controller.FeedController;
 import com.kkiri_trip.back.api.dto.Feed.FeedDto;
+import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
 import com.kkiri_trip.back.domain.feed.service.FeedService;
+import com.kkiri_trip.back.domain.feedUser.service.FeedUserService;
+import com.kkiri_trip.back.domain.user.entity.User;
+import com.kkiri_trip.back.domain.user.service.UserService;
+import com.kkiri_trip.back.domain.user.util.CustomUserDetails;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +27,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -40,6 +46,12 @@ class FeedControllerTest {
 
     @MockitoBean
     private FeedRepository feedRepository;
+
+    @MockitoBean
+    private FeedUserService feedUserService;
+
+    @MockitoBean
+    private UserService userService;
 
     @Test
     @DisplayName("피드 목록을 조회한다.")
@@ -90,11 +102,61 @@ class FeedControllerTest {
     }
 
     @Test
+    @DisplayName("특정 유저가 참여한 피드 목록을 조회한다.")
+    void getFeedsByUser() throws Exception {
+        // given
+        Long userId = 1L; // 테스트용 userId
+        User user = new User();
+
+        // 피드 목록 생성
+        FeedDto feedDto1 = new FeedDto(1L, "제목1", "내용1");
+        FeedDto feedDto2 = new FeedDto(2L, "제목2", "내용2");
+
+        List<FeedDto> feeds = List.of(feedDto1, feedDto2);
+
+        // feedUserService가 특정 user에 대해 피드를 반환하도록 설정
+        given(feedUserService.findFeedsByUser(userId)).willReturn(feeds);
+
+        // when & then
+        mockMvc.perform(get("/api/feeds/user/{userId}/feeds", userId))  // URL에 userId를 넣어서 호출
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(2)))  // 반환된 데이터의 크기가 2인지 확인
+                .andExpect(jsonPath("$.data[0].title").value("제목1"))
+                .andExpect(jsonPath("$.data[1].title").value("제목2"));
+    }
+
+    @Test
+    @DisplayName("특정 피드에 참여한 유저 목록을 조회한다.")
+    void getUsersByFeed() throws Exception {
+        // given
+        Feed feed = new Feed();
+        // feed.setId()가 불가능하므로 Feed 객체 생성 시 ID 값을 자동 할당하는 방식 필요
+
+        // 예시로 feed 객체를 mock으로 사용한다고 가정하고
+        User user1 = new User();
+        User user2 = new User();
+
+        List<User> users = List.of(user1, user2);
+
+        // feedUserService.findUsersByFeed()를 mock 처리
+        given(feedUserService.findUsersByFeed(1L)).willReturn(users);
+
+        // when & then
+        mockMvc.perform(get("/api/feeds/{feedId}/users", 1L))  // 피드 ID를 받는 엔드포인트 예시
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(2)));
+    }
+
+
+
+    @Test
     @DisplayName("피드를 생성한다.")
     void createFeed() throws Exception {
         // given
         FeedDto responseDto = new FeedDto(1L, "제목1", "내용1");
+
         given(feedService.createFeed(any(FeedDto.class))).willReturn(responseDto);
+        willDoNothing().given(feedUserService).createFeedUser(any(FeedDto.class), any(CustomUserDetails.class)); // 🔥 추가
 
         // when & then
         mockMvc.perform(post("/api/feeds")
@@ -110,27 +172,29 @@ class FeedControllerTest {
     @DisplayName("빈 제목으로 피드를 생성하면 예외가 발생해야 한다.")
     void createFeedWithInvalidTitle() throws Exception {
         // given
-        given(feedService.createFeed(any(FeedDto.class))).willThrow(new FeedException(FeedErrorCode.EMPTY_TITLE));
+        given(feedService.createFeed(any(FeedDto.class)))
+                .willThrow(new FeedException(FeedErrorCode.EMPTY_TITLE));
 
         // when & then
         mockMvc.perform(post("/api/feeds")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"title\": \"\", \"content\": \"내용\"}"))
-                .andExpect(status().isBadRequest()) // 400 상태 코드로 수정
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", is("제목은 비어 있을 수 없습니다.")));
     }
 
     @Test
-    @DisplayName("빈 내용으로 피드를 생성하면 예외가 발생해야 한다.") // 중복된 DisplayName 수정
+    @DisplayName("빈 내용으로 피드를 생성하면 예외가 발생해야 한다.")
     void createFeedWithInvalidContent() throws Exception {
         // given
-        given(feedService.createFeed(any(FeedDto.class))).willThrow(new FeedException(FeedErrorCode.EMPTY_CONTENT));
+        given(feedService.createFeed(any(FeedDto.class)))
+                .willThrow(new FeedException(FeedErrorCode.EMPTY_CONTENT));
 
         // when & then
         mockMvc.perform(post("/api/feeds")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"title\": \"제목\", \"content\": \"\"}"))
-                .andExpect(status().isBadRequest()) // 400 상태 코드로 수정
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message", is("내용은 비어 있을 수 없습니다.")));
     }
 

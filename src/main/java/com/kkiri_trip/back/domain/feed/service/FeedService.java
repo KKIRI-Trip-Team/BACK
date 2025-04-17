@@ -3,8 +3,11 @@ package com.kkiri_trip.back.domain.feed.service;
 import com.kkiri_trip.back.api.dto.Feed.FeedDto;
 import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
+import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
+import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;
+import com.kkiri_trip.back.global.error.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +19,8 @@ import java.util.List;
 public class FeedService {
 
     private final FeedRepository feedRepository;
+
+    private final UserRepository userRepository;
 
     public List<FeedDto> getAllFeeds()
     {
@@ -63,6 +68,12 @@ public class FeedService {
         if (feedDto.getContent() == null || feedDto.getContent().trim().isEmpty()) {
             throw new FeedException(FeedErrorCode.EMPTY_CONTENT);
         }
+    }
+
+    private void validateUser(Long userId)
+    {
+        userRepository.findById(userId).orElseThrow(()->
+                new UserException(UserErrorCode.USER_NOT_FOUND));
     }
 
     @Transactional

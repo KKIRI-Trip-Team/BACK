@@ -42,14 +42,12 @@ public class FeedController {
 
     @GetMapping("/user/{userId}/feeds")
     public ResponseEntity<ApiResponseDto<List<FeedDto>>> getFeedsByUser(@PathVariable Long userId) {
-        // 사용자 조회
         List<FeedDto> feedDtos = feedUserService.findFeedsByUser(userId);
         return ApiResponseDto.from(HttpStatus.OK, "사용자 피드 조회", feedDtos);
     }
 
     @GetMapping("/{id}/users")
     public ResponseEntity<ApiResponseDto<List<User>>> getUserByFeed(@PathVariable Long id) {
-        // 사용자 조회
         List<User> user = feedUserService.findUsersByFeed(id);
         return ApiResponseDto.from(HttpStatus.OK, "사용자 피드 조회", user);
     }
@@ -74,11 +72,11 @@ public class FeedController {
         return ApiResponseDto.from(HttpStatus.OK, "피드 삭제", null);
     }
 
-    @PostMapping("/{feedId}/join")
-    public ResponseEntity<ApiResponseDto<Void>> joinFeed(@PathVariable Long feedId,
+    @PostMapping("/{id}/join")
+    public ResponseEntity<ApiResponseDto<Void>> joinFeed(@PathVariable Long id,
                                                          @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getUser().getId();  // 현재 로그인한 유저의 ID 가져오기
-        feedUserService.joinFeed(feedId, userId);
+        feedUserService.joinFeed(id, userId);
         return ApiResponseDto.from(HttpStatus.OK, "피드 참여 성공", null);
     }
 

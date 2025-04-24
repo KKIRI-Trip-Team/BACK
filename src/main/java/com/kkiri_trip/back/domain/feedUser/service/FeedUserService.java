@@ -64,9 +64,11 @@ public class FeedUserService {
 
     public void joinFeed(Long feedId, Long userId) {
         Feed feed = feedRepository.findById(feedId)
-                .orElseThrow(() -> new RuntimeException("피드를 찾을 수 없습니다."));
+                .orElseThrow(() -> 
+                             new FeedException(FeedErrorCode.FEED_NOT_FOUND));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> 
+                             new UserException(UserErrorCode.USER_NOT_FOUND));
 
         FeedUser feedUser = new FeedUser(feed, user);
         feedUserRepository.save(feedUser);

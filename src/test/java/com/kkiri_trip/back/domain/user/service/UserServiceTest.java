@@ -2,8 +2,10 @@ package com.kkiri_trip.back.domain.user.service;
 
 import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
+import com.kkiri_trip.back.domain.user.dto.Request.UserUpdateRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Response.LoginResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
+import com.kkiri_trip.back.domain.user.dto.Response.UserUpdateResponseDto;
 import com.kkiri_trip.back.domain.user.entity.User;
 import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.global.enums.Gender;
@@ -44,6 +46,7 @@ class UserServiceTest {
                 .name("김테스트")
                 .nickname("김스트")
                 .mobile_number("01012345678")
+                .profileUrl(null)
                 .gender(Gender.M)
                 .build();
 
@@ -62,23 +65,53 @@ class UserServiceTest {
         // given
         userRepository.save(User.builder()
                 .email("test@example.com")
-                .password("12345")
+                .password(passwordEncoder.encode("pw"))
                 .name("김테스트")
                 .nickname("김스트")
-                .mobile_number("01012345678")
+                .mobile_number("01000000000")
                 .gender(Gender.M)
                 .build());
 
         SignUpRequestDto dto = SignUpRequestDto.builder()
                 .email("test@example.com")
-                .password("2345")
+                .password("12345")
+                .confirmPassword("2345")
                 .name("박테스트")
                 .nickname("박스트")
-                .mobile_number("01011112222")
-                .gender(Gender.F)
+                .mobile_number("01012345678")
+                .profileUrl(null)
+                .gender(Gender.M)
                 .build();
 
         // when
+        assertThrows(UserException.class, () -> userService.register(dto));
+    }
+
+    @Test
+    @DisplayName("중복 닉네임 예외 발생")
+    void duplicate_nickname_throws_exception(){
+        // given
+        userRepository.save(User.builder()
+                .email("existing@example.com")
+                .password(passwordEncoder.encode("pw"))
+                .name("김테스트")
+                .nickname("김스트")
+                .mobile_number("01000000000")
+                .gender(Gender.M)
+                .build());
+
+        SignUpRequestDto dto = SignUpRequestDto.builder()
+                .email("test@example.com")
+                .password("12345")
+                .confirmPassword("2345")
+                .name("박테스트")
+                .nickname("박스트")
+                .mobile_number("01012345678")
+                .profileUrl(null)
+                .gender(Gender.M)
+                .build();
+
+
         // then
         assertThrows(UserException.class, () -> userService.register(dto));
     }
@@ -94,6 +127,7 @@ class UserServiceTest {
                 .name("김테스트")
                 .nickname("김스트")
                 .mobile_number("01012345678")
+                .profileUrl(null)
                 .gender(Gender.M)
                 .build();
 
@@ -112,6 +146,7 @@ class UserServiceTest {
                 .name("김테스트")
                 .nickname("김스트")
                 .mobile_number("01012345678")
+                .profileUrl(null)
                 .gender(Gender.M)
                 .build());
 
@@ -123,7 +158,7 @@ class UserServiceTest {
 
         // then
         assertThat(result.getAccessToken()).isNotNull();
-        assertThat(result.getNickName()).isEqualTo("김스트");
+        assertThat(result.getNickname()).isEqualTo("김스트");
     }
 
     @Test
@@ -136,6 +171,7 @@ class UserServiceTest {
                 .name("김테스트")
                 .nickname("김스트")
                 .mobile_number("01012345678")
+                .profileUrl(null)
                 .gender(Gender.M)
                 .build());
 
@@ -144,5 +180,32 @@ class UserServiceTest {
 
         // when & then
         assertThrows(UserException.class, () -> userService.login(loginResponseDto, response));
+    }
+
+    @Test
+    @DisplayName("개인정보 수정 성공")
+    void updateUser_success() {
+        // given
+        User user = userRepository.save(User.builder()
+                .email("origin@example.com")
+                .password(passwordEncoder.encode("1234"))
+                .name("김테스트")
+                .nickname("originalNick")
+                .profileUrl("https://original.com")
+                .mobile_number("01012345678")
+                .gender(Gender.M)
+                .build());
+
+        UserUpdateRequestDto dto = new UserUpdateRequestDto(
+                "updated@example.com", "updatedNick", "https://updated.com"
+        );
+
+        // when
+        UserUpdateResponseDto response = userService.updateUser(dto, user);
+
+        // then
+        assertEquals("updated@example.com", response.getEmail());
+        assertEquals("updatedNick", response.getNickname());
+        assertEquals("https://updated.com", response.getProfileUrl());
     }
 }

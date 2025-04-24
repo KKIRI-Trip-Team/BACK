@@ -3,14 +3,12 @@ package com.kkiri_trip.back.domain.user.entity;
 import com.kkiri_trip.back.domain.common.entity.BaseEntity;
 import com.kkiri_trip.back.global.enums.Gender;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +26,8 @@ public class User extends BaseEntity {
 
     @Column(nullable = false)
     private String mobile_number;
+
+    private String profileUrl;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

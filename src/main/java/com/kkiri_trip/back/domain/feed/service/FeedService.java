@@ -3,6 +3,7 @@ package com.kkiri_trip.back.domain.feed.service;
 import com.kkiri_trip.back.api.dto.Feed.FeedDto;
 import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
+import com.kkiri_trip.back.domain.feedUser.service.FeedUserService;
 import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
@@ -22,6 +23,8 @@ public class FeedService {
 
     private final UserRepository userRepository;
 
+    private final FeedUserService feedUserService;
+
     public List<FeedDto> getAllFeeds()
     {
         return Feed.toDtoList(feedRepository.findAll());
@@ -34,7 +37,7 @@ public class FeedService {
                 .toDto();
     }
 
-    public FeedDto createFeed(FeedDto feedDto) {
+    public FeedDto createFeed(FeedDto feedDto, Long userId) {
         validateFeedDto(feedDto);
 
         Feed feed = Feed.builder()
@@ -43,6 +46,8 @@ public class FeedService {
                 .build();
 
         Feed savedFeed = feedRepository.save(feed);
+
+        feedUserService.createFeedHost(savedFeed.getId(),userId );
         return savedFeed.toDto();
     }
 

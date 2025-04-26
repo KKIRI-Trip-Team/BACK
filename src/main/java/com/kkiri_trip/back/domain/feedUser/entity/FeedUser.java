@@ -4,10 +4,7 @@ import com.kkiri_trip.back.api.dto.FeedUser.FeedUserDto;
 import com.kkiri_trip.back.domain.common.entity.BaseEntity;
 import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.user.entity.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,8 +28,15 @@ public class FeedUser extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FeedUserStatus status;
+
+    @Column(nullable = false)
+    private boolean isHost;
+
     public FeedUserDto toDto(){
-        return new FeedUserDto(this.getId(), feed.getId(), user.getId());
+        return new FeedUserDto(this.getId(), feed.getId(), user.getId(), this.status, this.isHost);
     }
 
     public static List<FeedUserDto> toDtoList(List<FeedUser> feedUsers)
@@ -42,4 +46,27 @@ public class FeedUser extends BaseEntity {
                 .collect(Collectors.toList());
     }
 
+    public boolean isApproved() {
+        return status == FeedUserStatus.APPROVED;
+    }
+
+    public boolean isRejected() {
+        return status == FeedUserStatus.REJECTED;
+    }
+
+    public void approve() {
+        status = FeedUserStatus.APPROVED;
+    }
+
+    public void reject() {
+        status = FeedUserStatus.REJECTED;
+    }
+
+    public boolean isHost() {
+        return isHost;
+    }
+
+    public void setHost(boolean isHost) {
+        this.isHost = isHost;
+    }
 }

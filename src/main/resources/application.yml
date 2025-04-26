@@ -3,11 +3,23 @@ server:
   servlet:
     context-path: /
 spring:
+  config:
+    import: "optional:classpath:.env[.properties],optional:file:./.env"
   datasource:
     url: jdbc:h2:mem:test
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+        bucket: ${AWS_S3_BUCKET}
+      region:
+        static: ${AWS_S3_REGION}
 
   jpa:
     hibernate:
@@ -18,7 +30,11 @@ spring:
         format_sql: true
         default_batch_fetch_size: 500 # ??? ??? ???? ?? ???
     open-in-view: false # ??? ????? ????? ???? ??? ??
+    defer-datasource-initialization: true
 
+  sql:
+    init:
+      mode: always
 
   servlet:
     multipart:
@@ -26,16 +42,14 @@ spring:
       max-request-size: 100MB
 
   jwt:
-    secret: JYGu7LnAjPxE1Hw9404R+guJVN91HYj3DxHT927j3EHmbAnTqi1AIGDSbyZMNudGN2+Ux8ZriRtN+D2V90jsHA==
-    access-expiration: 3600000
-    refresh-expiration: 1209600000
+    secret: ${JWT_SECRET}
+    access-expiration: ${JWT_ACCESS_EXPIRATION}
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION}
 
   data:
     redis:
-      host: localhost
-      port: 6379
-
-
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 logging:
   level:

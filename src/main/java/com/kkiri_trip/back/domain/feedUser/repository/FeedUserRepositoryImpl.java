@@ -1,6 +1,9 @@
 package com.kkiri_trip.back.domain.feedUser.repository;
 
 import com.kkiri_trip.back.domain.feed.entity.Feed;
+import com.kkiri_trip.back.domain.feedUser.entity.FeedUser;
+import com.kkiri_trip.back.domain.feedUser.entity.FeedUserStatus;
+import com.kkiri_trip.back.domain.feedUser.entity.QFeedUser;
 import com.kkiri_trip.back.domain.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,16 @@ public class FeedUserRepositoryImpl implements FeedUserCustomRepository{
         return queryFactory.select(feedUser.user)
                 .from(feedUser)
                 .where(feedUser.feed.eq(feed))
+                .fetch();
+    }
+
+    @Override
+    public List<FeedUser> findByFeedIdAndStatusApproved(Long feedId) {
+        QFeedUser qFeedUser = QFeedUser.feedUser;  // QueryDSL에서 생성된 Q 클래스
+        return queryFactory
+                .selectFrom(qFeedUser)
+                .where(qFeedUser.feed.id.eq(feedId) // 피드 ID가 일치
+                        .and(qFeedUser.status.eq(FeedUserStatus.APPROVED))) // status가 APPROVED인 유저들만
                 .fetch();
     }
 }

@@ -134,6 +134,9 @@ fabric.properties
 **/build/
 !src/**/build/
 
+# .env
+.env
+
 # Ignore Gradle GUI config
 gradle-app.setting
 

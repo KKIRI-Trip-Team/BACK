@@ -50,12 +50,13 @@ dependencies {
 }
 
 // QueryDSL
-sourceSets {
-	main {
-		java {
-			srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
-		}
-	}
+def querydslSrcDir = 'src/main/generated'
+
+clean {
+	delete file(querydslSrcDir)
+}
+tasks.withType(JavaCompile) {
+	options.generatedSourceOutputDirectory = file(querydslSrcDir)
 }
 
 tasks.named('test') {

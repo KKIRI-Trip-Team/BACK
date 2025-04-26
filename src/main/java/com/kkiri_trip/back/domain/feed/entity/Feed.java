@@ -44,12 +44,10 @@ public class Feed extends BaseEntity {
         this.content = content;
     }
 
-    // Feed 엔티티를 FeedDto로 변환하는 메서드
     public FeedDto toDto() {
         return new FeedDto(this.getId(), this.title, this.content);
     }
 
-    // Feed 리스트를 FeedDto 리스트로 변환하는 Stream 기반 메서드
     public static List<FeedDto> toDtoList(List<Feed> feeds) {
         return feeds.stream()
                 .map(Feed::toDto)

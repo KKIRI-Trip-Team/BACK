@@ -34,14 +34,14 @@ INSERT INTO feed (title, content, created_at, updated_at) VALUES
 INSERT INTO feed (title, content, created_at, updated_at) VALUES
 ('제목4', '내용4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO feed_user (feed_id, user_id, status, created_at, updated_at) VALUES
-(1, 1, 'REQUESTED', CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
+INSERT INTO feed_user (feed_id, user_id, status, is_host, created_at, updated_at) VALUES
+(1, 1, 'PENDING', TRUE, CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
 
-INSERT INTO feed_user (feed_id, user_id, status, created_at, updated_at) VALUES
-(2, 2, 'REQUESTED', CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
+INSERT INTO feed_user (feed_id, user_id, status, is_host, created_at, updated_at) VALUES
+(2, 2, 'PENDING', FALSE, CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
 
-INSERT INTO feed_user (feed_id, user_id, status, created_at, updated_at) VALUES
-(3, 3, 'APPROVED', CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
+INSERT INTO feed_user (feed_id, user_id, status, is_host, created_at, updated_at) VALUES
+(3, 3, 'APPROVED', TRUE, CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
 
-INSERT INTO feed_user (feed_id, user_id, status, created_at, updated_at) VALUES
-(4, 4, 'REJECTED', CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
+INSERT INTO feed_user (feed_id, user_id, status, is_host, created_at, updated_at) VALUES
+(4, 4, 'REJECTED', FALSE, CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);

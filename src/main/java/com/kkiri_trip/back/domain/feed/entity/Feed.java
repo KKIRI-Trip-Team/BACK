@@ -6,6 +6,7 @@ import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +27,6 @@ public class Feed extends BaseEntity {
 
     @Column(nullable = false)
     private String content;
-
-//    @Column
-//    private Long userId;
 
     public void setTitle(String title) {
         if (title == null || title.trim().isEmpty()) {

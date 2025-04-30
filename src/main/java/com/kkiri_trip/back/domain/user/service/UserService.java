@@ -112,6 +112,10 @@ public class UserService {
                 .toList();
     }
 
+    public UserResponseDto getMyInfo(User user) {
+        return UserResponseDto.from(user);
+    }
+
     @Transactional
     public UserUpdateResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto, User loginUser){
         User user = userRepository.findById(loginUser.getId())
@@ -137,4 +141,6 @@ public class UserService {
 
         return new UserUpdateResponseDto(user.getId(),user.getEmail(), user.getNickname(), user.getProfileUrl());
     }
+
+
 }

@@ -6,10 +6,12 @@ spring:
   config:
     import: "optional:classpath:.env[.properties],optional:file:./.env"
   datasource:
+    # TODO : 도커 컨테이너 등록 후 postgreSQL로 변경 예정
     url: jdbc:h2:mem:test
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
 
   cloud:
     aws:

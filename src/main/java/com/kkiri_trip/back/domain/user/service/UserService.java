@@ -2,6 +2,7 @@ package com.kkiri_trip.back.domain.user.service;
 
 import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
+import com.kkiri_trip.back.domain.user.dto.Request.UserProfileCreateRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.UserUpdateRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Response.LoginResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
@@ -39,10 +40,6 @@ public class UserService {
             throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
         }
 
-        // 닉네임 중복 검사
-        if (userRepository.existsByNickname(signupRequestDto.getNickname())){
-            throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
-        }
 
         // 비밀번호와 확인 비밀번호 일치 검사
         if(!signupRequestDto.getPassword().equals(signupRequestDto.getConfirmPassword())){
@@ -53,15 +50,26 @@ public class UserService {
                 .email(signupRequestDto.getEmail())
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
                 .name(signupRequestDto.getName())
-                .nickname(signupRequestDto.getNickname())
                 .mobile_number(signupRequestDto.getMobile_number())
-                .profileUrl(signupRequestDto.getProfileUrl())
                 .gender(signupRequestDto.getGender())
                 .build();
 
         userRepository.save(user);
 
-        return new SignUpResponseDto(user.getId(), user.getNickname());
+        return new SignUpResponseDto(user.getId(), user.getEmail());
+    }
+
+    @Transactional
+    public void registerProfile(UserProfileCreateRequestDto userProfileCreateRequestDto) {
+        User user = userRepository.findByEmail(userProfileCreateRequestDto.getEmail())
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        // 닉네임 중복 검사
+        if (userRepository.existsByNickname(userProfileCreateRequestDto.getNickname())){
+            throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
+        }
+
+        user.createProfile(userProfileCreateRequestDto.getNickname(), userProfileCreateRequestDto.getProfileUrl());
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response){
@@ -141,6 +149,7 @@ public class UserService {
 
         return new UserUpdateResponseDto(user.getId(),user.getEmail(), user.getNickname(), user.getProfileUrl());
     }
+
 
 
 }

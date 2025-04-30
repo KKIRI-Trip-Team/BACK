@@ -2,12 +2,12 @@ package com.kkiri_trip.back.domain.user.controller;
 
 import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
+import com.kkiri_trip.back.domain.user.dto.Request.UserProfileCreateRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.UserUpdateRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Response.LoginResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.UserResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.UserUpdateResponseDto;
-import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.domain.user.service.UserService;
 import com.kkiri_trip.back.domain.user.util.CustomUserDetails;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
@@ -35,6 +35,12 @@ public class UserController {
     public ResponseEntity<ApiResponseDto<SignUpResponseDto>> register(@RequestBody @Valid SignUpRequestDto signUpRequestDto){
         SignUpResponseDto signUpResponseDto = userService.register(signUpRequestDto);
         return ApiResponseDto.from(HttpStatus.CREATED, "회원가입이 성공적으로 등록되었습니다.", signUpResponseDto);
+    }
+
+    @PostMapping("/register/profile")
+    public ResponseEntity<ApiResponseDto<UserProfileCreateRequestDto>> profileCreate(@RequestBody UserProfileCreateRequestDto userProfileCreateRequestDto){
+        userService.registerProfile(userProfileCreateRequestDto);
+        return ApiResponseDto.from(HttpStatus.OK, "프로필이 성공적으로 등록되었습니다.", userProfileCreateRequestDto);
     }
 
     @PostMapping("/login")

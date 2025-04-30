@@ -35,5 +35,9 @@ public class User extends BaseEntity {
     // private Long temperature
     // private Long review
 
+    public void createProfile(String nickname, String profileUrl) {
+        this.nickname = nickname;
+        this.profileUrl = profileUrl;
+    }
 
 }

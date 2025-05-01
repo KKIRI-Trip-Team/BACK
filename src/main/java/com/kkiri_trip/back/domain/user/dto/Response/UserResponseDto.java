@@ -12,12 +12,14 @@ public class UserResponseDto {
     private Long id;
     private String email;
     private String nickname;
+    private String profileUrl;
 
     public static UserResponseDto from(User user){
         return new UserResponseDto(
                 user.getId(),
                 user.getEmail(),
-                user.getNickname()
+                user.getNickname(),
+                user.getProfileUrl()
         );
     }
 }

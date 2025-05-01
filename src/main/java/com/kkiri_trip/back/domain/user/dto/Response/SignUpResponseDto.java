@@ -9,5 +9,5 @@ import lombok.*;
 @AllArgsConstructor
 public class SignUpResponseDto {
     private Long id;
-    private String nickname;
+    private String email;
 }

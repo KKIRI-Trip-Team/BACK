@@ -20,7 +20,4 @@ public class SignUpRequestDto {
 
     @NotBlank
     private String confirmPassword;
-    private String name;
-    private String mobile_number;
-    private Gender gender;
 }

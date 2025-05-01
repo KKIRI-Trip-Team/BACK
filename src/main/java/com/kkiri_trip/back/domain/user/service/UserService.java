@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
+    public static final String DEFAULT_PROFILE_URL = "";
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -40,7 +40,6 @@ public class UserService {
             throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
         }
 
-
         // 비밀번호와 확인 비밀번호 일치 검사
         if(!signupRequestDto.getPassword().equals(signupRequestDto.getConfirmPassword())){
             throw new UserException(UserErrorCode.PASSWORD_MISMATCH);
@@ -49,9 +48,6 @@ public class UserService {
         User user = User.builder()
                 .email(signupRequestDto.getEmail())
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
-                .name(signupRequestDto.getName())
-                .mobile_number(signupRequestDto.getMobile_number())
-                .gender(signupRequestDto.getGender())
                 .build();
 
         userRepository.save(user);
@@ -64,12 +60,22 @@ public class UserService {
         User user = userRepository.findByEmail(userProfileCreateRequestDto.getEmail())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
+        String profileUrl = userProfileCreateRequestDto.getProfileUrl();
+
         // 닉네임 중복 검사
         if (userRepository.existsByNickname(userProfileCreateRequestDto.getNickname())){
             throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }
 
-        user.createProfile(userProfileCreateRequestDto.getNickname(), userProfileCreateRequestDto.getProfileUrl());
+        if(userProfileCreateRequestDto.getNickname() == null || userProfileCreateRequestDto.getNickname().isEmpty()){
+            throw new UserException(UserErrorCode.EMPTY_NICKNAME);
+        }
+
+        if(profileUrl == null || profileUrl.isEmpty()){
+            profileUrl = DEFAULT_PROFILE_URL;
+        }
+
+        user.createProfile(userProfileCreateRequestDto.getNickname(), profileUrl);
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response){

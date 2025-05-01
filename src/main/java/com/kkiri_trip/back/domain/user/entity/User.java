@@ -19,15 +19,16 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String name;
-
     private String nickname;
 
-    @Column(nullable = false)
-    private String mobile_number;
-
     private String profileUrl;
+
+    // TODO : 추후 Pass 연동 후 정보 제공
+//    @Column(nullable = false)
+    private String name;
+
+//    @Column(nullable = false)
+    private String mobile_number;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

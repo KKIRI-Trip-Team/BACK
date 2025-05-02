@@ -9,6 +9,7 @@ import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.UserResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.UserUpdateResponseDto;
 import com.kkiri_trip.back.domain.user.entity.User;
+import com.kkiri_trip.back.domain.user.entity.UserProfile;
 import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.global.jwt.JwtUtil;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
@@ -61,6 +62,7 @@ public class UserService {
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         String profileUrl = userProfileCreateRequestDto.getProfileUrl();
+        UserProfile userProfile = user.getUserProfile();
 
         // 닉네임 중복 검사
         if (userRepository.existsByNickname(userProfileCreateRequestDto.getNickname())){
@@ -75,12 +77,13 @@ public class UserService {
             profileUrl = DEFAULT_PROFILE_URL;
         }
 
-        user.createProfile(userProfileCreateRequestDto.getNickname(), profileUrl);
+        userProfile.createProfile(userProfileCreateRequestDto.getNickname(), profileUrl);
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response){
         User user = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+        UserProfile userProfile = user.getUserProfile();
 
         if(!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
             throw new UserException(UserErrorCode.PASSWORD_MISMATCH);
@@ -96,13 +99,22 @@ public class UserService {
                 14, TimeUnit.DAYS // 만료시간 설정
         );
 
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(60 * 60 * 24 * 14);
-        response.addCookie(cookie);
+        Cookie accessCookie = new Cookie("accessToken", accessToken);
+        accessCookie.setHttpOnly(true);
+        accessCookie.setSecure(true);
+        accessCookie.setPath("/");
+        accessCookie.setMaxAge(60 * 60);
 
-        return new LoginResponseDto(accessToken, user.getNickname());
+        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setSecure(true);
+        refreshCookie.setPath("/");
+        refreshCookie.setMaxAge(60 * 60 * 24 * 14);
+
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
+
+        return new LoginResponseDto(accessToken, userProfile.getNickname());
     }
 
     public void logout(String accessToken){
@@ -134,6 +146,7 @@ public class UserService {
     public UserUpdateResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto, User loginUser){
         User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+        UserProfile userProfile = user.getUserProfile();
 
         if(!user.getId().equals(loginUser.getId())){
             throw new UserException(UserErrorCode.UNAUTHORIZED_UPDATE);
@@ -145,17 +158,14 @@ public class UserService {
         }
 
         if(userRepository.existsByNickname(userUpdateRequestDto.getNickname())
-                && !user.getNickname().equals(userUpdateRequestDto.getNickname())){
+                && !userProfile.getNickname().equals(userUpdateRequestDto.getNickname())){
             throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }
 
         user.setEmail(userUpdateRequestDto.getEmail());
-        user.setNickname(userUpdateRequestDto.getNickname());
-        user.setProfileUrl(userUpdateRequestDto.getProfileUrl());
+        userProfile.setNickname(userUpdateRequestDto.getNickname());
+        userProfile.setProfileUrl(userUpdateRequestDto.getProfileUrl());
 
-        return new UserUpdateResponseDto(user.getId(),user.getEmail(), user.getNickname(), user.getProfileUrl());
+        return new UserUpdateResponseDto(user.getId(),user.getEmail(), userProfile.getNickname(), userProfile.getProfileUrl());
     }
-
-
-
 }

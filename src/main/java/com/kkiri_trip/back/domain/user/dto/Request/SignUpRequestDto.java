@@ -20,9 +20,4 @@ public class SignUpRequestDto {
 
     @NotBlank
     private String confirmPassword;
-    private String name;
-    private String nickname;
-    private String mobile_number;
-    private String profileUrl;
-    private Gender gender;
 }

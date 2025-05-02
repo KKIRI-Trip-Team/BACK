@@ -10,6 +10,7 @@ import com.kkiri_trip.back.domain.user.dto.Response.UserResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.UserUpdateResponseDto;
 import com.kkiri_trip.back.domain.user.entity.User;
 import com.kkiri_trip.back.domain.user.entity.UserProfile;
+import com.kkiri_trip.back.domain.user.repository.UserProfileRepository;
 import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.global.jwt.JwtUtil;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
@@ -33,6 +34,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final StringRedisTemplate stringRedisTemplate;
+    private final UserProfileRepository userProfileRepository;
 
     @Transactional
     public SignUpResponseDto register(SignUpRequestDto signupRequestDto){
@@ -62,10 +64,9 @@ public class UserService {
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         String profileUrl = userProfileCreateRequestDto.getProfileUrl();
-        UserProfile userProfile = user.getUserProfile();
 
         // 닉네임 중복 검사
-        if (userRepository.existsByNickname(userProfileCreateRequestDto.getNickname())){
+        if (userProfileRepository.existsByNickname(userProfileCreateRequestDto.getNickname())){
             throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }
 
@@ -77,7 +78,16 @@ public class UserService {
             profileUrl = DEFAULT_PROFILE_URL;
         }
 
+        UserProfile userProfile = user.getUserProfile();
+        if(userProfile == null){
+            userProfile = new UserProfile();
+            userProfile.setUser(user);
+            user.setUserProfile(userProfile);
+        }
+
         userProfile.createProfile(userProfileCreateRequestDto.getNickname(), profileUrl);
+
+        userRepository.save(user);
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response){
@@ -114,7 +124,7 @@ public class UserService {
         response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
 
-        return new LoginResponseDto(accessToken, userProfile.getNickname());
+        return new LoginResponseDto(user.getEmail(),userProfile.getProfileUrl(), userProfile.getNickname());
     }
 
     public void logout(String accessToken){
@@ -134,12 +144,12 @@ public class UserService {
     public List<UserResponseDto> getAllUsers(){
         return userRepository.findAll()
                 .stream()
-                .map(UserResponseDto::from)
+                .map(user -> UserResponseDto.from(user, user.getUserProfile()))
                 .toList();
     }
 
-    public UserResponseDto getMyInfo(User user) {
-        return UserResponseDto.from(user);
+    public UserResponseDto getMyInfo(User user, UserProfile userProfile) {
+        return UserResponseDto.from(user, userProfile);
     }
 
     @Transactional
@@ -157,7 +167,7 @@ public class UserService {
             throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
         }
 
-        if(userRepository.existsByNickname(userUpdateRequestDto.getNickname())
+        if(userProfileRepository.existsByNickname(userUpdateRequestDto.getNickname())
                 && !userProfile.getNickname().equals(userUpdateRequestDto.getNickname())){
             throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }

@@ -64,7 +64,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponseDto<UserResponseDto>> getMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails){
-        UserResponseDto userResponseDto = userService.getMyInfo(userDetails.getUser());
+        UserResponseDto userResponseDto = userService.getMyInfo(userDetails.getUser(), userDetails.getUser().getUserProfile());
         return ApiResponseDto.from(HttpStatus.OK, "본인 정보를 조회했습니다.", userResponseDto);
     }
 

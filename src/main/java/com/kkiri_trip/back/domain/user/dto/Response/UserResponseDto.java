@@ -1,6 +1,7 @@
 package com.kkiri_trip.back.domain.user.dto.Response;
 
 import com.kkiri_trip.back.domain.user.entity.User;
+import com.kkiri_trip.back.domain.user.entity.UserProfile;
 import lombok.*;
 
 @Getter
@@ -14,12 +15,12 @@ public class UserResponseDto {
     private String nickname;
     private String profileUrl;
 
-    public static UserResponseDto from(User user){
+    public static UserResponseDto from(User user, UserProfile userProfile){
         return new UserResponseDto(
                 user.getId(),
                 user.getEmail(),
-                user.getNickname(),
-                user.getProfileUrl()
+                userProfile.getNickname(),
+                userProfile.getProfileUrl()
         );
     }
 }

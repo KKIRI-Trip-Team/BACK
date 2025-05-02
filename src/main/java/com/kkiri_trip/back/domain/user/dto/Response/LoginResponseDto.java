@@ -8,7 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponseDto {
-    private String accessToken;
+    private String email;
     private String nickname;
+    private String profileUrl;
+
 
 }

@@ -15,7 +15,7 @@ import lombok.*;
 public class UserProfile extends BaseEntity {
     @Column(nullable = false)
     private String nickname;
-    @Column(nullable = false)
+    @Column(name = "profile_url", nullable = false, length = 2000)
     private String profileUrl;
 
     @OneToOne

@@ -55,6 +55,8 @@ dependencies {
 	// AWS
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.0'
 
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
 }
 
 // QueryDSL

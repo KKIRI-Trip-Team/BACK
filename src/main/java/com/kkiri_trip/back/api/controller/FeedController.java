@@ -4,12 +4,15 @@ import com.kkiri_trip.back.api.dto.Feed.FeedDto;
 import com.kkiri_trip.back.domain.feed.service.FeedService;
 import com.kkiri_trip.back.domain.user.util.CustomUserDetails;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
+import com.kkiri_trip.back.global.common.dto.PageResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,6 +51,19 @@ public class FeedController {
     public ResponseEntity<ApiResponseDto<Void>> deleteFeedById(@PathVariable Long id) {
         feedService.deleteFeed(id);
         return ApiResponseDto.from(HttpStatus.OK, "피드 삭제", null);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponseDto<PageResponseDto<FeedDto>>> searchFeeds(
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(
+                    size = 10,
+                    sort = "createdAt",
+                    direction = Sort.Direction.ASC)Pageable pageable
+            ){
+        PageResponseDto<FeedDto> feed = feedService.getFeeds(keyword, pageable);
+        return ApiResponseDto.from(HttpStatus.OK, "검색된 키워드로 조회되었습니다.", feed);
+
     }
 
     @GetMapping("/dummy")

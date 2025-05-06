@@ -7,9 +7,8 @@ import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
 import com.kkiri_trip.back.global.common.dto.PageResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -53,17 +52,15 @@ public class FeedController {
         return ApiResponseDto.from(HttpStatus.OK, "피드 삭제", null);
     }
 
+    // TODO : 게시글에 대한 정확한 데이터 나오면 DTO 생성 후 응답 값 수정
     @GetMapping("/search")
     public ResponseEntity<ApiResponseDto<PageResponseDto<FeedDto>>> searchFeeds(
             @RequestParam(required = false) String keyword,
-            @PageableDefault(
-                    size = 10,
-                    sort = "createdAt",
-                    direction = Sort.Direction.ASC)Pageable pageable
-            ){
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page - 1, size);
         PageResponseDto<FeedDto> feed = feedService.getFeeds(keyword, pageable);
         return ApiResponseDto.from(HttpStatus.OK, "검색된 키워드로 조회되었습니다.", feed);
-
     }
 
     @GetMapping("/dummy")

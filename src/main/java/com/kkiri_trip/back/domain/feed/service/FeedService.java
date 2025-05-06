@@ -97,4 +97,11 @@ public class FeedService {
         Page<FeedDto> dtoPage = feedPage.map(FeedDto::from); // Feed → FeedDto 변환
         return new PageResponseDto<>(dtoPage); // Page<FeedDto>로 감싸기
     }
+
+    // TODO : 게시글에 대한 정홗한 데이터 나오면 DTO 생성 후 응답 값 수정
+    public PageResponseDto<FeedDto> getMyFeeds(Long userId, Pageable pageable){
+        Page<Feed> feedPage = feedRepository.findMyFeeds(userId, pageable);
+        Page<FeedDto> dtoPage = feedPage.map(FeedDto::from);
+        return new PageResponseDto<>(dtoPage);
+    }
 }

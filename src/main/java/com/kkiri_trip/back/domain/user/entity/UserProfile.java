@@ -1,7 +1,6 @@
 package com.kkiri_trip.back.domain.user.entity;
 
 import com.kkiri_trip.back.domain.common.entity.BaseEntity;
-import com.kkiri_trip.back.global.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 

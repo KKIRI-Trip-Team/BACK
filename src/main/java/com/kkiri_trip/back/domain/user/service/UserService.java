@@ -124,7 +124,7 @@ public class UserService {
         response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
 
-        return new LoginResponseDto(user.getEmail(),userProfile.getNickname(), userProfile.getProfileUrl());
+        return new LoginResponseDto(user.getEmail(),userProfile.getNickname(), userProfile.getProfileUrl(), accessToken);
     }
 
     public void logout(String accessToken){

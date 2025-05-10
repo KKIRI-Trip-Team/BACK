@@ -11,6 +11,6 @@ public class LoginResponseDto {
     private String email;
     private String nickname;
     private String profileUrl;
-
+    private String accessToken;
 
 }

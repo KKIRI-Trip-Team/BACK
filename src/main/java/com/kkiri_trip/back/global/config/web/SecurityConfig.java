@@ -56,14 +56,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
                                 "/api/user/register",
                                 "/api/user/register/profile",
                                 "/api/user/login",
                                 "/api/posts/search",
-                                "api/userDummy",
+                                "/api/userDummy",
                                 "/api/images/upload",
                                 "/api/images/url"
                         ).permitAll()

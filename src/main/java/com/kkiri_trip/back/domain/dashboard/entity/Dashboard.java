@@ -3,13 +3,12 @@ package com.kkiri_trip.back.domain.dashboard.entity;
 import com.kkiri_trip.back.domain.common.entity.BaseEntity;
 import com.kkiri_trip.back.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "dashboard")
 @SuperBuilder
 @NoArgsConstructor
@@ -17,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class Dashboard extends BaseEntity {
 
     @Column(nullable = false)
+    @Builder.Default
     private Long viewCount = 0L;
 
     @OneToOne(fetch = FetchType.LAZY)

@@ -13,7 +13,7 @@ public class DashboardDto {
     private String email;
     private String nickname;
     private String profileUrl;
-    private Long viewCount = 0L;
+    private Long viewCount;
 
     public static DashboardDto from(Dashboard dashboard) {
         return DashboardDto.builder()

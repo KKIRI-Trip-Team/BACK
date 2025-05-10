@@ -4,13 +4,6 @@ build tool : Gradle
 SpringBoot : 3.4.4
 JAVA 17
 
-패키지 구조 - 계층형 패키지 구조
-- controller 패키지
-- service 패키지
-- repository 패키지
-- dto 패키지
-
-
 
 # 패키지 구조 설계 - 도메인형 패키지 구조
 ```

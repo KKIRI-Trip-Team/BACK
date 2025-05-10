@@ -1,0 +1,81 @@
+package com.kkiri_trip.back.api.controller;
+
+import com.kkiri_trip.back.api.dto.Feed.FeedDto;
+import com.kkiri_trip.back.domain.feed.service.FeedService;
+import com.kkiri_trip.back.domain.user.util.CustomUserDetails;
+import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
+import com.kkiri_trip.back.global.common.dto.PageResponseDto;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/feeds")
+public class FeedController {
+
+    private final FeedService feedService;
+
+    @GetMapping
+    public ResponseEntity<ApiResponseDto<List<FeedDto>>> getFeeds() {
+        return ApiResponseDto.from(HttpStatus.OK, "피드 리스트 조회", feedService.getAllFeeds());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<FeedDto>> getFeedById(@PathVariable Long id) {
+        return ApiResponseDto.from(HttpStatus.OK, "피드 조회", feedService.getFeedById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<ApiResponseDto<FeedDto>> createFeed(@Valid @RequestBody FeedDto feedDto,
+                                                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        FeedDto createdFeed = feedService.createFeed(feedDto, customUserDetails.getUser().getId());
+        return ApiResponseDto.from(HttpStatus.CREATED, "피드 생성", createdFeed);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<FeedDto>> updateFeedById(@PathVariable Long id, @Valid @RequestBody FeedDto feedDto) {
+        FeedDto updatedFeed = feedService.updateFeed(id, feedDto);
+        return ApiResponseDto.from(HttpStatus.OK, "피드 수정", updatedFeed);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponseDto<Void>> deleteFeedById(@PathVariable Long id) {
+        feedService.deleteFeed(id);
+        return ApiResponseDto.from(HttpStatus.OK, "피드 삭제", null);
+    }
+
+    // TODO : 게시글에 대한 정확한 데이터 나오면 DTO 생성 후 응답 값 수정
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponseDto<PageResponseDto<FeedDto>>> searchFeeds(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page - 1, size);
+        PageResponseDto<FeedDto> feed = feedService.getFeeds(keyword, pageable);
+        return ApiResponseDto.from(HttpStatus.OK, "검색된 키워드로 조회되었습니다.", feed);
+    }
+
+    @GetMapping("/dummy")
+    public ResponseEntity<ApiResponseDto<FeedDto>> getDummyFeedById() {
+        FeedDto feedDto = new FeedDto(1L, "제목1", "내용1");
+        return ApiResponseDto.from(HttpStatus.OK, "더미 피드 조회", feedDto);
+    }
+
+    @GetMapping("/dummylist")
+    public ResponseEntity<ApiResponseDto<List<FeedDto>>> getDummyFeeds() {
+        FeedDto feedDto1 = new FeedDto(1L, "제목1", "내용1");
+        FeedDto feedDto2 = new FeedDto(2L, "제목2", "내용2");
+        FeedDto feedDto3 = new FeedDto(3L, "제목3", "내용3");
+        FeedDto feedDto4 = new FeedDto(4L, "제목4", "내용4");
+        List<FeedDto> dummyFeeds = List.of(feedDto1, feedDto2, feedDto3, feedDto4);
+        return ApiResponseDto.from(HttpStatus.OK, "더미 피드 리스트 조회", dummyFeeds);
+    }
+}

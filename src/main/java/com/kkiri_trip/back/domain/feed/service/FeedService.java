@@ -5,11 +5,14 @@ import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
 import com.kkiri_trip.back.domain.feedUser.service.FeedUserService;
 import com.kkiri_trip.back.domain.user.repository.UserRepository;
+import com.kkiri_trip.back.global.common.dto.PageResponseDto;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import com.kkiri_trip.back.global.error.exception.UserException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,5 +90,18 @@ public class FeedService {
                 .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND));
 
         feedRepository.deleteById(id);
+    }
+
+    public PageResponseDto<FeedDto> getFeeds(String keyword, Pageable pageable){
+        Page<Feed> feedPage = feedRepository.searchFeeds(keyword, pageable);
+        Page<FeedDto> dtoPage = feedPage.map(FeedDto::from); // Feed → FeedDto 변환
+        return new PageResponseDto<>(dtoPage); // Page<FeedDto>로 감싸기
+    }
+
+    // TODO : 게시글에 대한 정홗한 데이터 나오면 DTO 생성 후 응답 값 수정
+    public PageResponseDto<FeedDto> getMyFeeds(Long userId, Pageable pageable){
+        Page<Feed> feedPage = feedRepository.findMyFeeds(userId, pageable);
+        Page<FeedDto> dtoPage = feedPage.map(FeedDto::from);
+        return new PageResponseDto<>(dtoPage);
     }
 }

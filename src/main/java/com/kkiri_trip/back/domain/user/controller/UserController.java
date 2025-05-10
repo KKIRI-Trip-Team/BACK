@@ -1,5 +1,7 @@
 package com.kkiri_trip.back.domain.user.controller;
 
+import com.kkiri_trip.back.api.dto.Feed.FeedDto;
+import com.kkiri_trip.back.domain.feed.service.FeedService;
 import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.UserProfileCreateRequestDto;
@@ -11,11 +13,14 @@ import com.kkiri_trip.back.domain.user.dto.Response.UserUpdateResponseDto;
 import com.kkiri_trip.back.domain.user.service.UserService;
 import com.kkiri_trip.back.domain.user.util.CustomUserDetails;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
+import com.kkiri_trip.back.global.common.dto.PageResponseDto;
 import com.kkiri_trip.back.global.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,6 +34,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final FeedService feedService;
     private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
@@ -67,6 +73,18 @@ public class UserController {
         UserResponseDto userResponseDto = userService.getMyInfo(userDetails.getUser(), userDetails.getUser().getUserProfile());
         return ApiResponseDto.from(HttpStatus.OK, "본인 정보를 조회했습니다.", userResponseDto);
     }
+
+    // TODO : 게시글에 대한 정홗한 데이터 나오면 DTO 생성 후 응답 값 수정
+    @GetMapping("/me/feeds")
+    public ResponseEntity<ApiResponseDto<PageResponseDto<FeedDto>>> getMyFeeds(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                               @RequestParam(defaultValue = "1") int page,
+                                                                               @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page - 1, size);
+        PageResponseDto<FeedDto> feeds = feedService.getMyFeeds(userDetails.getUser().getId(), pageable);
+        return ApiResponseDto.from(HttpStatus.OK, "본인의 작성 글 목록을 조회했습니다.", feeds);
+    }
+
+
 
     @PutMapping("/information")
     public ResponseEntity<ApiResponseDto<UserUpdateResponseDto>> updateUser(

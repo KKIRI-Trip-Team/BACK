@@ -59,7 +59,8 @@ public class FeedRepositoryCustomImpl implements FeedRepositoryCustom{
 
         Long total = Optional.ofNullable(jpaQueryFactory
                 .select(feed.count())
-                .from(feed)
+                .from(feedUser)
+                .join(feedUser.feed, feed)
                 .where(feedUser.user.id.eq(userId)
                         .and(feedUser.isHost.isTrue()))
                 .fetchOne()).orElse(0L);

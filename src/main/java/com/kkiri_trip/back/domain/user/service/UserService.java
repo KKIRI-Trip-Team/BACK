@@ -1,5 +1,7 @@
 package com.kkiri_trip.back.domain.user.service;
 
+import com.kkiri_trip.back.domain.dashboard.entity.Dashboard;
+import com.kkiri_trip.back.domain.dashboard.repository.DashboardRepository;
 import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.UserProfileCreateRequestDto;
@@ -37,6 +39,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final StringRedisTemplate stringRedisTemplate;
     private final UserProfileRepository userProfileRepository;
+    private final DashboardRepository dashboardRepository;
 
     @Transactional
     public SignUpResponseDto register(SignUpRequestDto signupRequestDto){
@@ -90,6 +93,12 @@ public class UserService {
         userProfile.createProfile(userProfileCreateRequestDto.getNickname(), profileUrl);
 
         userRepository.save(user);
+
+        if (user.getDashboard() == null) {
+            Dashboard dashboard = new Dashboard();
+            dashboard.setUser(user); // 양방향 연결이 필요하면 user.setDashboard(dashboard)도 함께
+            dashboardRepository.save(dashboard);
+        }
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response){

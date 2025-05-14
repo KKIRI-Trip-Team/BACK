@@ -1,6 +1,8 @@
 package com.kkiri_trip.back.domain.user.controller;
 
 import com.kkiri_trip.back.api.dto.Feed.FeedDto;
+import com.kkiri_trip.back.domain.dashboard.dto.DashboardDto;
+import com.kkiri_trip.back.domain.dashboard.service.DashboardService;
 import com.kkiri_trip.back.domain.feed.service.FeedService;
 import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
@@ -35,6 +37,7 @@ public class UserController {
 
     private final UserService userService;
     private final FeedService feedService;
+    private final DashboardService dashboardService;
     private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
@@ -84,7 +87,11 @@ public class UserController {
         return ApiResponseDto.from(HttpStatus.OK, "본인의 작성 글 목록을 조회했습니다.", feeds);
     }
 
-
+    @GetMapping("/me/dashboard")
+    public ResponseEntity<ApiResponseDto<DashboardDto>> getMyDashboard(@AuthenticationPrincipal CustomUserDetails userDetails){
+        DashboardDto dashboardDto = dashboardService.getMyDashboard(userDetails.getUser().getId());
+        return ApiResponseDto.from(HttpStatus.OK, "본인의 대시보드를 조회했습니다.", dashboardDto);
+    }
 
     @PutMapping("/information")
     public ResponseEntity<ApiResponseDto<UserUpdateResponseDto>> updateUser(

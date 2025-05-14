@@ -47,6 +47,14 @@ public class SecurityConfig {
                         .allowedOrigins("http://localhost:8081", "http://localhost:8082", "http://localhost:8083", "http://localhost:3000", "http://15.164.44.157:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                         .allowCredentials(true);
+//                registry.addMapping("/chat/**")
+//                        .allowedOrigins("http://127.0.0.1:5500", "http://localhost:3000")
+//                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+//                        .allowCredentials(true);
+//                registry.addMapping("/chat")
+//                        .allowedOrigins("http://127.0.0.1:5500", "http://localhost:3000")
+//                        .allowedMethods("GET", "POST", "OPTIONS")
+//                        .allowCredentials(false);
             }
         };
     }
@@ -57,7 +65,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/user/register", "/api/user/login", "/api/posts/search","api/userDummy").permitAll()
+                        .requestMatchers("/api/user/register", "/api/user/login", "/api/posts/search","api/userDummy", "/chat", "/chat/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

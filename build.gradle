@@ -37,12 +37,11 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
-	//Querydsl
+	// Querydsl
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -54,6 +53,15 @@ dependencies {
 	// AWS
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.0'
 
+	// Kafka dependencies
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	// WebSocket and STOMP dependencies
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.springframework:spring-messaging'
+
+	// Optional: Kafka Streams (if you plan to use Kafka Streams in your app)
+	implementation 'org.apache.kafka:kafka-streams'
 }
 
 // QueryDSL

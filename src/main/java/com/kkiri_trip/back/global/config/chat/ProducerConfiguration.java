@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.global.config.chat;
 
-import com.kkiri_trip.back.api.dto.ChatMessage;
+import com.kkiri_trip.back.api.dto.ChatMessage.ChatMessageDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class ProducerConfiguration {
 
     @Bean
-    public ProducerFactory<String, ChatMessage> producerFactory() {
+    public ProducerFactory<String, ChatMessageDto> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfigurations());
     }
 
@@ -34,7 +34,7 @@ public class ProducerConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, ChatMessage> kafkaTemplate() {
+    public KafkaTemplate<String, ChatMessageDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.global.chat;
 
-import com.kkiri_trip.back.api.dto.ChatMessage;
+import com.kkiri_trip.back.api.dto.ChatMessage.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -14,10 +14,10 @@ public class ChatConsumer {
 
     // Kafka에서 메시지를 받으면
     @KafkaListener(topics = "chat-topic", groupId = "chat-group")
-    public void consume(ChatMessage message) {
+    public void consume(ChatMessageDto message) {
         // /subscribe/chat/{postId}로 다시 broadcast (구독자들에게)
         messagingTemplate.convertAndSend(
-                "/subscribe/chat/" + message.getPostId(),
+                "/subscribe/chat/" + message.getChatRoomId(),
                 message
         );
     }

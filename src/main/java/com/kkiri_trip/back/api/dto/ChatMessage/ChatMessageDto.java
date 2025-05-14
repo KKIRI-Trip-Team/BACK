@@ -1,14 +1,17 @@
-package com.kkiri_trip.back.api.dto;
+package com.kkiri_trip.back.api.dto.ChatMessage;
 
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
 public class ChatMessageDto {
-    private Long chatRoomId;  // 채팅방 ID
-    private String sender;    // 발신자
-    private String content;   // 메시지 내용
-    private Long timestamp;   // 메시지 전송 시간 (optional)
-    private String messageType; // 메시지 타입 (이모지, 텍스트, 이미지 등)
-
-
+    private String id;
+    private Long chatRoomId;
+    private String sender;
+    private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String messageType;
+    private String imageUrl;       // 원본 이미지 URL
+    private String thumbnailUrl;   // 썸네일 이미지 URL
 }

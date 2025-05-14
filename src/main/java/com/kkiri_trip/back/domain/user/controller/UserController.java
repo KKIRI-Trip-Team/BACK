@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/register/profile")
-    public ResponseEntity<ApiResponseDto<UserProfileCreateRequestDto>> profileCreate(@RequestBody UserProfileCreateRequestDto userProfileCreateRequestDto){
+    public ResponseEntity<ApiResponseDto<UserProfileCreateRequestDto>> profileCreate(@RequestBody @Valid UserProfileCreateRequestDto userProfileCreateRequestDto){
         userService.registerProfile(userProfileCreateRequestDto);
         return ApiResponseDto.from(HttpStatus.OK, "프로필이 성공적으로 등록되었습니다.", userProfileCreateRequestDto);
     }

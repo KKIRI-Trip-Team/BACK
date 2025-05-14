@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.Duration;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,6 +28,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = getAccessTokenFromHeader(request);
+
+        if(accessToken == null){
+            accessToken = getAccessTokenFromCookie(request);
+        }
 
         try{
             if(accessToken != null && jwtUtil.validateToken(accessToken)){
@@ -40,7 +46,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     String newAccessToken = jwtUtil.generateAccessToken(Long.parseLong(userId));
 
                     // 응답 헤더에 새 AccessToken 추가
-                    response.setHeader("Authorization", "Bearer " + newAccessToken);
+                    // response.setHeader("Authorization", "Bearer " + newAccessToken);
+                    // 새 accessToken을 쿠키로 설정
+                    ResponseCookie newAccessCookie = ResponseCookie.from("accessToken", newAccessToken)
+                                    .httpOnly(true)
+                                    .secure(true)
+                                    .sameSite("None")
+                                    .path("/")
+                                    .maxAge(Duration.ofHours(1))
+                                    .build();
+                    response.addHeader("Set-Cookie", newAccessCookie.toString());
 
                     // 새 토큰으로 인증 처리
                     setAuthentication(newAccessToken, request);
@@ -76,6 +91,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         if(header != null && header.startsWith("Bearer ")){
             return header.substring(7);
+        }
+        return null;
+    }
+
+    private String getAccessTokenFromCookie(HttpServletRequest request) {
+        if(request.getCookies() != null){
+            for (Cookie cookie : request.getCookies()) {
+                if("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
         }
         return null;
     }

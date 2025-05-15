@@ -1,7 +1,7 @@
 package com.kkiri_trip.back.domain.user.entity;
 
 import com.kkiri_trip.back.domain.common.entity.BaseEntity;
-import com.kkiri_trip.back.global.enums.Gender;
+import com.kkiri_trip.back.domain.dashboard.entity.Dashboard;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,21 +19,15 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String name;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserProfile userProfile;
 
-    private String nickname;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private PassInfo passInfo;
 
-    @Column(nullable = false)
-    private String mobile_number;
-
-    private String profileUrl;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Dashboard dashboard;
 
     // private Long temperature
     // private Long review
-
-
 }

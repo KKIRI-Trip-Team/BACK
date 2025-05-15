@@ -1,84 +1,88 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.4.4'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.4.4'
+    id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.kkiri-trip'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    runtimeOnly 'org.postgresql:postgresql'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-	// Querydsl
-	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    // Querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-	// .env
-	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+    // .env
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 
-	// AWS
-	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.0'
-	implementation 'software.amazon.awssdk:s3:2.20.8'  // AWS SDK for S3
-	implementation 'software.amazon.awssdk:auth:2.20.8' // AWS 인증 관련 라이브러리
-	implementation 'software.amazon.awssdk:core:2.20.8' // 기본 SDK
-	// Kafka dependencies
-	implementation 'org.springframework.kafka:spring-kafka'
+    // AWS
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.0.0'
+    implementation 'software.amazon.awssdk:s3:2.20.8'  // AWS SDK for S3
+    implementation 'software.amazon.awssdk:auth:2.20.8' // AWS 인증 관련 라이브러리
+    implementation 'software.amazon.awssdk:core:2.20.8' // 기본 SDK
+    // Kafka dependencies
+    implementation 'org.springframework.kafka:spring-kafka'
 
-	// WebSocket and STOMP dependencies
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'org.springframework:spring-messaging'
+    // WebSocket and STOMP dependencies
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework:spring-messaging'
 
-	// Optional: Kafka Streams (if you plan to use Kafka Streams in your app)
-	implementation 'org.apache.kafka:kafka-streams'
+    // Optional: Kafka Streams (if you plan to use Kafka Streams in your app)
+    implementation 'org.apache.kafka:kafka-streams'
 
-	// Mongo DB
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    // Mongo DB (feature/chat에서 추가된 부분)
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // OpenAPI (dev에서 추가된 부분)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
 }
 
-// QueryDSL
 def querydslSrcDir = 'src/main/generated'
 
 clean {
-	delete file(querydslSrcDir)
+    delete file(querydslSrcDir)
 }
+
 tasks.withType(JavaCompile) {
-	options.generatedSourceOutputDirectory = file(querydslSrcDir)
+    options.generatedSourceOutputDirectory = file(querydslSrcDir)
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

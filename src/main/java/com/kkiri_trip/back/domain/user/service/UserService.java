@@ -1,13 +1,18 @@
 package com.kkiri_trip.back.domain.user.service;
 
+import com.kkiri_trip.back.domain.dashboard.entity.Dashboard;
+import com.kkiri_trip.back.domain.dashboard.repository.DashboardRepository;
 import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
+import com.kkiri_trip.back.domain.user.dto.Request.UserProfileCreateRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.UserUpdateRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Response.LoginResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.UserResponseDto;
 import com.kkiri_trip.back.domain.user.dto.Response.UserUpdateResponseDto;
 import com.kkiri_trip.back.domain.user.entity.User;
+import com.kkiri_trip.back.domain.user.entity.UserProfile;
+import com.kkiri_trip.back.domain.user.repository.UserProfileRepository;
 import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.global.jwt.JwtUtil;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
@@ -16,32 +21,31 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
+    public static final String DEFAULT_PROFILE_URL = "";
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final StringRedisTemplate stringRedisTemplate;
+    private final UserProfileRepository userProfileRepository;
+    private final DashboardRepository dashboardRepository;
 
     @Transactional
     public SignUpResponseDto register(SignUpRequestDto signupRequestDto){
         // 이메일 중복 검사
         if(userRepository.existsByEmail(signupRequestDto.getEmail())){
             throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
-        }
-
-        // 닉네임 중복 검사
-        if (userRepository.existsByNickname(signupRequestDto.getNickname())){
-            throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }
 
         // 비밀번호와 확인 비밀번호 일치 검사
@@ -52,21 +56,55 @@ public class UserService {
         User user = User.builder()
                 .email(signupRequestDto.getEmail())
                 .password(passwordEncoder.encode(signupRequestDto.getPassword()))
-                .name(signupRequestDto.getName())
-                .nickname(signupRequestDto.getNickname())
-                .mobile_number(signupRequestDto.getMobile_number())
-                .profileUrl(signupRequestDto.getProfileUrl())
-                .gender(signupRequestDto.getGender())
                 .build();
 
         userRepository.save(user);
 
-        return new SignUpResponseDto(user.getId(), user.getNickname());
+        return new SignUpResponseDto(user.getId(), user.getEmail());
+    }
+
+    @Transactional
+    public void registerProfile(UserProfileCreateRequestDto userProfileCreateRequestDto) {
+        User user = userRepository.findByEmail(userProfileCreateRequestDto.getEmail())
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        String profileUrl = userProfileCreateRequestDto.getProfileUrl();
+
+        // 닉네임 중복 검사
+        if (userProfileRepository.existsByNickname(userProfileCreateRequestDto.getNickname())){
+            throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
+        }
+
+        if(userProfileCreateRequestDto.getNickname() == null || userProfileCreateRequestDto.getNickname().isEmpty()){
+            throw new UserException(UserErrorCode.EMPTY_NICKNAME);
+        }
+
+        if(profileUrl == null || profileUrl.isEmpty()){
+            profileUrl = DEFAULT_PROFILE_URL;
+        }
+
+        UserProfile userProfile = user.getUserProfile();
+        if(userProfile == null){
+            userProfile = new UserProfile();
+            userProfile.setUser(user);
+            user.setUserProfile(userProfile);
+        }
+
+        userProfile.createProfile(userProfileCreateRequestDto.getNickname(), profileUrl);
+
+        userRepository.save(user);
+
+        if (user.getDashboard() == null) {
+            Dashboard dashboard = new Dashboard();
+            dashboard.setUser(user); // 양방향 연결이 필요하면 user.setDashboard(dashboard)도 함께
+            dashboardRepository.save(dashboard);
+        }
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response){
         User user = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+        UserProfile userProfile = user.getUserProfile();
 
         if(!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
             throw new UserException(UserErrorCode.PASSWORD_MISMATCH);
@@ -82,13 +120,26 @@ public class UserService {
                 14, TimeUnit.DAYS // 만료시간 설정
         );
 
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(60 * 60 * 24 * 14);
-        response.addCookie(cookie);
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(Duration.ofHours(1))
+                .build();
 
-        return new LoginResponseDto(accessToken, user.getNickname());
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(Duration.ofDays(14))
+                .build();
+
+        response.addHeader("Set-Cookie", accessCookie.toString());
+        response.addHeader("Set-Cookie", refreshCookie.toString());
+
+        return new LoginResponseDto(user.getId(), user.getEmail(),userProfile.getNickname(), userProfile.getProfileUrl(), accessToken);
     }
 
     public void logout(String accessToken){
@@ -108,14 +159,19 @@ public class UserService {
     public List<UserResponseDto> getAllUsers(){
         return userRepository.findAll()
                 .stream()
-                .map(UserResponseDto::from)
+                .map(user -> UserResponseDto.from(user, user.getUserProfile()))
                 .toList();
+    }
+
+    public UserResponseDto getMyInfo(User user, UserProfile userProfile) {
+        return UserResponseDto.from(user, userProfile);
     }
 
     @Transactional
     public UserUpdateResponseDto updateUser(UserUpdateRequestDto userUpdateRequestDto, User loginUser){
         User user = userRepository.findById(loginUser.getId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+        UserProfile userProfile = user.getUserProfile();
 
         if(!user.getId().equals(loginUser.getId())){
             throw new UserException(UserErrorCode.UNAUTHORIZED_UPDATE);
@@ -126,15 +182,15 @@ public class UserService {
             throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
         }
 
-        if(userRepository.existsByNickname(userUpdateRequestDto.getNickname())
-                && !user.getNickname().equals(userUpdateRequestDto.getNickname())){
+        if(userProfileRepository.existsByNickname(userUpdateRequestDto.getNickname())
+                && !userProfile.getNickname().equals(userUpdateRequestDto.getNickname())){
             throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
         }
 
         user.setEmail(userUpdateRequestDto.getEmail());
-        user.setNickname(userUpdateRequestDto.getNickname());
-        user.setProfileUrl(userUpdateRequestDto.getProfileUrl());
+        userProfile.setNickname(userUpdateRequestDto.getNickname());
+        userProfile.setProfileUrl(userUpdateRequestDto.getProfileUrl());
 
-        return new UserUpdateResponseDto(user.getId(),user.getEmail(), user.getNickname(), user.getProfileUrl());
+        return new UserUpdateResponseDto(user.getId(),user.getEmail(), userProfile.getNickname(), userProfile.getProfileUrl());
     }
 }

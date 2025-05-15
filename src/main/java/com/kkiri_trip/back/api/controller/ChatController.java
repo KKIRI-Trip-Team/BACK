@@ -36,7 +36,7 @@ public class ChatController {
             String thumbnailUrl = message.getThumbnailUrl();
 
             // 이곳에서 이미지 URL 처리와 저장 작업을 수행
-            message.setContent("<img src='" + thumbnailUrl + "' width='100' />");
+            message.setContent(thumbnailUrl);
 
             // 메시지 저장 및 Kafka 전송
             chatMessageService.saveMessage(message);

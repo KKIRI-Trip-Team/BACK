@@ -25,10 +25,10 @@ services:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - "27017:27017"  # 호스트의 27017 포트를 컨테이너의 27017 포트에 매핑
+      - "27017:27017"
     volumes:
-      - ./mongodb/data:/data/db  # MongoDB 데이터를 호스트와 공유
+      - ./mongodb/data:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=rootpassword
-    restart: always  # 컨테이너가 종료되면 자동으로 재시작
+    restart: always

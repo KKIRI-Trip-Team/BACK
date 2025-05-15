@@ -1,4 +1,40 @@
+version: '3'
+
 services:
+  # Kafka 및 Zookeeper
+  zookeeper:
+    image: bitnami/zookeeper:3.9
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    image: bitnami/kafka:3.7
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb/data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+    restart: always
+
+  # Trebuddy 서비스
   trebuddy:
     image: trebuddy:latest
     container_name: trebuddy
@@ -24,6 +60,7 @@ services:
       AWS_S3_REGION: ${AWS_S3_REGION}
     restart: unless-stopped
 
+  # Redis
   redis:
     image: redis:latest
     container_name: redis
@@ -31,6 +68,7 @@ services:
       - "6379:6379"
     restart: unless-stopped
 
+  # PostgreSQL
   postgres:
     image: postgres:15
     container_name: postgres

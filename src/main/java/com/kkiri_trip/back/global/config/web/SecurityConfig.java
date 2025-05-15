@@ -44,10 +44,17 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
+                // 1. /api/** 요청은 인증 포함 가능
                 registry.addMapping("/api/**")
                         .allowedOrigins("http://localhost:8081", "http://localhost:8082", "http://localhost:8083", "http://localhost:3000", "http://15.164.44.157:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowCredentials(true);
+
+                // 2. 그 외 요청은 (예: 정적 HTML 테스트용, 채팅 기능 등) 인증 없이 허용
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:5500", "http://127.0.0.1:5500") // 추가
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+                        .allowCredentials(false);
             }
         };
     }

@@ -162,3 +162,13 @@ gradle-app.setting
 /src/main/generated
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,git,intellij
+mongodb/data
+# MongoDB 데이터 파일 제외
+mongodb/data/*.wt
+mongodb/data/*.lock
+mongodb/data/*.log
+mongodb/data/*.bson
+mongodb/data/*.json
+mongodb/data/journal/
+mongodb/data/diagnostic.data/
+mongodb/data/storage.bson

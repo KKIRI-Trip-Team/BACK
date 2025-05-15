@@ -34,7 +34,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
-          key: ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}  # ✅ EC2_SSH_KEY → EC2_PRIVATE_KEY
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/trebuddy:latest
             docker compose -f /home/ec2-user/trebuddy/docker-compose.yml up -d

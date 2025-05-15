@@ -55,7 +55,7 @@ public class S3Service {
 
     // S3에서 이미지 URL 가져오기
     public String getImageUrl(String key) {
-        // 기본 엔드포인트 사용 (공용 S3 URL)
-        return "https://trebuddy.s3.amazonaws.com/" + bucketName + "/" + key;
+        // bucketName을 URL에서 제거하고 key만 사용
+        return "https://" + bucketName + ".s3.ap-northeast-2.amazonaws.com/" + key;
     }
 }

@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import com.kkiri_trip.back.domain.chat.ChatMessageRepository;
+import com.kkiri_trip.back.domain.chat.repository.ChatMessageRepository;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.kkiri_trip.back.domain",

@@ -75,7 +75,8 @@ public class SecurityConfig {
                                 "/api/posts/search",
                                 "/api/userDummy",
                                 "/api/images/upload",
-                                "/api/images/url"
+                                "/api/images/url",
+                                "/chat/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

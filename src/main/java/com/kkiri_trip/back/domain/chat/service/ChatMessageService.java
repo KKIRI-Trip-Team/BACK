@@ -1,8 +1,9 @@
-package com.kkiri_trip.back.domain.chat;
+package com.kkiri_trip.back.domain.chat.service;
 
 import com.kkiri_trip.back.api.dto.ChatMessage.ChatMessageDto;
+import com.kkiri_trip.back.domain.chat.entity.ChatMessage;
+import com.kkiri_trip.back.domain.chat.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

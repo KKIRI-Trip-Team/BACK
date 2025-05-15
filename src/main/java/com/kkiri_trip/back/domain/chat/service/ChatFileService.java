@@ -1,4 +1,4 @@
-package com.kkiri_trip.back.domain.chat;
+package com.kkiri_trip.back.domain.chat.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

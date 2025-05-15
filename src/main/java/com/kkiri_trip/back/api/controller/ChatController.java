@@ -1,8 +1,7 @@
 package com.kkiri_trip.back.api.controller;
 
 import com.kkiri_trip.back.api.dto.ChatMessage.ChatMessageDto;
-import com.kkiri_trip.back.domain.chat.ChatFileService;
-import com.kkiri_trip.back.domain.chat.ChatMessageService;
+import com.kkiri_trip.back.domain.chat.service.ChatMessageService;
 import com.kkiri_trip.back.infra.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,6 @@ public class ChatController {
 
     private final ChatMessageService chatMessageService;
     private final KafkaTemplate<String, ChatMessageDto> kafkaTemplate;
-    private final ChatFileService chatFileService;
     private final S3Service s3Service;
 
     @MessageMapping("/chat")

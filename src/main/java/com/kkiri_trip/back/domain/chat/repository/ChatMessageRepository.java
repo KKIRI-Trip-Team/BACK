@@ -1,5 +1,6 @@
-package com.kkiri_trip.back.domain.chat;
+package com.kkiri_trip.back.domain.chat.repository;
 
+import com.kkiri_trip.back.domain.chat.entity.ChatMessage;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

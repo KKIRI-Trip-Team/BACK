@@ -1,4 +1,4 @@
-package com.kkiri_trip.back.domain.chat;
+package com.kkiri_trip.back.domain.chat.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

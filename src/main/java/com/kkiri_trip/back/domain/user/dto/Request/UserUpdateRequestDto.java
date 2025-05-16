@@ -11,5 +11,7 @@ public class UserUpdateRequestDto {
     private String email;
     private String nickname;
     private String profileUrl;
+    private String password;
+    private String confirmPassword;
 
 }

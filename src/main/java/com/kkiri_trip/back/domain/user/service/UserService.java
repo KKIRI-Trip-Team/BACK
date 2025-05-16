@@ -17,7 +17,6 @@ import com.kkiri_trip.back.domain.user.repository.UserRepository;
 import com.kkiri_trip.back.global.jwt.JwtUtil;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
 import com.kkiri_trip.back.global.error.exception.UserException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -177,19 +176,35 @@ public class UserService {
             throw new UserException(UserErrorCode.UNAUTHORIZED_UPDATE);
         }
 
-        if(userRepository.existsByEmail(userUpdateRequestDto.getEmail())
-                && !user.getEmail().equals(userUpdateRequestDto.getEmail())){
-            throw new UserException(UserErrorCode.DUPLICATE_EMAIL);
+        // 이메일(변경 x)
+
+        // 닉네임(변경 O)
+        if(userUpdateRequestDto.getNickname() != null) {
+            if (userProfileRepository.existsByNickname(userUpdateRequestDto.getNickname())
+                    && !userProfile.getNickname().equals(userUpdateRequestDto.getNickname())) {
+                throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
+            }
+            userProfile.setNickname(userUpdateRequestDto.getNickname());
         }
 
-        if(userProfileRepository.existsByNickname(userUpdateRequestDto.getNickname())
-                && !userProfile.getNickname().equals(userUpdateRequestDto.getNickname())){
-            throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
+        // 프로필 이미지(변경 O)
+        if(userUpdateRequestDto.getProfileUrl() != null){
+            userProfile.setProfileUrl(userUpdateRequestDto.getProfileUrl());
         }
 
-        user.setEmail(userUpdateRequestDto.getEmail());
-        userProfile.setNickname(userUpdateRequestDto.getNickname());
-        userProfile.setProfileUrl(userUpdateRequestDto.getProfileUrl());
+        // 비밀번호(변경 O)
+        if(userUpdateRequestDto.getPassword() != null){
+            if (!userUpdateRequestDto.getPassword().equals(userUpdateRequestDto.getConfirmPassword())){
+                throw new UserException(UserErrorCode.PASSWORD_MISMATCH);
+            }
+
+            String password = passwordEncoder.encode(userUpdateRequestDto.getPassword());
+            user.setPassword(password);
+        }
+
+        // 생년월일(추후 정하기)
+        // 이름(추후 정하기)
+        // 전화번호(추후 정하기)
 
         return new UserUpdateResponseDto(user.getId(),user.getEmail(), userProfile.getNickname(), userProfile.getProfileUrl());
     }

@@ -21,15 +21,7 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
 
     public PlaceDto savePlace(PlaceDto placeDto) {
-        Place place = Place.builder()
-                .placeName(placeDto.getPlaceName())
-                .addressName(placeDto.getAddressName())
-                .roadAddressName(placeDto.getRoadAddressName())
-                .placeUrl(placeDto.getPlaceUrl())
-                .categoryName(placeDto.getCategoryName())
-                .phone(placeDto.getPhone())
-                .location(new GeoJsonPoint(placeDto.getX(), placeDto.getY()))
-                .build();
+        Place place = Place.of(placeDto);
         return placeRepository.save(place).toDto();
     }
 
@@ -44,21 +36,18 @@ public class PlaceService {
     }
 
     @Transactional
-    public PlaceDto updatePlace(String id, PlaceDto placeDto)
-    {
-        Place place = placeRepository.findById(id).orElseThrow(()->
+    public PlaceDto updatePlace(String id, PlaceDto placeDto) {
+        placeRepository.findById(id).orElseThrow(() ->
                 new PlaceExceptoin(PlaceErrorCode.PLACE_NOT_FOUND));
 
-        place.setPlaceName(placeDto.getPlaceName());
-        place.setAddressName(placeDto.getAddressName());
-        place.setRoadAddressName(placeDto.getRoadAddressName());
-        place.setPlaceUrl(placeDto.getPlaceUrl());
-        place.setPhone(placeDto.getPhone());
-        place.setCategoryName(placeDto.getCategoryName());
-        place.setLocation(new GeoJsonPoint(placeDto.getX(),placeDto.getY()));
+        Place updatedPlace = Place.of(placeDto);
+        updatedPlace.setId(id);
 
-        return place.toDto();
+        placeRepository.save(updatedPlace);
+
+        return updatedPlace.toDto();
     }
+
 
     @Transactional
     public void deleteFeed(String id) {

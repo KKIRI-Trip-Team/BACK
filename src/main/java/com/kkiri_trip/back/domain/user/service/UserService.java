@@ -1,7 +1,7 @@
 package com.kkiri_trip.back.domain.user.service;
 
-import com.kkiri_trip.back.domain.dashboard.entity.Dashboard;
 import com.kkiri_trip.back.domain.dashboard.repository.DashboardRepository;
+import com.kkiri_trip.back.domain.dashboard.service.DashboardService;
 import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
 import com.kkiri_trip.back.domain.user.dto.Request.UserProfileCreateRequestDto;
@@ -38,6 +38,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final StringRedisTemplate stringRedisTemplate;
     private final UserProfileRepository userProfileRepository;
+    private final DashboardService dashboardService;
     private final DashboardRepository dashboardRepository;
 
     @Transactional
@@ -94,9 +95,7 @@ public class UserService {
         userRepository.save(user);
 
         if (user.getDashboard() == null) {
-            Dashboard dashboard = new Dashboard();
-            dashboard.setUser(user); // 양방향 연결이 필요하면 user.setDashboard(dashboard)도 함께
-            dashboardRepository.save(dashboard);
+            dashboardService.createDashboard(user);
         }
     }
 
@@ -178,6 +177,39 @@ public class UserService {
 
         // 이메일(변경 x)
 
+        // 닉네임(변경 O)
+        String newNickname = userUpdateRequestDto.getNickname();
+        String currentNickname = userProfile.getNickname();
+
+        if(newNickname != null) {
+            if(newNickname.equals(currentNickname)){
+                throw new UserException(UserErrorCode.SAME_NICKNAME);
+            }
+
+            if (userProfileRepository.existsByNickname(newNickname)) {
+                throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
+            }
+            userProfile.setNickname(newNickname);
+        }
+
+        // 프로필 이미지(변경 O)
+        if(userUpdateRequestDto.getProfileUrl() != null){
+            userProfile.setProfileUrl(userUpdateRequestDto.getProfileUrl());
+        }
+
+        // 비밀번호(변경 O)
+        if(userUpdateRequestDto.getPassword() != null){
+            if (!userUpdateRequestDto.getPassword().equals(userUpdateRequestDto.getConfirmPassword())){
+                throw new UserException(UserErrorCode.PASSWORD_MISMATCH);
+            }
+
+            String password = passwordEncoder.encode(userUpdateRequestDto.getPassword());
+            user.setPassword(password);
+        }
+
+        // 생년월일(추후 정하기)
+        // 이름(추후 정하기)
+        // 전화번호(추후 정하기)
         // 닉네임(변경 O)
         if(userUpdateRequestDto.getNickname() != null) {
             if (userProfileRepository.existsByNickname(userUpdateRequestDto.getNickname())

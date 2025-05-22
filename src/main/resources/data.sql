@@ -29,17 +29,33 @@ INSERT INTO pass_info (name, mobile_number, gender, user_id, created_at, updated
 ('테스터8', '01000000008', 'F', 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 
-INSERT INTO feed (title, content, created_at, updated_at) VALUES
-('제목1', '내용1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- trip_style
+INSERT INTO trip_style (id, name) VALUES
+(1, '휴식'),
+(2, '액티비티'),
+(3, '맛집'),
+(4, '문화');
 
-INSERT INTO feed (title, content, created_at, updated_at) VALUES
-('제목2', '내용2', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- feed
+INSERT INTO feed (title, content, region, period, gender, age_group, cost, created_at, updated_at) VALUES
+('제목1', '내용1', 'SEOUL', 'ONE_NIGHT', 'ANY', 'TWENTIES', 100000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('제목2', '내용2', 'BUSAN', 'TWO_NIGHT', 'FEMALE', 'THIRTIES', 200000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('제목3', '내용3', 'DAEGU', 'DAY_TRIP', 'MALE', 'ANY', 150000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('제목4', '내용4', 'GANGWON', 'OVER_SEVEN', 'ANY', 'FORTIES', 80000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO feed (title, content, created_at, updated_at) VALUES
-('제목3', '내용3', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- feed_trip_style
+-- feed 1 → '휴식', '맛집'
+INSERT INTO feed_trip_style (feed_id, trip_style_id) VALUES (1, 1), (1, 3);
 
-INSERT INTO feed (title, content, created_at, updated_at) VALUES
-('제목4', '내용4', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- feed 2 → '액티비티'
+INSERT INTO feed_trip_style (feed_id, trip_style_id) VALUES (2, 2);
+
+-- feed 3 → '문화', '맛집'
+INSERT INTO feed_trip_style (feed_id, trip_style_id) VALUES (3, 4), (3, 3);
+
+-- feed 4 → '휴식', '액티비티', '문화'
+INSERT INTO feed_trip_style (feed_id, trip_style_id) VALUES (4, 1), (4, 2), (4, 4);
+
 
 INSERT INTO feed_user (feed_id, user_id, status, is_host, created_at, updated_at) VALUES
 (1, 1, 'PENDING', TRUE, CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);

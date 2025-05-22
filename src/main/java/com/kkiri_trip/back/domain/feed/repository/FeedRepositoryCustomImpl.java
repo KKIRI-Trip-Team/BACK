@@ -2,6 +2,8 @@ package com.kkiri_trip.back.domain.feed.repository;
 
 import com.kkiri_trip.back.domain.feed.entity.Feed;
 import com.kkiri_trip.back.domain.feed.entity.QFeed;
+import com.kkiri_trip.back.domain.feed.entity.QFeedTripStyle;
+import com.kkiri_trip.back.domain.feed.entity.QTripStyle;
 import com.kkiri_trip.back.domain.feedUser.entity.QFeedUser;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.kkiri_trip.back.domain.feed.entity.QTripStyle.tripStyle;
 
 @RequiredArgsConstructor
 public class FeedRepositoryCustomImpl implements FeedRepositoryCustom{
@@ -67,4 +71,31 @@ public class FeedRepositoryCustomImpl implements FeedRepositoryCustom{
 
         return new PageImpl<>(content, pageable, total);
     }
+
+    @Override
+    public List<Feed> findAllWithTripStyles() {
+        QFeed feed = QFeed.feed;
+        QFeedTripStyle feedTripStyle = QFeedTripStyle.feedTripStyle;
+
+        return jpaQueryFactory.selectFrom(feed)
+                .leftJoin(feed.feedTripStyles, feedTripStyle).fetchJoin()
+                .leftJoin(feedTripStyle.tripStyle, tripStyle).fetchJoin()  // 추가
+                .distinct()
+                .fetch();
+    }
+
+    public Optional<Feed> findWithTripStylesById(Long id) {
+        QFeed feed = QFeed.feed;
+        QFeedTripStyle feedTripStyle = QFeedTripStyle.feedTripStyle;
+        QTripStyle tripStyle = QTripStyle.tripStyle;
+
+        Feed result = jpaQueryFactory.selectFrom(feed)
+                .leftJoin(feed.feedTripStyles, feedTripStyle).fetchJoin()
+                .leftJoin(feedTripStyle.tripStyle, tripStyle).fetchJoin()
+                .where(feed.id.eq(id))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
+    }
+
 }

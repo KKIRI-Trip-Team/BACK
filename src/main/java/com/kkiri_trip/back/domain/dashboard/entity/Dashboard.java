@@ -22,4 +22,7 @@ public class Dashboard extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
+
+    @OneToOne(mappedBy = "dashboard", cascade = CascadeType.ALL)
+    private UserRank userRank;
 }

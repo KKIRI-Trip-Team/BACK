@@ -1,5 +1,6 @@
 package com.kkiri_trip.back.global.error;
 
+import com.kkiri_trip.back.domain.mongo.place.entity.Place;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
 import com.kkiri_trip.back.global.error.exception.*;
 import org.springframework.http.ResponseEntity;
@@ -34,4 +35,9 @@ public class GlobalExceptionHandler {
         return ApiResponseDto.from(ex.getErrorCode().getHttpStatus(), ex.getMessage(), null);
     }
 
+
+    @ExceptionHandler(PlaceExceptoin.class)
+    public ResponseEntity<ApiResponseDto<Void>> handlePlaceException(PlaceExceptoin ex) {
+        return ApiResponseDto.from(ex.getErrorCode().getHttpStatus(), ex.getMessage(), null);
+    }
 }

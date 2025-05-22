@@ -1,6 +1,7 @@
 package com.kkiri_trip.back.domain.user.repository;
 
-import com.kkiri_trip.back.domain.user.entity.User;
+import com.kkiri_trip.back.domain.jpa.user.entity.User;
+import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
 import com.kkiri_trip.back.global.enums.Gender;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

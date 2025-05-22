@@ -1,9 +1,9 @@
 package com.kkiri_trip.back.Schedule.ScheduleItem.DELETE;
 
 import com.kkiri_trip.back.api.controller.ScheduleItemController;
-import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
-import com.kkiri_trip.back.domain.schedule.repository.ScheduleRepository;
-import com.kkiri_trip.back.domain.scheduleItem.service.ScheduleItemService;
+import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
+import com.kkiri_trip.back.domain.jpa.schedule.repository.ScheduleRepository;
+import com.kkiri_trip.back.domain.jpa.scheduleItem.service.ScheduleItemService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

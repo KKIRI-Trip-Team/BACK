@@ -1,8 +1,8 @@
 package com.kkiri_trip.back.FeedUser;
 
-import com.kkiri_trip.back.domain.feed.entity.Feed;
-import com.kkiri_trip.back.domain.feedUser.entity.FeedUser;
-import com.kkiri_trip.back.domain.user.entity.User;
+import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
+import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
+import com.kkiri_trip.back.domain.jpa.user.entity.User;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import com.kkiri_trip.back.global.error.exception.UserException;
 import org.junit.jupiter.api.DisplayName;

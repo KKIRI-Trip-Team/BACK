@@ -4,7 +4,7 @@ import com.kkiri_trip.back.api.dto.Feed.attribute.AgeGroup;
 import com.kkiri_trip.back.api.dto.Feed.attribute.Gender;
 import com.kkiri_trip.back.api.dto.Feed.attribute.Period;
 import com.kkiri_trip.back.api.dto.Feed.attribute.Region;
-import com.kkiri_trip.back.domain.feed.entity.Feed;
+import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,10 +1,9 @@
 package com.kkiri_trip.back.api.controller;
 
 import com.kkiri_trip.back.api.dto.FeedUser.FeedUserDto;
-import com.kkiri_trip.back.domain.feedUser.service.FeedUserService;
-import com.kkiri_trip.back.domain.user.util.CustomUserDetails;
+import com.kkiri_trip.back.domain.jpa.feedUser.service.FeedUserService;
+import com.kkiri_trip.back.domain.jpa.user.util.CustomUserDetails;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

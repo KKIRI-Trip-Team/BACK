@@ -1,13 +1,14 @@
 package com.kkiri_trip.back.domain.user.service;
 
-import com.kkiri_trip.back.domain.user.dto.Request.LoginRequestDto;
-import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
-import com.kkiri_trip.back.domain.user.dto.Request.UserUpdateRequestDto;
-import com.kkiri_trip.back.domain.user.dto.Response.LoginResponseDto;
-import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
-import com.kkiri_trip.back.domain.user.dto.Response.UserUpdateResponseDto;
-import com.kkiri_trip.back.domain.user.entity.User;
-import com.kkiri_trip.back.domain.user.repository.UserRepository;
+import com.kkiri_trip.back.domain.jpa.user.dto.Request.LoginRequestDto;
+import com.kkiri_trip.back.domain.jpa.user.dto.Request.SignUpRequestDto;
+import com.kkiri_trip.back.domain.jpa.user.dto.Request.UserUpdateRequestDto;
+import com.kkiri_trip.back.domain.jpa.user.dto.Response.LoginResponseDto;
+import com.kkiri_trip.back.domain.jpa.user.dto.Response.SignUpResponseDto;
+import com.kkiri_trip.back.domain.jpa.user.dto.Response.UserUpdateResponseDto;
+import com.kkiri_trip.back.domain.jpa.user.entity.User;
+import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
+import com.kkiri_trip.back.domain.jpa.user.service.UserService;
 import com.kkiri_trip.back.global.enums.Gender;
 import com.kkiri_trip.back.global.error.exception.UserException;
 import org.junit.jupiter.api.DisplayName;

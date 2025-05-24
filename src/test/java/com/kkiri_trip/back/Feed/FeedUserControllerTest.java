@@ -2,10 +2,10 @@ package com.kkiri_trip.back.Feed;
 
 import com.kkiri_trip.back.api.controller.FeedUserController;
 import com.kkiri_trip.back.api.dto.FeedUser.FeedUserDto;
-import com.kkiri_trip.back.domain.feedUser.entity.FeedUser;
-import com.kkiri_trip.back.domain.feedUser.entity.FeedUserStatus;
-import com.kkiri_trip.back.domain.feedUser.repository.FeedUserRepository;
-import com.kkiri_trip.back.domain.feedUser.service.FeedUserService;
+import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
+import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUserStatus;
+import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepository;
+import com.kkiri_trip.back.domain.jpa.feedUser.service.FeedUserService;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import org.junit.jupiter.api.DisplayName;

@@ -13,7 +13,9 @@ public enum UserErrorCode implements BaseErrorCode {
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER_004", "사용자를 찾을 수 없습니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "USER_005", "유효하지 않은 토큰입니다."),
     UNAUTHORIZED_UPDATE(HttpStatus.UNAUTHORIZED, "USER_006", "수정 권한이 없습니다."),
-    EMPTY_NICKNAME(HttpStatus.BAD_REQUEST, "USER_007", "닉네임을 입력해주세요.");
+    EMPTY_NICKNAME(HttpStatus.BAD_REQUEST, "USER_007", "닉네임을 입력해주세요."),
+    SAME_NICKNAME(HttpStatus.BAD_REQUEST, "USER_008", "현재 사용 중인 닉네임과 동일합니다.");
+    ;
 
     private final HttpStatus httpStatus;
     private final String errorCode;

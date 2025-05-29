@@ -2,6 +2,7 @@ package com.kkiri_trip.back.domain.jpa.user.service;
 
 import com.kkiri_trip.back.domain.jpa.dashboard.entity.Dashboard;
 import com.kkiri_trip.back.domain.jpa.dashboard.repository.DashboardRepository;
+import com.kkiri_trip.back.domain.jpa.dashboard.service.DashboardService;
 import com.kkiri_trip.back.domain.jpa.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.jpa.user.dto.Request.SignUpRequestDto;
 import com.kkiri_trip.back.domain.jpa.user.dto.Request.UserProfileCreateRequestDto;
@@ -38,6 +39,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final StringRedisTemplate stringRedisTemplate;
     private final UserProfileRepository userProfileRepository;
+    private final DashboardService dashboardService;
     private final DashboardRepository dashboardRepository;
 
     @Transactional
@@ -94,9 +96,7 @@ public class UserService {
         userRepository.save(user);
 
         if (user.getDashboard() == null) {
-            Dashboard dashboard = new Dashboard();
-            dashboard.setUser(user); // 양방향 연결이 필요하면 user.setDashboard(dashboard)도 함께
-            dashboardRepository.save(dashboard);
+            dashboardService.createDashboard(user);
         }
     }
 
@@ -179,12 +179,18 @@ public class UserService {
         // 이메일(변경 x)
 
         // 닉네임(변경 O)
-        if(userUpdateRequestDto.getNickname() != null) {
-            if (userProfileRepository.existsByNickname(userUpdateRequestDto.getNickname())
-                    && !userProfile.getNickname().equals(userUpdateRequestDto.getNickname())) {
+        String newNickname = userUpdateRequestDto.getNickname();
+        String currentNickname = userProfile.getNickname();
+
+        if(newNickname != null) {
+            if(newNickname.equals(currentNickname)){
+                throw new UserException(UserErrorCode.SAME_NICKNAME);
+            }
+
+            if (userProfileRepository.existsByNickname(newNickname)) {
                 throw new UserException(UserErrorCode.DUPLICATE_NICKNAME);
             }
-            userProfile.setNickname(userUpdateRequestDto.getNickname());
+            userProfile.setNickname(newNickname);
         }
 
         // 프로필 이미지(변경 O)

@@ -10,7 +10,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "com.kkiri_trip.back.domain.chat")  // MongoDB 리포지토리 패키지
+@EnableMongoRepositories(basePackages = {
+        "com.kkiri_trip.back.domain.mongo"
+})
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Override

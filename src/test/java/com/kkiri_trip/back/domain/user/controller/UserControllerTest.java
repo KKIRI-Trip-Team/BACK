@@ -1,10 +1,11 @@
 package com.kkiri_trip.back.domain.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kkiri_trip.back.domain.user.dto.Request.SignUpRequestDto;
-import com.kkiri_trip.back.domain.user.dto.Response.SignUpResponseDto;
-import com.kkiri_trip.back.domain.user.repository.UserRepository;
-import com.kkiri_trip.back.domain.user.service.UserService;
+import com.kkiri_trip.back.domain.jpa.user.controller.UserController;
+import com.kkiri_trip.back.domain.jpa.user.dto.Request.SignUpRequestDto;
+import com.kkiri_trip.back.domain.jpa.user.dto.Response.SignUpResponseDto;
+import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
+import com.kkiri_trip.back.domain.jpa.user.service.UserService;
 import com.kkiri_trip.back.global.enums.Gender;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
 import com.kkiri_trip.back.global.error.exception.UserException;

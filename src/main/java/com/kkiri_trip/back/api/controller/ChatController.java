@@ -1,7 +1,7 @@
 package com.kkiri_trip.back.api.controller;
 
 import com.kkiri_trip.back.api.dto.ChatMessage.ChatMessageDto;
-import com.kkiri_trip.back.domain.chat.service.ChatMessageService;
+import com.kkiri_trip.back.domain.mongo.chat.service.ChatMessageService;
 import com.kkiri_trip.back.infra.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

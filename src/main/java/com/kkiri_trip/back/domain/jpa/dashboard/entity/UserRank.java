@@ -1,6 +1,6 @@
-package com.kkiri_trip.back.domain.dashboard.entity;
+package com.kkiri_trip.back.domain.jpa.dashboard.entity;
 
-import com.kkiri_trip.back.domain.common.entity.BaseEntity;
+import com.kkiri_trip.back.domain.jpa.common.entity.BaseEntity;
 import com.kkiri_trip.back.global.enums.TierLevel;
 import jakarta.persistence.*;
 import lombok.*;

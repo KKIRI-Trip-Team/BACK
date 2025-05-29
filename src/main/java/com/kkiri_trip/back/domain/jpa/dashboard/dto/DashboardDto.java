@@ -1,6 +1,7 @@
 package com.kkiri_trip.back.domain.jpa.dashboard.dto;
 
-import com.kkiri_trip.back.domain.dashboard.entity.Dashboard;
+import com.kkiri_trip.back.domain.jpa.dashboard.entity.Dashboard;
+import com.kkiri_trip.back.global.enums.TierLevel;
 import lombok.*;
 
 @Getter

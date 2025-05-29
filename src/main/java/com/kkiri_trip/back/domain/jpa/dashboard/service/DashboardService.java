@@ -1,11 +1,13 @@
-package com.kkiri_trip.back.domain.dashboard.service;
+package com.kkiri_trip.back.domain.jpa.dashboard.service;
 
-import com.kkiri_trip.back.domain.dashboard.dto.DashboardDto;
-import com.kkiri_trip.back.domain.dashboard.entity.Dashboard;
-import com.kkiri_trip.back.domain.dashboard.repository.DashboardRepository;
-import com.kkiri_trip.back.domain.user.entity.User;
-import com.kkiri_trip.back.domain.user.repository.UserRepository;
+import com.kkiri_trip.back.domain.jpa.dashboard.dto.DashboardDto;
+import com.kkiri_trip.back.domain.jpa.dashboard.entity.Dashboard;
+import com.kkiri_trip.back.domain.jpa.dashboard.entity.UserRank;
+import com.kkiri_trip.back.domain.jpa.dashboard.repository.DashboardRepository;
+import com.kkiri_trip.back.domain.jpa.user.entity.User;
+import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
 import com.kkiri_trip.back.global.common.dto.PageResponseDto;
+import com.kkiri_trip.back.global.enums.TierLevel;
 import com.kkiri_trip.back.global.error.errorcode.DashboardErrorCode;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
 import com.kkiri_trip.back.global.error.exception.DashboardException;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

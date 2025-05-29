@@ -1,11 +1,11 @@
 package com.kkiri_trip.back.Schedule.ScheduleItem;
 
-import com.kkiri_trip.back.domain.feed.entity.Feed;
-import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
-import com.kkiri_trip.back.domain.schedule.entity.Schedule;
-import com.kkiri_trip.back.domain.schedule.repository.ScheduleRepository;
-import com.kkiri_trip.back.domain.scheduleItem.entity.ScheduleItem;
-import com.kkiri_trip.back.domain.scheduleItem.repository.ScheduleItemRepository;
+import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
+import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
+import com.kkiri_trip.back.domain.jpa.schedule.entity.Schedule;
+import com.kkiri_trip.back.domain.jpa.schedule.repository.ScheduleRepository;
+import com.kkiri_trip.back.domain.jpa.scheduleItem.entity.ScheduleItem;
+import com.kkiri_trip.back.domain.jpa.scheduleItem.repository.ScheduleItemRepository;
 import com.kkiri_trip.back.global.error.errorcode.ScheduleItemErrorCode;
 import com.kkiri_trip.back.global.error.exception.ScheduleItemException;
 import org.junit.jupiter.api.AfterEach;

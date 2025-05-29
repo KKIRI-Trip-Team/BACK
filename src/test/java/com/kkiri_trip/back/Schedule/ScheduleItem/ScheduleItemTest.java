@@ -1,8 +1,8 @@
 package com.kkiri_trip.back.Schedule.ScheduleItem;
 
-import com.kkiri_trip.back.domain.feed.entity.Feed;
-import com.kkiri_trip.back.domain.schedule.entity.Schedule;
-import com.kkiri_trip.back.domain.scheduleItem.entity.ScheduleItem;
+import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
+import com.kkiri_trip.back.domain.jpa.schedule.entity.Schedule;
+import com.kkiri_trip.back.domain.jpa.scheduleItem.entity.ScheduleItem;
 import com.kkiri_trip.back.global.error.exception.ScheduleItemException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,8 +1,12 @@
 package com.kkiri_trip.back.api.controller;
 
 import com.kkiri_trip.back.api.dto.Feed.FeedDto;
-import com.kkiri_trip.back.domain.feed.service.FeedService;
-import com.kkiri_trip.back.domain.user.util.CustomUserDetails;
+import com.kkiri_trip.back.api.dto.Feed.attribute.AgeGroup;
+import com.kkiri_trip.back.api.dto.Feed.attribute.Gender;
+import com.kkiri_trip.back.api.dto.Feed.attribute.Period;
+import com.kkiri_trip.back.api.dto.Feed.attribute.Region;
+import com.kkiri_trip.back.domain.jpa.feed.service.FeedService;
+import com.kkiri_trip.back.domain.jpa.user.util.CustomUserDetails;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
 import com.kkiri_trip.back.global.common.dto.PageResponseDto;
 import jakarta.validation.Valid;
@@ -65,17 +69,33 @@ public class FeedController {
 
     @GetMapping("/dummy")
     public ResponseEntity<ApiResponseDto<FeedDto>> getDummyFeedById() {
-        FeedDto feedDto = new FeedDto(1L, "제목1", "내용1");
-        return ApiResponseDto.from(HttpStatus.OK, "더미 피드 조회", feedDto);
+        FeedDto dummyFeed = createDummyFeed(1L);
+        return ApiResponseDto.from(HttpStatus.OK, "더미 피드 조회", dummyFeed);
     }
 
     @GetMapping("/dummylist")
     public ResponseEntity<ApiResponseDto<List<FeedDto>>> getDummyFeeds() {
-        FeedDto feedDto1 = new FeedDto(1L, "제목1", "내용1");
-        FeedDto feedDto2 = new FeedDto(2L, "제목2", "내용2");
-        FeedDto feedDto3 = new FeedDto(3L, "제목3", "내용3");
-        FeedDto feedDto4 = new FeedDto(4L, "제목4", "내용4");
-        List<FeedDto> dummyFeeds = List.of(feedDto1, feedDto2, feedDto3, feedDto4);
+        List<FeedDto> dummyFeeds = List.of(
+                createDummyFeed(1L),
+                createDummyFeed(2L),
+                createDummyFeed(3L),
+                createDummyFeed(4L)
+        );
         return ApiResponseDto.from(HttpStatus.OK, "더미 피드 리스트 조회", dummyFeeds);
     }
+
+    private FeedDto createDummyFeed(Long id) {
+        return FeedDto.builder()
+                .id(id)
+                .title("제목" + id)
+                .content("내용" + id)
+                .region(Region.SEOUL)
+                .period(Period.DAY_TRIP)
+                .gender(Gender.FEMALE)
+                .ageGroup(AgeGroup.TWENTIES)
+                .cost(50000L * id)
+                .tripStyles(List.of("휴식", "액티비티"))
+                .build();
+    }
+
 }

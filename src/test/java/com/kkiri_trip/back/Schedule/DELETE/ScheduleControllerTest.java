@@ -1,8 +1,8 @@
 package com.kkiri_trip.back.Schedule.DELETE;
 
 import com.kkiri_trip.back.api.controller.ScheduleController;
-import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
-import com.kkiri_trip.back.domain.schedule.service.ScheduleService;
+import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
+import com.kkiri_trip.back.domain.jpa.schedule.service.ScheduleService;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.errorcode.ScheduleErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;

@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.api.dto.FeedUser;
 
-import com.kkiri_trip.back.domain.feedUser.entity.FeedUserStatus;
+import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -1,11 +1,11 @@
 package com.kkiri_trip.back.FeedUser;
 
-import com.kkiri_trip.back.domain.feed.entity.Feed;
-import com.kkiri_trip.back.domain.feed.repository.FeedRepository;
-import com.kkiri_trip.back.domain.feedUser.entity.FeedUser;
-import com.kkiri_trip.back.domain.feedUser.repository.FeedUserRepository;
-import com.kkiri_trip.back.domain.user.entity.User;
-import com.kkiri_trip.back.domain.user.repository.UserRepository;
+import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
+import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
+import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
+import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepository;
+import com.kkiri_trip.back.domain.jpa.user.entity.User;
+import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;

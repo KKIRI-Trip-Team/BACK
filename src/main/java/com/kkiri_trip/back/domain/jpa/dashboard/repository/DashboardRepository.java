@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface DashboardRepository extends JpaRepository<Dashboard, Long>, DashboardRepositoryCustom {
     Optional<Dashboard> findByUser(User user);
+
+    boolean existsByUser(User user);
 }

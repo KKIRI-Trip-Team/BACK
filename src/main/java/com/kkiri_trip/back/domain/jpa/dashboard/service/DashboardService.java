@@ -2,10 +2,12 @@ package com.kkiri_trip.back.domain.jpa.dashboard.service;
 
 import com.kkiri_trip.back.domain.jpa.dashboard.dto.DashboardDto;
 import com.kkiri_trip.back.domain.jpa.dashboard.entity.Dashboard;
+import com.kkiri_trip.back.domain.jpa.dashboard.entity.UserRank;
 import com.kkiri_trip.back.domain.jpa.dashboard.repository.DashboardRepository;
 import com.kkiri_trip.back.domain.jpa.user.entity.User;
 import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
 import com.kkiri_trip.back.global.common.dto.PageResponseDto;
+import com.kkiri_trip.back.global.enums.TierLevel;
 import com.kkiri_trip.back.global.error.errorcode.DashboardErrorCode;
 import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
 import com.kkiri_trip.back.global.error.exception.DashboardException;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +26,8 @@ public class DashboardService {
     private final DashboardRepository dashboardRepository;
     private final UserRepository userRepository;
 
-    public Dashboard createDashboard(User user){
-       if( dashboardRepository.findByUser(user).isPresent()){
+    public void createDashboard(User user){
+       if(dashboardRepository.existsByUser(user)){
                 throw new DashboardException(DashboardErrorCode.ALREADY_EXISTS);
         }
 
@@ -33,9 +36,18 @@ public class DashboardService {
                 .viewCount(0L)
                 .build();
 
-        return dashboardRepository.save(dashboard);
-    }
+        TierLevel tierLevel = TierLevel.fromScore(0L);
 
+        UserRank userRank = UserRank.builder()
+                .dashboard(dashboard)
+                .tier(tierLevel)
+                .score(0L)
+                .build();
+
+        dashboard.setUserRank(userRank);
+
+        dashboardRepository.save(dashboard);
+    }
 
     public DashboardDto getMyDashboard(Long userId) {
         User user = userRepository.findById(userId)
@@ -50,6 +62,7 @@ public class DashboardService {
                 .nickname(user.getUserProfile().getNickname())
                 .profileUrl(user.getUserProfile().getProfileUrl())
                 .viewCount(dashboard.getViewCount())
+                .tierName(dashboard.getUserRank().getTier().getName())
                 .build();
     }
 
@@ -58,4 +71,23 @@ public class DashboardService {
         Page<DashboardDto> dashboardDtos = dashboardPage.map(DashboardDto::from);
         return new PageResponseDto<>(dashboardDtos);
     }
+
+    @Transactional
+    public void updateScoreAndTier(Long userId, long scoreToAdd){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        Dashboard dashboard = dashboardRepository.findByUser(user)
+                .orElseThrow(() -> new DashboardException(DashboardErrorCode.NOT_FOUND));
+
+        UserRank userRank = dashboard.getUserRank();
+
+        long newScore = userRank.getScore() + scoreToAdd;
+        userRank.setScore(newScore);
+
+        TierLevel newTier = TierLevel.fromScore(newScore);
+        userRank.setTier(newTier);
+
+    }
 }
+

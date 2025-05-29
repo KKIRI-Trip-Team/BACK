@@ -1,23 +1,21 @@
 package com.kkiri_trip.back.domain.jpa.feed.entity;
 
 import com.kkiri_trip.back.api.dto.Feed.FeedDto;
-import com.kkiri_trip.back.domain.jpa.common.entity.BaseEntity;
 import com.kkiri_trip.back.api.dto.Feed.attribute.AgeGroup;
 import com.kkiri_trip.back.api.dto.Feed.attribute.Gender;
 import com.kkiri_trip.back.api.dto.Feed.attribute.Period;
 import com.kkiri_trip.back.api.dto.Feed.attribute.Region;
+import com.kkiri_trip.back.domain.jpa.common.entity.BaseEntity;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.exception.FeedException;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Entity
 @Getter
 @SuperBuilder
@@ -50,6 +48,7 @@ public class Feed extends BaseEntity {
     @Builder.Default
     private List<FeedTripStyle> feedTripStyles = new ArrayList<>();
 
+    // Setter with validation
     public void setTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
             throw new FeedException(FeedErrorCode.EMPTY_TITLE);
@@ -100,17 +99,12 @@ public class Feed extends BaseEntity {
     }
 
     public void setFeedTripStyles(List<FeedTripStyle> styles) {
-        if(!this.feedTripStyles.isEmpty())
-        {
-            this.feedTripStyles.clear();
-        }
         this.feedTripStyles.clear();
         if (styles != null) {
             this.feedTripStyles.addAll(styles);
         }
     }
 
-    // Feed 엔티티 내
     public FeedDto toDto() {
         return FeedDto.builder()
                 .id(this.getId())
@@ -122,7 +116,7 @@ public class Feed extends BaseEntity {
                 .ageGroup(this.ageGroup)
                 .cost(this.cost)
                 .tripStyles(this.feedTripStyles.stream()
-                        .map(ft -> ft.getTripStyle() != null ? ft.getTripStyle().getName() : "")
+                        .map(ft -> ft.getTripStyle() != null ? ft.getTripStyle().getType() : null)
                         .collect(Collectors.toList()))
                 .build();
     }

@@ -5,6 +5,7 @@ import com.kkiri_trip.back.api.dto.Feed.attribute.AgeGroup;
 import com.kkiri_trip.back.api.dto.Feed.attribute.Gender;
 import com.kkiri_trip.back.api.dto.Feed.attribute.Period;
 import com.kkiri_trip.back.api.dto.Feed.attribute.Region;
+import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyleType;
 import com.kkiri_trip.back.domain.jpa.feed.service.FeedService;
 import com.kkiri_trip.back.domain.jpa.user.util.CustomUserDetails;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
@@ -94,7 +95,7 @@ public class FeedController {
                 .gender(Gender.FEMALE)
                 .ageGroup(AgeGroup.TWENTIES)
                 .cost(50000L * id)
-                .tripStyles(List.of("휴식", "액티비티"))
+                .tripStyles(List.of(TripStyleType.EXPERIENCE, TripStyleType.KNOWLEDGE))
                 .build();
     }
 

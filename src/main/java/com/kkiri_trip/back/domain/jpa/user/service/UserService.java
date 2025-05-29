@@ -1,7 +1,8 @@
-package com.kkiri_trip.back.domain.user.service;
+package com.kkiri_trip.back.domain.jpa.user.service;
 
 import com.kkiri_trip.back.domain.jpa.dashboard.entity.Dashboard;
 import com.kkiri_trip.back.domain.jpa.dashboard.repository.DashboardRepository;
+import com.kkiri_trip.back.domain.jpa.dashboard.service.DashboardService;
 import com.kkiri_trip.back.domain.jpa.user.dto.Request.LoginRequestDto;
 import com.kkiri_trip.back.domain.jpa.user.dto.Request.SignUpRequestDto;
 import com.kkiri_trip.back.domain.jpa.user.dto.Request.UserProfileCreateRequestDto;

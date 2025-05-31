@@ -9,4 +9,5 @@ public class ScheduleItemDto {
     private Long id;
     private int itemOrder;
     private Long scheduleId;
+    private String place;
 }

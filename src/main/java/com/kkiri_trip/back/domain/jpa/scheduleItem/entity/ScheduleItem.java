@@ -3,6 +3,7 @@ package com.kkiri_trip.back.domain.jpa.scheduleItem.entity;
 import com.kkiri_trip.back.api.dto.Schedule.ScheduleItem.ScheduleItemDto;
 import com.kkiri_trip.back.domain.jpa.common.entity.BaseEntity;
 import com.kkiri_trip.back.domain.jpa.schedule.entity.Schedule;
+import com.kkiri_trip.back.domain.mongo.place.entity.Place;
 import com.kkiri_trip.back.global.error.errorcode.ScheduleItemErrorCode;
 import com.kkiri_trip.back.global.error.exception.ScheduleItemException;
 import jakarta.persistence.*;
@@ -28,6 +29,8 @@ public class ScheduleItem extends BaseEntity {
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
+    @Column(name = "place_id", nullable = false)
+    private String place;
 
     public void setItemOrder(int itemOrder) {
         if (itemOrder <= 0 ) {
@@ -43,8 +46,15 @@ public class ScheduleItem extends BaseEntity {
         this.schedule = schedule;
     }
 
+    public void setPlace(Place place) {
+        if(place == null|| schedule.getId() == null || schedule.getId() <= 0)
+        {
+            throw new ScheduleItemException(ScheduleItemErrorCode.PLACE_NOT_FOUND);
+        }
+    }
+
     public ScheduleItemDto toDto() {
-        return new ScheduleItemDto(this.getId(), this.itemOrder, this.schedule.getId());
+        return new ScheduleItemDto(this.getId(), this.itemOrder, this.schedule.getId(), this.place);
     }
 
     public static List<ScheduleItemDto> toDtoList(List<ScheduleItem> scheduleItems) {
@@ -52,4 +62,6 @@ public class ScheduleItem extends BaseEntity {
                 .map(ScheduleItem::toDto)
                 .collect(Collectors.toList());
     }
+
+
 }

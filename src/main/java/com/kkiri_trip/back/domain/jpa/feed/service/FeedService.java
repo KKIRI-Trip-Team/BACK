@@ -4,6 +4,7 @@ import com.kkiri_trip.back.api.dto.Feed.FeedDto;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.domain.jpa.feed.entity.FeedTripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyle;
+import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyleType;
 import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
 import com.kkiri_trip.back.domain.jpa.feed.repository.TripStyleRepository;
 import com.kkiri_trip.back.domain.jpa.feedUser.service.FeedUserService;
@@ -63,8 +64,8 @@ public class FeedService {
         // travelStyles가 List<TravelStyle> 또는 List<String>이라면 변환 필요
         if (feedDto.getTripStyles() != null) {
             List<FeedTripStyle> feedTripStyles = new ArrayList<>();
-            for (String tripStyleName : feedDto.getTripStyles()) {
-                TripStyle tripStyle = tripStyleRepository.findByName(tripStyleName)
+            for (TripStyleType dtoTripStyle : feedDto.getTripStyles()) {
+                TripStyle tripStyle = tripStyleRepository.findByType(dtoTripStyle)
                         .orElseThrow(() -> new FeedException(FeedErrorCode.INVALID_TRIP_STYLE));
 
                 FeedTripStyle fts = FeedTripStyle.builder()
@@ -98,7 +99,7 @@ public class FeedService {
         // TripStyle 이름으로 실제 TripStyle 엔티티 조회
         List<FeedTripStyle> newFeedTripStyles = feedDto.getTripStyles().stream()
                 .map(name -> {
-                    TripStyle tripStyle = tripStyleRepository.findByName(name)
+                    TripStyle tripStyle = tripStyleRepository.findByType(name)
                             .orElseThrow(() -> new FeedException(FeedErrorCode.INVALID_TRIP_STYLE));
                     return FeedTripStyle.of(feed, tripStyle); // 정적 팩토리 메서드 활용
                 })

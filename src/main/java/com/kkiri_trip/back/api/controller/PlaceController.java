@@ -1,7 +1,6 @@
 package com.kkiri_trip.back.api.controller;
 
-import com.kkiri_trip.back.api.dto.Place.PlaceDto;
-import com.kkiri_trip.back.domain.mongo.place.entity.Place;
+import com.kkiri_trip.back.api.dto.place.PlaceDto;
 import com.kkiri_trip.back.domain.mongo.place.service.PlaceService;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;

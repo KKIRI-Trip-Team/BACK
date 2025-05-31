@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.api.controller;
 
-import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
+import com.kkiri_trip.back.api.dto.schedule.ScheduleDto;
 import com.kkiri_trip.back.domain.jpa.schedule.service.ScheduleService;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
 import jakarta.validation.Valid;

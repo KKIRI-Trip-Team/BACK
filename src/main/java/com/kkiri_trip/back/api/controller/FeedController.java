@@ -1,10 +1,10 @@
 package com.kkiri_trip.back.api.controller;
 
-import com.kkiri_trip.back.api.dto.Feed.FeedDto;
-import com.kkiri_trip.back.api.dto.Feed.attribute.AgeGroup;
-import com.kkiri_trip.back.api.dto.Feed.attribute.Gender;
-import com.kkiri_trip.back.api.dto.Feed.attribute.Period;
-import com.kkiri_trip.back.api.dto.Feed.attribute.Region;
+import com.kkiri_trip.back.api.dto.feed.FeedDto;
+import com.kkiri_trip.back.api.dto.feed.attribute.AgeGroup;
+import com.kkiri_trip.back.api.dto.feed.attribute.Gender;
+import com.kkiri_trip.back.api.dto.feed.attribute.Period;
+import com.kkiri_trip.back.api.dto.feed.attribute.Region;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyleType;
 import com.kkiri_trip.back.domain.jpa.feed.service.FeedService;
 import com.kkiri_trip.back.domain.jpa.user.util.CustomUserDetails;

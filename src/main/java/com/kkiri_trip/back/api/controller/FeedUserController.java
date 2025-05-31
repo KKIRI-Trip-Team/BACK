@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.api.controller;
 
-import com.kkiri_trip.back.api.dto.FeedUser.FeedUserDto;
+import com.kkiri_trip.back.api.dto.feedUser.FeedUserDto;
 import com.kkiri_trip.back.domain.jpa.feedUser.service.FeedUserService;
 import com.kkiri_trip.back.domain.jpa.user.util.CustomUserDetails;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;

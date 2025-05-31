@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.domain.jpa.schedule.entity;
 
-import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
+import com.kkiri_trip.back.api.dto.schedule.ScheduleDto;
 import com.kkiri_trip.back.domain.jpa.common.entity.BaseEntity;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.global.error.errorcode.ScheduleErrorCode;

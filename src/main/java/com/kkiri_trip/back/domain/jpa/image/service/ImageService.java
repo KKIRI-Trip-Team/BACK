@@ -1,8 +1,8 @@
 package com.kkiri_trip.back.domain.jpa.image.service;
 
-import com.kkiri_trip.back.domain.jpa.image.dto.Request.ImageRequestDto;
-import com.kkiri_trip.back.domain.jpa.image.dto.Response.ImageResponseDto;
-import com.kkiri_trip.back.domain.jpa.image.dto.Response.ImageUrlResponse;
+import com.kkiri_trip.back.api.dto.image.request.ImageRequestDto;
+import com.kkiri_trip.back.api.dto.image.response.ImageResponseDto;
+import com.kkiri_trip.back.api.dto.image.response.ImageUrlResponse;
 import com.kkiri_trip.back.global.error.errorcode.FileErrorCode;
 import com.kkiri_trip.back.global.error.exception.FileException;
 import lombok.RequiredArgsConstructor;

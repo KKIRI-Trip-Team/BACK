@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.domain.jpa.feed.service;
 
-import com.kkiri_trip.back.api.dto.Feed.FeedDto;
+import com.kkiri_trip.back.api.dto.feed.FeedDto;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.domain.jpa.feed.entity.FeedTripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyle;

@@ -2,7 +2,7 @@ package com.kkiri_trip.back.Schedule.PUT;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkiri_trip.back.api.controller.ScheduleController;
-import com.kkiri_trip.back.api.dto.Schedule.ScheduleDto;
+import com.kkiri_trip.back.api.dto.schedule.ScheduleDto;
 import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
 import com.kkiri_trip.back.domain.jpa.schedule.repository.ScheduleRepository;
 import com.kkiri_trip.back.domain.jpa.schedule.service.ScheduleService;

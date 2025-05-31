@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.domain.jpa.dashboard.service;
 
-import com.kkiri_trip.back.domain.jpa.dashboard.dto.DashboardDto;
+import com.kkiri_trip.back.api.dto.dashboard.DashboardDto;
 import com.kkiri_trip.back.domain.jpa.dashboard.entity.Dashboard;
 import com.kkiri_trip.back.domain.jpa.dashboard.entity.UserRank;
 import com.kkiri_trip.back.domain.jpa.dashboard.repository.DashboardRepository;

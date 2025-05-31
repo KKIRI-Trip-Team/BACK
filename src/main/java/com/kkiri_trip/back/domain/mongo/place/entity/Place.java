@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.domain.mongo.place.entity;
 
-import com.kkiri_trip.back.api.dto.Place.PlaceDto;
+import com.kkiri_trip.back.api.dto.place.PlaceDto;
 import com.kkiri_trip.back.global.error.errorcode.PlaceErrorCode;
 import com.kkiri_trip.back.global.error.exception.PlaceExceptoin;
 import lombok.*;

@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.global.chat;
 
-import com.kkiri_trip.back.api.dto.ChatMessage.ChatMessageDto;
+import com.kkiri_trip.back.api.dto.chatMessage.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

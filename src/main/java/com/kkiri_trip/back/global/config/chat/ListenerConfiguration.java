@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.global.config.chat;
 
-import com.kkiri_trip.back.api.dto.ChatMessage.ChatMessageDto;
+import com.kkiri_trip.back.api.dto.chatMessage.ChatMessageDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;

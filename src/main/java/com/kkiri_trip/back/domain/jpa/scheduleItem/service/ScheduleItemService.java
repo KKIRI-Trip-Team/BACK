@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.domain.jpa.scheduleItem.service;
 
-import com.kkiri_trip.back.api.dto.Schedule.ScheduleItem.ScheduleItemDto;
+import com.kkiri_trip.back.api.dto.schedule.scheduleItem.ScheduleItemDto;
 import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
 import com.kkiri_trip.back.domain.jpa.scheduleItem.repository.ScheduleItemRepository;
 import com.kkiri_trip.back.domain.jpa.scheduleItem.repository.ScheduleItemRepositoryImpl;

@@ -1,11 +1,11 @@
 package com.kkiri_trip.back.domain.user.service;
 
-import com.kkiri_trip.back.domain.jpa.user.dto.Request.LoginRequestDto;
-import com.kkiri_trip.back.domain.jpa.user.dto.Request.SignUpRequestDto;
-import com.kkiri_trip.back.domain.jpa.user.dto.Request.UserUpdateRequestDto;
-import com.kkiri_trip.back.domain.jpa.user.dto.Response.LoginResponseDto;
-import com.kkiri_trip.back.domain.jpa.user.dto.Response.SignUpResponseDto;
-import com.kkiri_trip.back.domain.jpa.user.dto.Response.UserUpdateResponseDto;
+import com.kkiri_trip.back.api.dto.user.request.LoginRequestDto;
+import com.kkiri_trip.back.api.dto.user.request.SignUpRequestDto;
+import com.kkiri_trip.back.api.dto.user.request.UserUpdateRequestDto;
+import com.kkiri_trip.back.api.dto.user.response.LoginResponseDto;
+import com.kkiri_trip.back.api.dto.user.response.SignUpResponseDto;
+import com.kkiri_trip.back.api.dto.user.response.UserUpdateResponseDto;
 import com.kkiri_trip.back.domain.jpa.user.entity.User;
 import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
 import com.kkiri_trip.back.domain.jpa.user.service.UserService;

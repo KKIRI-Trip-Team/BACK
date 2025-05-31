@@ -1,7 +1,7 @@
 package com.kkiri_trip.back.Feed;
 
 import com.kkiri_trip.back.api.controller.FeedUserController;
-import com.kkiri_trip.back.api.dto.FeedUser.FeedUserDto;
+import com.kkiri_trip.back.api.dto.feedUser.FeedUserDto;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUserStatus;
 import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepository;

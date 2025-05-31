@@ -7,12 +7,13 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 
 @Builder
-public record ApiResponseDto<T> (String message, T data, LocalDateTime timestamp) {
+public record ApiResponseDto<T> ( int statusCode, String message, T data, LocalDateTime timestamp) {
 
     public static <T> ResponseEntity<ApiResponseDto<T>> from(HttpStatus status, String message, T data) {
         return ResponseEntity
                 .status(status)
                 .body(new ApiResponseDto<>(
+                        status.value(),
                         message,
                         data,
                         LocalDateTime.now()

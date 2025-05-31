@@ -1,0 +1,14 @@
+package com.kkiri_trip.back.domain.jpa.feed.repository;
+
+import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyle;
+import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyleType;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface TripStyleRepository extends JpaRepository<TripStyle, Long> {
+
+    Optional<TripStyle> findByType(TripStyleType type);
+}

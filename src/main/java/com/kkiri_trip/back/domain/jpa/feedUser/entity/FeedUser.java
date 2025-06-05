@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.domain.jpa.feedUser.entity;
 
-import com.kkiri_trip.back.api.dto.FeedUser.FeedUserDto;
+import com.kkiri_trip.back.api.dto.feedUser.FeedUserDto;
 import com.kkiri_trip.back.domain.jpa.common.entity.BaseEntity;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.domain.jpa.user.entity.User;

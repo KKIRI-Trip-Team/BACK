@@ -1,7 +1,7 @@
 package com.kkiri_trip.back.domain.jpa.feedUser.service;
 
-import com.kkiri_trip.back.api.dto.Feed.FeedDto;
-import com.kkiri_trip.back.api.dto.FeedUser.FeedUserDto;
+import com.kkiri_trip.back.api.dto.feed.FeedDto;
+import com.kkiri_trip.back.api.dto.feedUser.FeedUserDto;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;

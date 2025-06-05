@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.domain.jpa.scheduleItem.entity;
 
-import com.kkiri_trip.back.api.dto.Schedule.ScheduleItem.ScheduleItemDto;
+import com.kkiri_trip.back.api.dto.schedule.scheduleItem.ScheduleItemDto;
 import com.kkiri_trip.back.domain.jpa.common.entity.BaseEntity;
 import com.kkiri_trip.back.domain.jpa.schedule.entity.Schedule;
 import com.kkiri_trip.back.domain.mongo.place.entity.Place;

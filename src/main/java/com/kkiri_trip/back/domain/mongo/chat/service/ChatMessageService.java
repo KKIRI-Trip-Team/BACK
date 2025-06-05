@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.domain.mongo.chat.service;
 
-import com.kkiri_trip.back.api.dto.ChatMessage.ChatMessageDto;
+import com.kkiri_trip.back.api.dto.chatMessage.ChatMessageDto;
 import com.kkiri_trip.back.domain.mongo.chat.entity.ChatMessage;
 import com.kkiri_trip.back.domain.mongo.chat.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;

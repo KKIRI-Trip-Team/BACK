@@ -2,7 +2,7 @@ package com.kkiri_trip.back.Feed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkiri_trip.back.api.controller.FeedController;
-import com.kkiri_trip.back.api.dto.Feed.FeedDto;
+import com.kkiri_trip.back.api.dto.feed.FeedDto;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
 import com.kkiri_trip.back.domain.jpa.feed.service.FeedService;

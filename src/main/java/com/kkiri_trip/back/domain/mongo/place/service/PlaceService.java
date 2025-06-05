@@ -1,14 +1,11 @@
 package com.kkiri_trip.back.domain.mongo.place.service;
 
-import com.kkiri_trip.back.api.dto.Place.PlaceDto;
+import com.kkiri_trip.back.api.dto.place.PlaceDto;
 import com.kkiri_trip.back.domain.mongo.place.entity.Place;
 import com.kkiri_trip.back.domain.mongo.place.repository.PlaceRepository;
-import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
 import com.kkiri_trip.back.global.error.errorcode.PlaceErrorCode;
-import com.kkiri_trip.back.global.error.exception.FeedException;
 import com.kkiri_trip.back.global.error.exception.PlaceExceptoin;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

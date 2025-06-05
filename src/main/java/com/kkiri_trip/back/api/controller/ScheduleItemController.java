@@ -1,6 +1,6 @@
 package com.kkiri_trip.back.api.controller;
 
-import com.kkiri_trip.back.api.dto.Schedule.ScheduleItem.ScheduleItemDto;
+import com.kkiri_trip.back.api.dto.schedule.scheduleItem.ScheduleItemDto;
 import com.kkiri_trip.back.domain.jpa.scheduleItem.service.ScheduleItemService;
 import com.kkiri_trip.back.global.common.dto.ApiResponseDto;
 import lombok.RequiredArgsConstructor;

@@ -1,14 +1,14 @@
 package com.kkiri_trip.back.domain.jpa.user.service;
 
+import com.kkiri_trip.back.api.dto.user.response.LoginResponseDto;
+import com.kkiri_trip.back.api.dto.user.response.SignUpResponseDto;
 import com.kkiri_trip.back.domain.jpa.dashboard.repository.DashboardRepository;
 import com.kkiri_trip.back.domain.jpa.dashboard.service.DashboardService;
 import com.kkiri_trip.back.api.dto.user.request.LoginRequestDto;
 import com.kkiri_trip.back.api.dto.user.request.SignUpRequestDto;
 import com.kkiri_trip.back.api.dto.user.request.UserProfileCreateRequestDto;
 import com.kkiri_trip.back.api.dto.user.request.UserUpdateRequestDto;
-import com.kkiri_trip.back.api.dto.user.response.LoginResponseDto;
-import com.kkiri_trip.back.api.dto.user.response.SignUpResponseDto;
-import com.kkiri_trip.back.api.dto.user.response.UserResponseDto;
+import com.kkiri_trip.back.api.dto.user.response.UserProfileCreateResponseDto;
 import com.kkiri_trip.back.api.dto.user.response.UserUpdateResponseDto;
 import com.kkiri_trip.back.domain.jpa.user.entity.User;
 import com.kkiri_trip.back.domain.jpa.user.entity.UserProfile;
@@ -64,7 +64,7 @@ public class UserService {
     }
 
     @Transactional
-    public void registerProfile(UserProfileCreateRequestDto userProfileCreateRequestDto) {
+    public UserProfileCreateResponseDto registerProfile(UserProfileCreateRequestDto userProfileCreateRequestDto) {
         User user = userRepository.findByEmail(userProfileCreateRequestDto.getEmail())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
@@ -97,6 +97,8 @@ public class UserService {
         if (user.getDashboard() == null) {
             dashboardService.createDashboard(user);
         }
+
+        return new UserProfileCreateResponseDto(user.getId(), user.getEmail(), user.getUserProfile().getNickname(), user.getUserProfile().getProfileUrl());
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response){
@@ -154,15 +156,15 @@ public class UserService {
 
     }
 
-    public List<UserResponseDto> getAllUsers(){
+    public List<UserProfileCreateResponseDto> getAllUsers(){
         return userRepository.findAll()
                 .stream()
-                .map(user -> UserResponseDto.from(user, user.getUserProfile()))
+                .map(user -> UserProfileCreateResponseDto.from(user, user.getUserProfile()))
                 .toList();
     }
 
-    public UserResponseDto getMyInfo(User user, UserProfile userProfile) {
-        return UserResponseDto.from(user, userProfile);
+    public UserProfileCreateResponseDto getMyInfo(User user, UserProfile userProfile) {
+        return UserProfileCreateResponseDto.from(user, userProfile);
     }
 
     @Transactional

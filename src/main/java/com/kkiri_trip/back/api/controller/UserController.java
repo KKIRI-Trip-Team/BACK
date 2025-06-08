@@ -10,7 +10,7 @@ import com.kkiri_trip.back.api.dto.user.request.UserProfileCreateRequestDto;
 import com.kkiri_trip.back.api.dto.user.request.UserUpdateRequestDto;
 import com.kkiri_trip.back.api.dto.user.response.LoginResponseDto;
 import com.kkiri_trip.back.api.dto.user.response.SignUpResponseDto;
-import com.kkiri_trip.back.api.dto.user.response.UserResponseDto;
+import com.kkiri_trip.back.api.dto.user.response.UserProfileCreateResponseDto;
 import com.kkiri_trip.back.api.dto.user.response.UserUpdateResponseDto;
 import com.kkiri_trip.back.domain.jpa.user.service.UserService;
 import com.kkiri_trip.back.domain.jpa.user.util.CustomUserDetails;
@@ -66,14 +66,14 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponseDto<List<UserResponseDto>>> getAllUsers(){
-        List<UserResponseDto> userResponseDtoList = userService.getAllUsers();
+    public ResponseEntity<ApiResponseDto<List<UserProfileCreateResponseDto>>> getAllUsers(){
+        List<UserProfileCreateResponseDto> userResponseDtoList = userService.getAllUsers();
         return ApiResponseDto.from(HttpStatus.OK, "모든 유저를 조회했습니다.", userResponseDtoList);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<ApiResponseDto<UserResponseDto>> getMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails){
-        UserResponseDto userResponseDto = userService.getMyInfo(userDetails.getUser(), userDetails.getUser().getUserProfile());
+    public ResponseEntity<ApiResponseDto<UserProfileCreateResponseDto>> getMyInfo(@AuthenticationPrincipal CustomUserDetails userDetails){
+        UserProfileCreateResponseDto userResponseDto = userService.getMyInfo(userDetails.getUser(), userDetails.getUser().getUserProfile());
         return ApiResponseDto.from(HttpStatus.OK, "본인 정보를 조회했습니다.", userResponseDto);
     }
 

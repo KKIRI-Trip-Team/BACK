@@ -9,14 +9,14 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDto {
+public class UserProfileCreateResponseDto {
     private Long id;
     private String email;
     private String nickname;
     private String profileUrl;
 
-    public static UserResponseDto from(User user, UserProfile userProfile){
-        return new UserResponseDto(
+    public static UserProfileCreateResponseDto from(User user, UserProfile userProfile){
+        return new UserProfileCreateResponseDto(
                 user.getId(),
                 user.getEmail(),
                 userProfile.getNickname(),

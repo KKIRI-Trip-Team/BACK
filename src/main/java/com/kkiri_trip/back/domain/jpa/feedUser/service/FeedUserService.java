@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +73,7 @@ public class FeedUserService {
                 .orElseThrow(() ->
                         new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        FeedUser feedUser = new FeedUser(feed, user, FeedUserStatus.PENDING, true);
+        FeedUser feedUser = new FeedUser(feed, user, FeedUserStatus.APPROVED, true);
         feedUserRepository.save(feedUser);
     }
 
@@ -108,6 +109,10 @@ public class FeedUserService {
             throw new FeedUserException(FeedUserErrorCode.ALREADY_REJECTED);
 
         feedUser.reject();
+    }
+
+    public User findHostsByFeed(Long feedId) {
+        return feedUserRepository.findByFeedIdAndIsHostTrue(feedId).getUser();
     }
 
     public List<FeedUserDto> getPendingUsers(Long feedId) {

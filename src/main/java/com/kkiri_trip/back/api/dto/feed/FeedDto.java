@@ -28,6 +28,7 @@ public class FeedDto {
     private Long cost;
 
     private List<TripStyleType> tripStyles;  // 단순 문자열 리스트 (예: "휴식", "액티비티" 등)
+    private UserDto owner;
 
     public static FeedDto from(Feed feed) {
         return FeedDto.builder()

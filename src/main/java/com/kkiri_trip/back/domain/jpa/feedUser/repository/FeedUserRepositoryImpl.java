@@ -44,4 +44,18 @@ public class FeedUserRepositoryImpl implements FeedUserCustomRepository{
                         .and(qFeedUser.status.eq(FeedUserStatus.APPROVED))) // status가 APPROVED인 유저들만
                 .fetch();
     }
+
+    @Override
+    public User findHostByFeedId(Long feedId) {
+        QFeedUser qFeedUser = QFeedUser.feedUser;
+
+        return queryFactory
+                .select(qFeedUser.user)
+                .from(qFeedUser)
+                .where(
+                        qFeedUser.feed.id.eq(feedId)
+                                .and(qFeedUser.isHost.isTrue())  // isHost == true 조건
+                )
+                .fetchOne();  // 유일한 1명 반환
+    }
 }

@@ -1,13 +1,18 @@
 package com.kkiri_trip.back.domain.jpa.feed.service;
 
 import com.kkiri_trip.back.api.dto.feed.FeedDto;
+import com.kkiri_trip.back.api.dto.feed.UserDto;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.domain.jpa.feed.entity.FeedTripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyleType;
 import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
 import com.kkiri_trip.back.domain.jpa.feed.repository.TripStyleRepository;
+import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
+import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepository;
+import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepositoryImpl;
 import com.kkiri_trip.back.domain.jpa.feedUser.service.FeedUserService;
+import com.kkiri_trip.back.domain.jpa.user.entity.User;
 import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
 import com.kkiri_trip.back.global.common.dto.PageResponseDto;
 import com.kkiri_trip.back.global.error.errorcode.FeedErrorCode;
@@ -36,17 +41,46 @@ public class FeedService {
 
     private final TripStyleRepository tripStyleRepository;
 
-    public List<FeedDto> getAllFeeds()
-    {
-        return Feed.toDtoList(feedRepository.findAllWithTripStyles());
+    private final FeedUserRepositoryImpl feedUserRepository;
+
+    @Transactional(readOnly = true)
+    public List<FeedDto> getAllFeeds() {
+        List<Feed> feeds = feedRepository.findAllWithTripStyles();
+
+        return feeds.stream()
+                .map(feed -> {
+                    FeedDto feedDto = feed.toDto();
+
+                    // 👇 호스트 조회
+                    User host = feedUserRepository.findHostByFeedId(feed.getId());
+                    if (host != null) {
+                        UserDto hostDto = convertToUserDto(host);
+                        feedDto.setOwner(hostDto);
+                    } else {
+                        feedDto.setOwner(null);
+                    }
+
+                    return feedDto;
+                })
+                .collect(Collectors.toList());
     }
 
-    public FeedDto getFeedById(Long id)
-    {
-        return feedRepository.findWithTripStylesById(id)
-                .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND))
-                .toDto();
+    @Transactional(readOnly = true)
+    public FeedDto getFeedById(Long id) {
+        Feed feed = feedRepository.findWithTripStylesById(id)
+                .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+
+        FeedDto feedDto = feed.toDto();
+
+        User host = feedUserRepository.findHostByFeedId(id);
+        if (host != null) {
+            feedDto.setOwner(convertToUserDto(host));
+        } // host가 없으면 null 그대로
+
+        return feedDto;
     }
+
+
 
     public FeedDto createFeed(FeedDto feedDto, Long userId) {
         validateFeedDto(feedDto);
@@ -179,5 +213,13 @@ public class FeedService {
         Page<Feed> feedPage = feedRepository.findMyFeeds(userId, pageable);
         Page<FeedDto> dtoPage = feedPage.map(FeedDto::from);
         return new PageResponseDto<>(dtoPage);
+    }
+
+    private UserDto convertToUserDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .profileUrl(user.getUserProfile().getProfileUrl() != null ? user.getUserProfile().getProfileUrl() : null)
+                .build();
     }
 }

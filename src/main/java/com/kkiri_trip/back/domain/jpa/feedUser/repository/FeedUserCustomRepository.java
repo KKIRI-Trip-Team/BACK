@@ -11,4 +11,5 @@ public interface FeedUserCustomRepository {
     List<Feed> findFeedsByUser(User user);
     List<User> findUsersByFeed(Feed feed);
     List<FeedUser> findByFeedIdAndStatusApproved(Long feedId);
+    User findHostByFeedId(Long feedId);
 }

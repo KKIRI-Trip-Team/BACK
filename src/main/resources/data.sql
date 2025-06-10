@@ -47,6 +47,19 @@ INSERT INTO feed (title, content, region, period, gender, age_group, cost, creat
 ('제목3', '내용3', 'DAEGU', 'DAY_TRIP', 'MALE', 'ANY', 150000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('제목4', '내용4', 'GANGWON', 'OVER_SEVEN', 'ANY', 'FORTIES', 80000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+INSERT INTO feed_image (feed_id, url) VALUES
+(1, 'https://example.com/default.jpg'),
+(1, 'https://example.com/default.jpg'),
+(1, 'https://example.com/default.jpg'),
+(2, 'https://example.com/default.jpg'),
+(2, 'https://example.com/default.jpg'),
+(2, 'https://example.com/default.jpg'),
+(3, 'https://example.com/default.jpg'),
+(3, 'https://example.com/default.jpg'),
+(3, 'https://example.com/default.jpg'),
+(4, 'https://example.com/default.jpg'),
+(4, 'https://example.com/default.jpg'),
+(4, 'https://example.com/default.jpg');
 -- feed_trip_style
 INSERT INTO feed_trip_style (feed_id, trip_style_id) VALUES
 (1, 1), (1, 3),       -- feed 1 → 'REST', 'GOURMET'

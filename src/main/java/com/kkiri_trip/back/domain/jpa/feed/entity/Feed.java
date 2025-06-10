@@ -48,6 +48,12 @@ public class Feed extends BaseEntity {
     @Builder.Default
     private List<FeedTripStyle> feedTripStyles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<FeedImage> feedImages = new ArrayList<>();
+
+
+
     // Setter with validation
     public void setTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
@@ -105,6 +111,13 @@ public class Feed extends BaseEntity {
         }
     }
 
+    public void setFeedImages(List<FeedImage> images) {
+        this.feedImages.clear();
+        if (images != null) {
+            this.feedImages.addAll(images);
+        }
+    }
+
     public FeedDto toDto() {
         return FeedDto.builder()
                 .id(this.getId())
@@ -118,8 +131,12 @@ public class Feed extends BaseEntity {
                 .tripStyles(this.feedTripStyles.stream()
                         .map(ft -> ft.getTripStyle() != null ? ft.getTripStyle().getType() : null)
                         .collect(Collectors.toList()))
+                .imageUrls(this.feedImages.stream()
+                        .map(FeedImage::getUrl)
+                        .collect(Collectors.toList()))
                 .build();
     }
+
 
     public static List<FeedDto> toDtoList(List<Feed> feeds) {
         return feeds.stream()

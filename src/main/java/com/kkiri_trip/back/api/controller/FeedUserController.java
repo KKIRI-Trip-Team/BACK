@@ -28,7 +28,6 @@ public class FeedUserController {
         return ApiResponseDto.from(HttpStatus.OK, "피드 참여 요청 완료", null);
     }
 
-    //
     @PatchMapping("/{feedId}/join")
     public ResponseEntity<ApiResponseDto<Void>> updateHost(@PathVariable Long feedId,
                                                            @AuthenticationPrincipal CustomUserDetails userDetails)

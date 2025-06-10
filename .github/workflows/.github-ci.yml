@@ -43,4 +43,5 @@ jobs:
             fi
             cd BACK
             docker pull ${{ secrets.DOCKER_USERNAME }}/trebuddy:latest
+            docker compose -f docker-compose.yml down
             docker compose -f docker-compose.yml up -d

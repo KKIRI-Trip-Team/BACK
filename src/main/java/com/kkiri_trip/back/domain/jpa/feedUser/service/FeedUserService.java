@@ -8,6 +8,7 @@ import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUserStatus;
 import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserCustomRepository;
 import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepository;
+import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepositoryImpl;
 import com.kkiri_trip.back.domain.jpa.user.entity.User;
 import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
 import com.kkiri_trip.back.domain.jpa.user.util.CustomUserDetails;
@@ -75,6 +76,27 @@ public class FeedUserService {
 
         FeedUser feedUser = new FeedUser(feed, user, FeedUserStatus.APPROVED, true);
         feedUserRepository.save(feedUser);
+    }
+
+    public void updateFeedHost(Long feedId, Long userId)
+    {
+        feedRepository.findById(feedId)
+                .orElseThrow(() ->
+                        new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+        userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new UserException(UserErrorCode.USER_NOT_FOUND));
+        FeedUser updateHostFeedUser = feedUserCustomRepository.findByFeedIdAndUserId(feedId,userId)
+                .orElseThrow( ()->
+                        new FeedUserException(FeedUserErrorCode.FEEDUSER_NOT_FOUND));
+
+
+        FeedUser originHostFeedUser = feedUserCustomRepository.findHostFeedUserByFeedId(feedId)
+                .orElseThrow( ()->
+                        new FeedUserException(FeedUserErrorCode.FEEDUSER_NOT_FOUND));
+
+        updateHostFeedUser.setHost(false);
+        originHostFeedUser.setHost(true);
     }
 
     public void joinRequestFeed(Long feedId, Long userId) {

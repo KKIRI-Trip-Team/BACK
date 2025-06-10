@@ -4,6 +4,8 @@ import com.kkiri_trip.back.api.dto.feedUser.FeedUserDto;
 import com.kkiri_trip.back.domain.jpa.common.entity.BaseEntity;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.domain.jpa.user.entity.User;
+import com.kkiri_trip.back.global.error.errorcode.UserErrorCode;
+import com.kkiri_trip.back.global.error.exception.UserException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +46,15 @@ public class FeedUser extends BaseEntity {
         return feedUsers.stream()
                 .map(FeedUser::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public void setUser(User user)
+    {
+        if(user.getId() == null)
+        {
+            throw new UserException(UserErrorCode.USER_NOT_FOUND);
+        }
+        this.user = user;
     }
 
     public boolean isApproved() {

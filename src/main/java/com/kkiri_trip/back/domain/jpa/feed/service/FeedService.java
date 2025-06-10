@@ -7,6 +7,8 @@ import com.kkiri_trip.back.domain.jpa.feed.entity.FeedTripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyleType;
 import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
+import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepositoryCustom;
+import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepositoryCustomImpl;
 import com.kkiri_trip.back.domain.jpa.feed.repository.TripStyleRepository;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
 import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepository;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 public class FeedService {
 
     private final FeedRepository feedRepository;
+    private final FeedRepositoryCustomImpl feedRepositoryCustom;
 
     private final UserRepository userRepository;
 
@@ -45,17 +48,16 @@ public class FeedService {
 
     @Transactional(readOnly = true)
     public List<FeedDto> getAllFeeds() {
-        List<Feed> feeds = feedRepository.findAllWithTripStyles();
+        List<Feed> feeds = feedRepositoryCustom.findAllWithHostAndTripStyles();
 
         return feeds.stream()
                 .map(feed -> {
                     FeedDto feedDto = feed.toDto();
 
-                    // 👇 호스트 조회
+                    // feedId로 호스트 User 조회
                     User host = feedUserRepository.findHostByFeedId(feed.getId());
                     if (host != null) {
-                        UserDto hostDto = convertToUserDto(host);
-                        feedDto.setOwner(hostDto);
+                        feedDto.setOwner(convertToUserDto(host));
                     } else {
                         feedDto.setOwner(null);
                     }

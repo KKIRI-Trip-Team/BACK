@@ -101,4 +101,19 @@ public class FeedRepositoryCustomImpl implements FeedRepositoryCustom{
         return Optional.ofNullable(result);
     }
 
+    @Override
+    public List<Feed> findAllWithHostAndTripStyles() {
+        QFeed qFeed = QFeed.feed;
+        QFeedUser qFeedUser = QFeedUser.feedUser;
+
+        return jpaQueryFactory
+                .selectDistinct(qFeed)
+                .from(qFeed)
+                .leftJoin(qFeedUser)
+                .on(qFeedUser.feed.id.eq(qFeed.id)
+                        .and(qFeedUser.isHost.isTrue()))
+                .leftJoin(qFeed.feedTripStyles).fetchJoin()
+                .fetch();
+    }
+
 }

@@ -48,17 +48,17 @@ public class FeedUserRepositoryImpl implements FeedUserCustomRepository{
     }
 
     @Override
-    public User findHostByFeedId(Long feedId) {
+    public Optional<User> findHostByFeedId(Long feedId) {
         QFeedUser qFeedUser = QFeedUser.feedUser;
 
-        return queryFactory
+        return Optional.ofNullable(queryFactory
                 .select(qFeedUser.user)
                 .from(qFeedUser)
                 .where(
                         qFeedUser.feed.id.eq(feedId)
                                 .and(qFeedUser.isHost.isTrue())  // isHost == true 조건
                 )
-                .fetchOne();  // 유일한 1명 반환
+                .fetchOne());  // 유일한 1명 반환
     }
 
 

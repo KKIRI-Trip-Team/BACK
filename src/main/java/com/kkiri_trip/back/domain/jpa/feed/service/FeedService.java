@@ -7,11 +7,8 @@ import com.kkiri_trip.back.domain.jpa.feed.entity.FeedTripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyleType;
 import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepository;
-import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepositoryCustom;
 import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepositoryCustomImpl;
 import com.kkiri_trip.back.domain.jpa.feed.repository.TripStyleRepository;
-import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
-import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepository;
 import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepositoryImpl;
 import com.kkiri_trip.back.domain.jpa.feedUser.service.FeedUserService;
 import com.kkiri_trip.back.domain.jpa.user.entity.User;
@@ -55,13 +52,9 @@ public class FeedService {
                     FeedDto feedDto = feed.toDto();
 
                     // feedId로 호스트 User 조회
-                    User host = feedUserRepository.findHostByFeedId(feed.getId());
-                    if (host != null) {
-                        feedDto.setOwner(convertToUserDto(host));
-                    } else {
-                        feedDto.setOwner(null);
-                    }
-
+                    User owner = feedUserRepository.findHostByFeedId(feed.getId()).orElseThrow(()->
+                            new UserException(UserErrorCode.USER_NOT_FOUND));
+                        feedDto.setOwner(convertToUserDto(owner));
                     return feedDto;
                 })
                 .collect(Collectors.toList());
@@ -74,10 +67,9 @@ public class FeedService {
 
         FeedDto feedDto = feed.toDto();
 
-        User host = feedUserRepository.findHostByFeedId(id);
-        if (host != null) {
-            feedDto.setOwner(convertToUserDto(host));
-        } // host가 없으면 null 그대로
+        User owner = feedUserRepository.findHostByFeedId(feed.getId()).orElseThrow(()->
+                new UserException(UserErrorCode.USER_NOT_FOUND));
+        feedDto.setOwner(convertToUserDto(owner));
 
         return feedDto;
     }

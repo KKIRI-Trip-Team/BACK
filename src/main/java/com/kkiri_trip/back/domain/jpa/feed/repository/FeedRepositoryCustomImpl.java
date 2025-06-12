@@ -4,7 +4,10 @@ import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.domain.jpa.feed.entity.QFeed;
 import com.kkiri_trip.back.domain.jpa.feed.entity.QFeedTripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.QTripStyle;
+import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.QFeedUser;
+import com.kkiri_trip.back.domain.jpa.user.entity.QUser;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -96,6 +99,21 @@ public class FeedRepositoryCustomImpl implements FeedRepositoryCustom{
                 .fetchOne();
 
         return Optional.ofNullable(result);
+    }
+
+    @Override
+    public List<Feed> findAllWithHostAndTripStyles() {
+        QFeed qFeed = QFeed.feed;
+        QFeedUser qFeedUser = QFeedUser.feedUser;
+
+        return jpaQueryFactory
+                .selectDistinct(qFeed)
+                .from(qFeed)
+                .leftJoin(qFeedUser)
+                .on(qFeedUser.feed.id.eq(qFeed.id)
+                        .and(qFeedUser.isHost.isTrue()))
+                .leftJoin(qFeed.feedTripStyles).fetchJoin()
+                .fetch();
     }
 
 }

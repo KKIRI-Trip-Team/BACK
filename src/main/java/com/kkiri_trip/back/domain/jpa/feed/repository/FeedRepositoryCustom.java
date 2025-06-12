@@ -12,4 +12,5 @@ public interface FeedRepositoryCustom {
     Page<Feed> findMyFeeds(Long userId, Pageable pageable);
     List<Feed> findAllWithTripStyles();
     Optional<Feed> findWithTripStylesById(Long id);
+    List<Feed> findAllWithHostAndTripStyles();
 }

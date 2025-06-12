@@ -18,7 +18,7 @@ public enum FeedErrorCode implements BaseErrorCode {
     INVALID_AGE_GROUP(HttpStatus.BAD_REQUEST, "FEED_007", "유효하지 않은 연령대입니다."),
     INVALID_COST(HttpStatus.BAD_REQUEST, "FEED_008", "유효하지 않은 비용입니다."),
     INVALID_TRIP_STYLE(HttpStatus.BAD_REQUEST, "FEED_008","유효하지 않은 여행 " +
-            "스타일입니다." );
+            "스타일입니다." ), INVALID_PROFILE_URL(HttpStatus.BAD_REQUEST, "FEED_009", "유효하지 않은 imageurl입니다.");
 
     private final HttpStatus httpStatus;
     private final String errorCode;

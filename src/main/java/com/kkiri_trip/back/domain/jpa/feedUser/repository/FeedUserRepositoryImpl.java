@@ -1,6 +1,7 @@
 package com.kkiri_trip.back.domain.jpa.feedUser.repository;
 
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
+import com.kkiri_trip.back.domain.jpa.feed.entity.QFeed;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUserStatus;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.QFeedUser;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.kkiri_trip.back.domain.jpa.feedUser.entity.QFeedUser.feedUser;
 
@@ -43,5 +45,42 @@ public class FeedUserRepositoryImpl implements FeedUserCustomRepository{
                 .where(qFeedUser.feed.id.eq(feedId) // 피드 ID가 일치
                         .and(qFeedUser.status.eq(FeedUserStatus.APPROVED))) // status가 APPROVED인 유저들만
                 .fetch();
+    }
+
+    @Override
+    public Optional<User> findHostByFeedId(Long feedId) {
+        QFeedUser qFeedUser = QFeedUser.feedUser;
+
+        return Optional.ofNullable(queryFactory
+                .select(qFeedUser.user)
+                .from(qFeedUser)
+                .where(
+                        qFeedUser.feed.id.eq(feedId)
+                                .and(qFeedUser.isHost.isTrue())  // isHost == true 조건
+                )
+                .fetchOne());  // 유일한 1명 반환
+    }
+
+
+    @Override
+    public Optional<FeedUser> findHostFeedUserByFeedId(Long feedId) {
+        QFeedUser feedUser = QFeedUser.feedUser;
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(feedUser)
+                .where(feedUser.feed.id.eq(feedId)
+                        .and(feedUser.isHost.eq(true)))
+                .fetchOne());
+    }
+
+    @Override
+    public Optional<FeedUser> findByFeedIdAndUserId(Long feedId, Long userId) {
+        QFeedUser feedUser = QFeedUser.feedUser;
+
+        return Optional.ofNullable(queryFactory
+                .selectFrom(feedUser)
+                .where(feedUser.feed.id.eq(feedId)
+                        .and(feedUser.user.id.eq(userId)))
+                .fetchOne());
     }
 }

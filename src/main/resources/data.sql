@@ -7,7 +7,9 @@ INSERT INTO users (email, password, created_at, updated_at) VALUES
 ('test5@example.com', '$2b$12$wGz.CbY9tY3ABmGwRmIH4OM3b5alGer863Wh5oXemyJp4ztPfVO/a', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('test6@example.com', '$2b$12$wGz.CbY9tY3ABmGwRmIH4OM3b5alGer863Wh5oXemyJp4ztPfVO/a', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('test7@example.com', '$2b$12$wGz.CbY9tY3ABmGwRmIH4OM3b5alGer863Wh5oXemyJp4ztPfVO/a', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('test8@example.com', '$2b$12$wGz.CbY9tY3ABmGwRmIH4OM3b5alGer863Wh5oXemyJp4ztPfVO/a', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('test8@example.com', '$2b$12$wGz.CbY9tY3ABmGwRmIH4OM3b5alGer863Wh5oXemyJp4ztPfVO/a', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('test9@example.com', '$2a$12$XexvOtb0a97vzNDCHbY8cuI56ERpFbbqcJtMUZ.ZwMwyZmNX.lrqG', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 
 -- user_profile
 INSERT INTO user_profile (nickname, profile_url, user_id, created_at, updated_at) VALUES
@@ -18,7 +20,8 @@ INSERT INTO user_profile (nickname, profile_url, user_id, created_at, updated_at
 ('tester5', 'https://example.com/default.jpg', 5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('tester6', 'https://example.com/default.jpg', 6, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('tester7', 'https://example.com/default.jpg', 7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-('tester8', 'https://example.com/default.jpg', 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+('tester8', 'https://example.com/default.jpg', 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('tester9', 'https://example.com/default.jpg', 9, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- pass_info
 INSERT INTO pass_info (name, mobile_number, gender, user_id, created_at, updated_at) VALUES
@@ -44,6 +47,19 @@ INSERT INTO feed (title, content, region, period, gender, age_group, cost, creat
 ('제목3', '내용3', 'DAEGU', 'DAY_TRIP', 'MALE', 'ANY', 150000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('제목4', '내용4', 'GANGWON', 'OVER_SEVEN', 'ANY', 'FORTIES', 80000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+INSERT INTO feed_image (feed_id, url) VALUES
+(1, 'https://example.com/default.jpg'),
+(1, 'https://example.com/default.jpg'),
+(1, 'https://example.com/default.jpg'),
+(2, 'https://example.com/default.jpg'),
+(2, 'https://example.com/default.jpg'),
+(2, 'https://example.com/default.jpg'),
+(3, 'https://example.com/default.jpg'),
+(3, 'https://example.com/default.jpg'),
+(3, 'https://example.com/default.jpg'),
+(4, 'https://example.com/default.jpg'),
+(4, 'https://example.com/default.jpg'),
+(4, 'https://example.com/default.jpg');
 -- feed_trip_style
 INSERT INTO feed_trip_style (feed_id, trip_style_id) VALUES
 (1, 1), (1, 3),       -- feed 1 → 'REST', 'GOURMET'
@@ -54,6 +70,6 @@ INSERT INTO feed_trip_style (feed_id, trip_style_id) VALUES
 -- feed_user
 INSERT INTO feed_user (feed_id, user_id, status, is_host, created_at, updated_at) VALUES
 (1, 1, 'PENDING', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(2, 2, 'PENDING', FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(2, 2, 'PENDING', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 (3, 3, 'APPROVED', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-(4, 4, 'REJECTED', FALSE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+(4, 4, 'REJECTED', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

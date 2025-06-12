@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface FeedUserRepository extends JpaRepository<FeedUser, Long> {
     List<FeedUser> findByFeedIdAndStatus(Long feedId, FeedUserStatus status);
+    FeedUser findByFeedIdAndIsHostTrue(Long feedId);
 }

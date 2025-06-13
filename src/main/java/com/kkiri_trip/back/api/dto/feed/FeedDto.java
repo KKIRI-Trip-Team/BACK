@@ -5,6 +5,7 @@ import com.kkiri_trip.back.api.dto.feed.attribute.Gender;
 import com.kkiri_trip.back.api.dto.feed.attribute.Period;
 import com.kkiri_trip.back.api.dto.feed.attribute.Region;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
+import com.kkiri_trip.back.domain.jpa.feed.entity.FeedImage;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,8 @@ public class FeedDto {
     private Long cost;
 
     private List<TripStyleType> tripStyles;  // 단순 문자열 리스트 (예: "휴식", "액티비티" 등)
+    private UserDto owner;
+    private List<String> imageUrls;
 
     public static FeedDto from(Feed feed) {
         return FeedDto.builder()
@@ -41,6 +44,9 @@ public class FeedDto {
                 .cost((long) feed.getCost())  // Feed 엔티티 cost가 int라면 Long 변환
                 .tripStyles(feed.getFeedTripStyles().stream()
                         .map(ft -> ft.getTripStyle().getType())
+                        .collect(Collectors.toList()))
+                .imageUrls(feed.getFeedImages().stream()
+                        .map(FeedImage::getUrl)
                         .collect(Collectors.toList()))
                 .build();
     }

@@ -14,4 +14,5 @@ public interface FeedRepositoryCustom {
     List<Feed> findAllWithTripStyles();
     Optional<Feed> findWithTripStylesById(Long id);
     Page<Feed> filterFeeds(FeedFilterDto feedFilterRequestDto, Pageable pageable);
+    List<Feed> findAllWithHostAndTripStyles();
 }

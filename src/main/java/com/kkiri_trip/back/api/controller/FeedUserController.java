@@ -28,6 +28,15 @@ public class FeedUserController {
         return ApiResponseDto.from(HttpStatus.OK, "피드 참여 요청 완료", null);
     }
 
+    @PatchMapping("/{feedId}/join")
+    public ResponseEntity<ApiResponseDto<Void>> updateHost(@PathVariable Long feedId,
+                                                           @AuthenticationPrincipal CustomUserDetails userDetails)
+    {
+        Long userId = userDetails.getUser().getId();
+        feedUserService.updateFeedHost(feedId,userId);
+        return ApiResponseDto.from(HttpStatus.OK, "피드 방장 수정 완료", null);
+    }
+
     @GetMapping("/{feedId}/approved")
     public ResponseEntity<ApiResponseDto<List<FeedUserDto>>> getApprovedUsers(@PathVariable Long feedId) {
         List<FeedUserDto> approvedUsers = feedUserService.getApprovedUsers(feedId);

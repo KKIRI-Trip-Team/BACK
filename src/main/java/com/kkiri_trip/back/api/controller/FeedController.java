@@ -1,6 +1,7 @@
 package com.kkiri_trip.back.api.controller;
 
 import com.kkiri_trip.back.api.dto.feed.FeedDto;
+import com.kkiri_trip.back.api.dto.feed.FeedFilterDto;
 import com.kkiri_trip.back.api.dto.feed.attribute.AgeGroup;
 import com.kkiri_trip.back.api.dto.feed.attribute.Gender;
 import com.kkiri_trip.back.api.dto.feed.attribute.Period;
@@ -67,6 +68,23 @@ public class FeedController {
         PageResponseDto<FeedDto> feed = feedService.getFeeds(keyword, pageable);
         return ApiResponseDto.from(HttpStatus.OK, "검색된 키워드로 조회되었습니다.", feed);
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<ApiResponseDto<PageResponseDto<FeedDto>>> filterFeeds(
+            @RequestParam(required = false) String region,
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) String ageGroup,
+            @RequestParam(required = false) String tripStyle,
+            @RequestParam(required = false) String cost,
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        FeedFilterDto feedFilterDto = new FeedFilterDto(region, period, gender, ageGroup, tripStyle, cost);
+        PageResponseDto<FeedDto> responseDto = feedService.getFilterFeeds(feedFilterDto, pageable);
+        return ApiResponseDto.from(HttpStatus.OK, "필터 검색 성공", responseDto);
+    }
+
 
     @GetMapping("/dummy")
     public ResponseEntity<ApiResponseDto<FeedDto>> getDummyFeedById() {

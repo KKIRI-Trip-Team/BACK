@@ -1,6 +1,7 @@
 package com.kkiri_trip.back.domain.jpa.feed.service;
 
 import com.kkiri_trip.back.api.dto.feed.FeedDto;
+import com.kkiri_trip.back.api.dto.feed.FeedFilterDto;
 import com.kkiri_trip.back.domain.jpa.feed.entity.Feed;
 import com.kkiri_trip.back.domain.jpa.feed.entity.FeedTripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.TripStyle;
@@ -179,5 +180,12 @@ public class FeedService {
         Page<Feed> feedPage = feedRepository.findMyFeeds(userId, pageable);
         Page<FeedDto> dtoPage = feedPage.map(FeedDto::from);
         return new PageResponseDto<>(dtoPage);
+    }
+
+    public PageResponseDto<FeedDto> getFilterFeeds(FeedFilterDto feedFilterRequestDto, Pageable pageable){
+        Page<Feed> feedPage = feedRepository.filterFeeds(feedFilterRequestDto, pageable);
+        Page<FeedDto> dtoPage = feedPage.map(FeedDto::from);
+        return new PageResponseDto<>(dtoPage);
+
     }
 }

@@ -40,6 +40,9 @@ jobs:
             cd /home/ec2-user
             if [ ! -d BACK ]; then
               git clone --branch dev https://github.com/KKIRI-Trip-Team/BACK.git BACK
+            else
+              cd BACK
+              git pull origin dev
             fi
             cd BACK
             docker pull ${{ secrets.DOCKER_USERNAME }}/trebuddy:latest

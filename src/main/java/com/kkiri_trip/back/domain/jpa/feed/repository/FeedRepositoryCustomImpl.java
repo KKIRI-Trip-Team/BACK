@@ -87,6 +87,7 @@ public class FeedRepositoryCustomImpl implements FeedRepositoryCustom{
                 .fetch();
     }
 
+    @Override
     public Optional<Feed> findWithTripStylesById(Long id) {
         QFeed feed = QFeed.feed;
         QFeedTripStyle feedTripStyle = QFeedTripStyle.feedTripStyle;

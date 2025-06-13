@@ -35,10 +35,24 @@ INSERT INTO pass_info (name, mobile_number, gender, user_id, created_at, updated
 ('테스터8', '01000000008', 'F', 8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- trip_style
-INSERT INTO trip_style (type) VALUES ('REST');       -- ID 1
-INSERT INTO trip_style (type) VALUES ('ACTIVITY');   -- ID 2
-INSERT INTO trip_style (type) VALUES ('GOURMET');    -- ID 3
-INSERT INTO trip_style (type) VALUES ('KNOWLEDGE');  -- ID 4 (대체된 값)
+INSERT INTO trip_style (type) VALUES ('REST');                 -- 휴식
+INSERT INTO trip_style (type) VALUES ('EXPERIENCE');           -- 체험
+INSERT INTO trip_style (type) VALUES ('ACTIVITY');             -- 액티비티
+INSERT INTO trip_style (type) VALUES ('SHOPPING');             -- 쇼핑
+INSERT INTO trip_style (type) VALUES ('KNOWLEDGE');            -- 견문넓히기 → 대체된 값
+INSERT INTO trip_style (type) VALUES ('GOURMET');              -- 식도락
+INSERT INTO trip_style (type) VALUES ('EMOTIONAL_TOUR');       -- 감성투어
+INSERT INTO trip_style (type) VALUES ('COST_EFFECTIVE');       -- 가성비
+INSERT INTO trip_style (type) VALUES ('FLEX');                 -- 플랙스
+INSERT INTO trip_style (type) VALUES ('METICULOUS_PLANNING');  -- 꼼꼼한계획
+INSERT INTO trip_style (type) VALUES ('SPONTANEOUS');          -- 즉흥
+INSERT INTO trip_style (type) VALUES ('NATURE_FRIENDLY');      -- 자연친화
+INSERT INTO trip_style (type) VALUES ('RELAXED');              -- 여유
+INSERT INTO trip_style (type) VALUES ('MUST_TAKE_PHOTO');      -- 인생샷필수
+INSERT INTO trip_style (type) VALUES ('HOT_PLACE');            -- 핫플
+INSERT INTO trip_style (type) VALUES ('WAITING_OK');           -- 웨이팅가능
+INSERT INTO trip_style (type) VALUES ('ANY_NEARBY_RESTAURANT');-- 근처아무식당
+
 
 -- feed
 INSERT INTO feed (title, content, region, period, gender, age_group, cost, created_at, updated_at) VALUES

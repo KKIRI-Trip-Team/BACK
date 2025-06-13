@@ -46,7 +46,7 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 // 1. /api/** 요청은 인증 포함 가능
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:8081", "http://localhost:8082", "http://localhost:8083", "http://localhost:3000", "http://15.164.44.157:3000")
+                        .allowedOrigins("http://localhost:8081", "http://localhost:8082", "http://localhost:8083", "http://localhost:3000", "http://15.164.44.157:3000", "https://localhost:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowCredentials(true);
 

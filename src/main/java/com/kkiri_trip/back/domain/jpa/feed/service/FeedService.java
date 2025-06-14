@@ -234,7 +234,7 @@ public class FeedService {
     private UserDto convertToUserDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
-                .email(user.getEmail())
+                .nickname(user.getUserProfile().getNickname())
                 .profileUrl(user.getUserProfile().getProfileUrl() != null ? user.getUserProfile().getProfileUrl() : null)
                 .build();
     }

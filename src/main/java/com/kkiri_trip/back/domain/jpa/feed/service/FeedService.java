@@ -212,11 +212,19 @@ public class FeedService {
 
     @Transactional
     public void deleteFeed(Long id) {
-        feedRepository.findById(id)
+        Feed feed = feedRepository.findById(id)
                 .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+
+
+        List<User> users = feedUserService.findUsersByFeed(feed.getId());
+
+        for (User user : users) {
+            feedUserService.deleteFeedUserById(feedUserRepository.findByFeedIdAndUserId(feed.getId(), user.getId()).get().getId());
+        }
 
         feedRepository.deleteById(id);
     }
+
 
     public PageResponseDto<FeedDto> getFeeds(String keyword, Pageable pageable){
         Page<Feed> feedPage = feedRepository.searchFeeds(keyword, pageable);

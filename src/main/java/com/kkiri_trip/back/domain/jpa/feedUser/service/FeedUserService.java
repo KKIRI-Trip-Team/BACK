@@ -146,4 +146,10 @@ public class FeedUserService {
         List<FeedUser> approvedUsers = feedUserCustomRepository.findByFeedIdAndStatusApproved(feedId);
         return FeedUser.toDtoList(approvedUsers);
     }
+
+    public void deleteFeedUserById(Long id)
+    {
+        FeedUser feedUser = feedUserRepository.findById(id).orElseThrow(()-> new FeedUserException(FeedUserErrorCode.FEEDUSER_NOT_FOUND));
+        feedUserRepository.delete(feedUser);
+    }
 }

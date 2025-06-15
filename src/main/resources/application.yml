@@ -50,7 +50,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://localhost:27017/trebuddy
+      uri: mongodb://rootuser:rootpassword@15.164.44.157:27017/trebuddy?authSource=admin
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}

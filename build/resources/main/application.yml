@@ -58,3 +58,4 @@ spring:
 logging:
   level:
     org.hibernate.type: trace
+    org.springframework.web.socket.config.WebSocketMessageBrokerStats: warn

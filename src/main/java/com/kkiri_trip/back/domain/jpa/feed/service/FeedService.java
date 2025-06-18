@@ -233,6 +233,7 @@ public class FeedService {
     }
 
     // TODO : 게시글에 대한 정홗한 데이터 나오면 DTO 생성 후 응답 값 수정
+    @Transactional
     public PageResponseDto<FeedDto> getMyFeeds(Long userId, Pageable pageable){
         Page<Feed> feedPage = feedRepository.findMyFeeds(userId, pageable);
         Page<FeedDto> dtoPage = feedPage.map(FeedDto::from);

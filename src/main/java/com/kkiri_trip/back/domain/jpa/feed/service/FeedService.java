@@ -236,7 +236,15 @@ public class FeedService {
     @Transactional
     public PageResponseDto<FeedDto> getMyFeeds(Long userId, Pageable pageable){
         Page<Feed> feedPage = feedRepository.findMyFeeds(userId, pageable);
-        Page<FeedDto> dtoPage = feedPage.map(FeedDto::from);
+        Page<FeedDto> dtoPage = feedPage.map(feed -> {
+            FeedDto feedDto = FeedDto.from(feed);
+
+            User owner = feedUserRepository.findHostByFeedId(feed.getId())
+                    .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+            feedDto.setOwner(convertToUserDto(owner));
+            return feedDto;
+        });
         return new PageResponseDto<>(dtoPage);
     }
 

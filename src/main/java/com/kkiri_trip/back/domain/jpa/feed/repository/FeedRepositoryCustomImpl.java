@@ -51,12 +51,14 @@ public class FeedRepositoryCustomImpl implements FeedRepositoryCustom{
     @Override
     public Page<Feed> findMyFeeds(Long userId, Pageable pageable) {
         QFeed feed = QFeed.feed;
+        QUser user = QUser.user;
         QFeedUser feedUser = QFeedUser.feedUser;
 
         List<Feed> content = jpaQueryFactory
                 .select(feed)
                 .from(feedUser)
                 .join(feedUser.feed, feed)
+                .join(feedUser.user, user)
                 .where(feedUser.user.id.eq(userId)
                         .and(feedUser.isHost.isTrue()))
                 .orderBy(feed.createdAt.desc())

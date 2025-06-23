@@ -2,9 +2,12 @@ package com.kkiri_trip.back.domain.jpa.schedule.repository;
 
 import static com.kkiri_trip.back.domain.jpa.feed.entity.QFeed.feed;
 import static com.kkiri_trip.back.domain.jpa.schedule.entity.QSchedule.schedule;
+import static com.kkiri_trip.back.domain.jpa.scheduleItem.entity.QScheduleItem.scheduleItem;
+
 import com.kkiri_trip.back.domain.jpa.schedule.entity.Schedule;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,5 +38,13 @@ public class ScheduleRepositoryImpl implements ScheduleCustomRepository {
                         )
                         .fetchOne()
         );
+    }
+
+    @Override
+    @Transactional
+    public void deleteByScheduleId(Long scheduleId) {
+        jpaQueryFactory.delete(scheduleItem)
+                .where(scheduleItem.schedule.id.eq(scheduleId))
+                .execute();
     }
 }

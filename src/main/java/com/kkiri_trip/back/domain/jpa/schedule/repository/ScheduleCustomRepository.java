@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ScheduleCustomRepository {
     List<Schedule> findSchedulesByFeedId(Long feedId);
     Optional<Schedule> findScheduleByFeedIdAndScheduleId(Long feedId, Long scheduleId);
+    void deleteByScheduleId(Long scheduleId);
 }

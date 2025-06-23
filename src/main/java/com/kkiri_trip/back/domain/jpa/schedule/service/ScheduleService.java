@@ -84,6 +84,6 @@ public class ScheduleService {
         scheduleRepository.findById(id)
                 .orElseThrow(() -> new ScheduleException(ScheduleErrorCode.SCHEDULE_NOT_FOUND));
 
-        scheduleRepository.deleteById(id);
+        scheduleRepositoryImpl.deleteByScheduleId(id);
     }
 }

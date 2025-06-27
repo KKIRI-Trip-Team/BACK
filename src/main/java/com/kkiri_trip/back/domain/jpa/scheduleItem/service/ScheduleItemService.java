@@ -17,6 +17,7 @@ import com.kkiri_trip.back.global.error.exception.ScheduleException;
 import com.kkiri_trip.back.global.error.exception.ScheduleItemException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -63,6 +64,7 @@ public class ScheduleItemService {
         return scheduleItemRepository.save(scheduleItem).toDto();
     }
 
+    @Transactional
     public ScheduleItemDto updateScheduleItem(Long feedId, Long scheduleId, Long scheduleItemId, ScheduleItemDto dto) {
         validateFeedExistence(feedId);
         Schedule schedule = getScheduleById(scheduleId);

@@ -13,4 +13,6 @@ public interface FeedRepositoryCustom {
     List<Feed> findAllWithTripStyles();
     Optional<Feed> findWithTripStylesById(Long id);
     List<Feed> findAllWithHostAndTripStyles();
+    long deleteSchedulesByFeedId(Long feedId);
+    void deleteByFeedIdWithItems(Long feedId);
 }

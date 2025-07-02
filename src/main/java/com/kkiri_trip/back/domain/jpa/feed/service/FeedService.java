@@ -8,6 +8,7 @@ import com.kkiri_trip.back.domain.jpa.feed.repository.FeedRepositoryCustomImpl;
 import com.kkiri_trip.back.domain.jpa.feed.repository.TripStyleRepository;
 import com.kkiri_trip.back.domain.jpa.feedUser.repository.FeedUserRepositoryImpl;
 import com.kkiri_trip.back.domain.jpa.feedUser.service.FeedUserService;
+import com.kkiri_trip.back.domain.jpa.scheduleItem.repository.ScheduleItemRepositoryImpl;
 import com.kkiri_trip.back.domain.jpa.user.entity.User;
 import com.kkiri_trip.back.domain.jpa.user.repository.UserRepository;
 import com.kkiri_trip.back.global.common.dto.PageResponseDto;
@@ -40,6 +41,8 @@ public class FeedService {
     private final TripStyleRepository tripStyleRepository;
 
     private final FeedUserRepositoryImpl feedUserRepository;
+
+    private final ScheduleItemRepositoryImpl scheduleItemRepository;
 
     @Transactional(readOnly = true)
     public List<FeedDto> getAllFeeds() {
@@ -222,6 +225,7 @@ public class FeedService {
             feedUserService.deleteFeedUserById(feedUserRepository.findByFeedIdAndUserId(feed.getId(), user.getId()).get().getId());
         }
 
+        feedRepositoryCustom.deleteByFeedIdWithItems(id);
         feedRepository.deleteById(id);
     }
 

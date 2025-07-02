@@ -6,6 +6,7 @@ import com.kkiri_trip.back.domain.jpa.feed.entity.QFeedTripStyle;
 import com.kkiri_trip.back.domain.jpa.feed.entity.QTripStyle;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.FeedUser;
 import com.kkiri_trip.back.domain.jpa.feedUser.entity.QFeedUser;
+import com.kkiri_trip.back.domain.jpa.schedule.entity.QSchedule;
 import com.kkiri_trip.back.domain.jpa.user.entity.QUser;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,11 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.kkiri_trip.back.domain.jpa.feed.entity.QTripStyle.tripStyle;
+import static com.kkiri_trip.back.domain.jpa.schedule.entity.QSchedule.schedule;
+import static com.kkiri_trip.back.domain.jpa.scheduleItem.entity.QScheduleItem.scheduleItem;
 
 @RequiredArgsConstructor
 public class FeedRepositoryCustomImpl implements FeedRepositoryCustom{
@@ -117,6 +121,41 @@ public class FeedRepositoryCustomImpl implements FeedRepositoryCustom{
                         .and(qFeedUser.isHost.isTrue()))
                 .leftJoin(qFeed.feedTripStyles).fetchJoin()
                 .fetch();
+    }
+
+    @Override
+    public long deleteSchedulesByFeedId(Long feedId) {
+        QSchedule schedule = QSchedule.schedule;
+
+        return jpaQueryFactory
+                .delete(schedule)
+                .where(schedule.feed.id.eq(feedId))
+                .execute();
+    }
+
+    @Override
+    @Transactional
+    public void deleteByFeedIdWithItems(Long feedId) {
+        // 1. 해당 Feed에 속한 Schedule ID 조회
+        List<Long> scheduleIds = jpaQueryFactory
+                .select(schedule.id)
+                .from(schedule)
+                .where(schedule.feed.id.eq(feedId))
+                .fetch();
+
+        if (!scheduleIds.isEmpty()) {
+            // 2. ScheduleItem 삭제
+            jpaQueryFactory
+                    .delete(scheduleItem)
+                    .where(scheduleItem.schedule.id.in(scheduleIds))
+                    .execute();
+
+            // 3. Schedule 삭제
+            jpaQueryFactory
+                    .delete(schedule)
+                    .where(schedule.id.in(scheduleIds))
+                    .execute();
+        }
     }
 
 }
